@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../l10n/app_localizations.dart';
 import 'app_drawer_widgets.dart';
 
-class AppDrawer extends StatelessWidget {
-  const AppDrawer({super.key});
+class CustomAppDrawer extends StatelessWidget {
+  const CustomAppDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {

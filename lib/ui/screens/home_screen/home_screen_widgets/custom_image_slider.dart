@@ -1,0 +1,88 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart';
+
+import '../../../../data/models/apod.dart';
+
+Widget buildImageSlider(
+    BuildContext context,
+    List<ApodModel> images,
+    double height,
+    BoxConstraints constraints,
+    ) {
+  final screenSize = MediaQuery.of(context).size;
+  final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+
+  return CarouselSlider(
+    options: CarouselOptions(
+      scrollPhysics: const BouncingScrollPhysics(),
+      height: height,
+      autoPlay: true,
+      enlargeCenterPage: true,
+      aspectRatio: isPortrait ? 16 / 9 : 21 / 9,
+      autoPlayInterval: const Duration(seconds: 3),
+      autoPlayCurve: Curves.fastOutSlowIn,
+      viewportFraction: isPortrait ? 0.85 : 0.7,
+    ),
+    items: images.map((image) {
+      return Builder(
+        builder: (BuildContext context) {
+          return Container(
+            width: constraints.maxWidth,
+            margin: EdgeInsets.symmetric(
+              horizontal: screenSize.width * 0.02,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(
+                screenSize.width * 0.02,
+              ),
+              image: DecorationImage(
+                image: NetworkImage(image.url),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                  screenSize.width * 0.02,
+                ),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withOpacity(0.7),
+                  ],
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(screenSize.width * 0.03),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      image.title,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: screenSize.width * 0.04,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: screenSize.height * 0.01),
+                    Text(
+                      image.date,
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: screenSize.width * 0.03,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    }).toList(),
+  );
+}
