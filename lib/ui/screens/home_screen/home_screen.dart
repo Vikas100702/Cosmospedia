@@ -7,7 +7,6 @@ import 'package:cosmospedia/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../utils/size_config.dart';
 import '../../components/app_drawer/app_drawer.dart';
 import '../../components/bottom_navigation_bar/bottom_navigation_bar.dart';
 import 'home_screen_widgets/custom_image_slider.dart';
@@ -63,32 +62,39 @@ class HomeScreen extends StatelessWidget {
           ),
         ),*/
         drawer: const CustomAppDrawer(),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: /*FloatingActionButton(
           onPressed: () {},
           child: const Icon(Icons.add),
         ),
+
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,*/
+        Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                spreadRadius: 2,
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: FloatingActionButton(
+            backgroundColor: Colors.blue[700],
+            elevation: 0,
+            shape: const CircleBorder(),
+            onPressed: () {},
+            child: const Icon(
+              Icons.home,
+              color: Colors.white,
+              size: 32,
+            ),
+          ),
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: const CustomNavigationBar(),
-        /*bottomNavigationBar: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "l10n!.home",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.explore),
-              label: "l10n!.explore",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: "l10n!.profile",
-            ),
-          ],
-          currentIndex: 0, // You'll need to manage this with state
-          onTap: (index) {
-            // Handle navigation here
-          },
-        ),*/
+
 
         body: SafeArea(
           bottom: false,

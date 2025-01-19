@@ -1,11 +1,6 @@
-import 'dart:math';
-
 import 'package:cosmospedia/utils/app_colors.dart';
 import 'package:flutter/material.dart';
-
 import '../../../l10n/app_localizations.dart';
-import '../../../utils/size_config.dart';
-
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
@@ -14,45 +9,60 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final screenSize = MediaQuery.of(context).size;
+
     return AppBar(
       excludeHeaderSemantics: true,
       backgroundColor: AppColors.transparentColor,
       foregroundColor: AppColors.transparentColor,
       forceMaterialTransparency: true,
       automaticallyImplyLeading: false,
-      title: Text(
-        l10n!.appName,
-        style: TextStyle(
-          color: AppColors.backgroundLight,
-          fontWeight: FontWeight.bold,
-            fontSize: screenSize.width * 0.05
+      leading: IconButton(
+        icon: const Icon(
+          Icons.menu,
+          color: Colors.white,
+          size: 24,
+        ),
+        onPressed: () {
+          // Open the drawer
+          Scaffold.of(context).openDrawer();
+        },
+      ),
+      centerTitle: true,
+      title: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          l10n!.appName,
+          style: TextStyle(
+            color: AppColors.backgroundLight,
+            fontWeight: FontWeight.w600,
+            fontSize: screenSize.width * 0.045,
+            letterSpacing: 0.5,
+          ),
         ),
       ),
       actions: [
-        Row(
-          children: [
-            IconButton(
-              icon: const Icon(Icons.notifications),
-              color: AppColors.primaryLight,
-              onPressed: () {
-                // Handle notification icon tap
-              },
+        IconButton(
+          icon: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              shape: BoxShape.circle,
             ),
-            /*Builder(
-              builder: (context) => IconButton(
-                icon: const Icon(Icons.menu),
-                color: AppColors.primaryLight,
-                onPressed: () {
-                  Scaffold.of(context).openEndDrawer(); // Open the end drawer
-                },
-              ),
-            ),*/
-            SizedBox(
-              width: SizeConfig.width(5),
+            child: const Icon(
+              Icons.notifications_outlined,
+              color: Colors.white,
+              size: 24,
             ),
-            // Add padding to the right for better spacing
-          ],
+          ),
+          onPressed: () {
+            // Handle notification tap
+          },
         ),
+        const SizedBox(width: 16),
       ],
     );
   }
