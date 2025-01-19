@@ -24,7 +24,7 @@ class CustomAppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+            decoration: BoxDecoration(color: Theme.of(context).primaryColorLight),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -68,13 +68,13 @@ class CustomAppDrawer extends StatelessWidget {
             title: 'Mars Rovers',
             route: '/rovers',
           ),
-          buildDrawerItem(
+          /*buildDrawerItem(
             context,
             icon: Icons.track_changes,
             title: 'Near-Earth Objects',
             route: '/neos',
           ),
-         /* buildDrawerItem(
+         buildDrawerItem(
             context,
             icon: Icons.event,
             title: 'Astronomical Events',
