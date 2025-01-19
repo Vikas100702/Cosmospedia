@@ -68,13 +68,13 @@ class CustomAppDrawer extends StatelessWidget {
             title: 'Mars Rovers',
             route: '/rovers',
           ),
-          buildDrawerItem(
+          /*buildDrawerItem(
             context,
             icon: Icons.track_changes,
             title: 'Near-Earth Objects',
             route: '/neos',
           ),
-         /* buildDrawerItem(
+         buildDrawerItem(
             context,
             icon: Icons.event,
             title: 'Astronomical Events',
