@@ -81,13 +81,13 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
           child: FloatingActionButton(
-            backgroundColor: Colors.blue[700],
+            backgroundColor: Colors.white,
             elevation: 0,
             shape: const CircleBorder(),
             onPressed: () {},
             child: const Icon(
               Icons.home,
-              color: Colors.white,
+              color: Colors.black,
               size: 32,
             ),
           ),

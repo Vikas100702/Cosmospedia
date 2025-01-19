@@ -12,7 +12,7 @@ class CustomNavigationBar extends StatelessWidget {
     return BottomAppBar(
       padding: EdgeInsets.zero,
       height: SizeConfig.height(8),
-      color: Colors.black,
+      color: Colors.white,
       shape: const CircularNotchedRectangle(),
       notchMargin: SizeConfig.devicePixelRatio(8),
       child: Row(
@@ -22,7 +22,7 @@ class CustomNavigationBar extends StatelessWidget {
             child: IconButton(
               icon: Icon(
                 Icons.calendar_today,
-                color: AppColors.surfaceLight,
+                color: AppColors.surfaceDark,
                 size: SizeConfig.devicePixelRatio(28),
               ),
               onPressed: () {},
@@ -32,7 +32,7 @@ class CustomNavigationBar extends StatelessWidget {
             child: IconButton(
               icon: Icon(
                 Icons.cloud_outlined,
-                color: AppColors.surfaceLight,
+                color: AppColors.surfaceDark,
                 size: SizeConfig.devicePixelRatio(28),
               ),
               onPressed: () {},
@@ -45,7 +45,7 @@ class CustomNavigationBar extends StatelessWidget {
             child: IconButton(
               icon: Icon(
                 Icons.edit_outlined,
-                color: AppColors.surfaceLight,
+                color: AppColors.surfaceDark,
                 size: SizeConfig.devicePixelRatio(28),
               ),
               onPressed: () {},
@@ -55,7 +55,7 @@ class CustomNavigationBar extends StatelessWidget {
             child: IconButton(
               icon: Icon(
                 Icons.photo_library_outlined,
-                color: AppColors.surfaceLight,
+                color: AppColors.surfaceDark,
                 size: SizeConfig.devicePixelRatio(28),
               ),
               onPressed: () {},
@@ -67,4 +67,4 @@ class CustomNavigationBar extends StatelessWidget {
   }
 }
 
-// In your HomeScreen.dart, update the FloatingActionButton:
+
