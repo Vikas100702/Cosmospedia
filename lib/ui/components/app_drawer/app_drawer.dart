@@ -50,12 +50,12 @@ class CustomAppDrawer extends StatelessWidget {
             title: 'Home',
             route: '/',
           ),
-          buildDrawerItem(
+          /*buildDrawerItem(
             context,
             icon: Icons.rocket,
             title: 'Missions',
             route: '/missions',
-          ),
+          ),*/
           buildDrawerItem(
             context,
             icon: Icons.image,

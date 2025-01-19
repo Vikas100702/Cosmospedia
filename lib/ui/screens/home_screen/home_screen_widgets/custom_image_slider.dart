@@ -29,7 +29,7 @@ Widget buildImageSlider(
           return Container(
             width: constraints.maxWidth,
             margin: EdgeInsets.symmetric(
-              horizontal: screenSize.width * 0.02,
+              horizontal: screenSize.width * 0.00,
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(
@@ -55,7 +55,7 @@ Widget buildImageSlider(
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.all(screenSize.width * 0.03),
+                padding: EdgeInsets.all(screenSize.width * 0.01),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
