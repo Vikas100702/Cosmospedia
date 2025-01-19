@@ -74,12 +74,12 @@ class CustomAppDrawer extends StatelessWidget {
             title: 'Near-Earth Objects',
             route: '/neos',
           ),
-          buildDrawerItem(
+         /* buildDrawerItem(
             context,
             icon: Icons.event,
             title: 'Astronomical Events',
             route: '/events',
-          ),
+          ),*/
         ],
       ),
     );
