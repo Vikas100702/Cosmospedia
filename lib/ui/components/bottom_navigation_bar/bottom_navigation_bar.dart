@@ -69,6 +69,9 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
 
     return BottomAppBar(
       color: backgroundColor,
+      padding: EdgeInsets.zero,
+      height: SizeConfig.height(8),
+      color: Colors.white,
       shape: const CircularNotchedRectangle(),
       notchMargin: SizeConfig.devicePixelRatio(8),
       padding: EdgeInsets.symmetric(vertical: SizeConfig.height(1)), // Adjust the vertical padding
@@ -79,6 +82,25 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
             onPressed: () {},
             icon: const Icon(Icons.event),
             color: iconColor,
+          Expanded(
+            child: IconButton(
+              icon: Icon(
+                Icons.calendar_today,
+                color: AppColors.surfaceDark,
+                size: SizeConfig.devicePixelRatio(28),
+              ),
+              onPressed: () {},
+            ),
+          ),
+          Expanded(
+            child: IconButton(
+              icon: Icon(
+                Icons.cloud_outlined,
+                color: AppColors.surfaceDark,
+                size: SizeConfig.devicePixelRatio(28),
+              ),
+              onPressed: () {},
+            ),
           ),
           IconButton(
             onPressed: () {},
@@ -94,6 +116,31 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
             onPressed: () {},
             icon: const Icon(Icons.image),
             color: iconColor,
+          ),
+        ],
+      ),
+    );
+  },
+},
+          Expanded(
+            child: IconButton(
+              icon: Icon(
+                Icons.edit_outlined,
+                color: AppColors.surfaceDark,
+                size: SizeConfig.devicePixelRatio(28),
+              ),
+              onPressed: () {},
+            ),
+          ),
+          Expanded(
+            child: IconButton(
+              icon: Icon(
+                Icons.photo_library_outlined,
+                color: AppColors.surfaceDark,
+                size: SizeConfig.devicePixelRatio(28),
+              ),
+              onPressed: () {},
+            ),
           ),
         ],
       ),
