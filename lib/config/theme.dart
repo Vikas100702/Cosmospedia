@@ -34,7 +34,6 @@ class AppTheme{
         colorScheme: const ColorScheme.light(
           primary: AppColors.primaryLight,
           error: AppColors.error,
-          background: AppColors.backgroundLight,
           surface: AppColors.surfaceLight,
         ),
       );
@@ -70,7 +69,6 @@ class AppTheme{
       colorScheme: const ColorScheme.dark(
         primary: AppColors.primaryDark,
         error: AppColors.errorDark,
-        background: AppColors.backgroundDark,
         surface: AppColors.surfaceDark,
       ),
     );
