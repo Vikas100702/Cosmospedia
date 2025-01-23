@@ -12,7 +12,6 @@ import '../../components/bottom_navigation_bar/bottom_navigation_bar.dart';
 import 'home_screen_widgets/custom_image_slider.dart';
 import 'home_screen_widgets/custom_news_list.dart';
 
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -21,7 +20,8 @@ class HomeScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final screenSize = MediaQuery.of(context).size;
     final padding = MediaQuery.of(context).padding;
-    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
 
     // Calculate responsive values
     final double appBarHeight = screenSize.height * 0.08;
@@ -29,46 +29,15 @@ class HomeScreen extends StatelessWidget {
 
     return Container(
       decoration: const BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage("assets/background.png"),
-        )
-      ),
+          image: DecorationImage(
+        fit: BoxFit.cover,
+        image: AssetImage("assets/background.png"),
+      )),
       child: Scaffold(
         backgroundColor: AppColors.transparentColor,
         appBar: const CustomAppBar(),
-
-        /*appBar: PreferredSize(
-          preferredSize: Size.fromHeight(appBarHeight),
-          child: AppBar(
-            title: Text(
-              l10n!.appName,
-              style: TextStyle(
-                fontSize: screenSize.width * 0.05,
-              ),
-            ),
-            actions: [
-              IconButton(
-                icon: Icon(
-                  Icons.refresh,
-                  size: screenSize.width * 0.06,
-                ),
-                onPressed: () {
-                  context.read<HomeBloc>().add(RefreshHomeData());
-                },
-                tooltip: l10n?.homeRefresh,
-              ),
-            ],
-          ),
-        ),*/
         drawer: const CustomAppDrawer(),
-        floatingActionButton: /*FloatingActionButton(
-          onPressed: () {},
-          child: const Icon(Icons.add),
-        ),
-
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,*/
-        Container(
+        floatingActionButton: Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             boxShadow: [
@@ -94,8 +63,6 @@ class HomeScreen extends StatelessWidget {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: const CustomNavigationBar(),
-
-
         body: SafeArea(
           bottom: false,
           child: BlocBuilder<HomeBloc, HomeState>(
@@ -119,28 +86,26 @@ class HomeScreen extends StatelessWidget {
                 onRefresh: () async {
                   context.read<HomeBloc>().add(RefreshHomeData());
                 },
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        children: [
-                          buildImageSlider(
-                            context,
-                            state.apodImages,
-                            carouselHeight,
-                            constraints,
-                          ),
-                          buildNewsList(
-                            context,
-                            state.newsItems,
-                            constraints,
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                ),
+                child: LayoutBuilder(builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        buildImageSlider(
+                          context,
+                          state.apodImages,
+                          carouselHeight,
+                          constraints,
+                        ),
+                        buildNewsList(
+                          context,
+                          state.newsItems,
+                          constraints,
+                        ),
+                      ],
+                    ),
+                  );
+                }),
               );
             },
           ),

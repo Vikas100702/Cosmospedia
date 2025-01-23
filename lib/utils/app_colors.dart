@@ -14,6 +14,10 @@ class AppColors {
   static const Color surfaceLight = Color(0xFFFFFFFF);
   static const Color surfaceDark = Color(0xFF1E1E1E);
 
+  //Drawer header
+  static const Color drawerHeader = Color(0xFF17203A);
+  static const Color drawerHeaderGradient = Color(0xFF2C3E50);
+
   // Card Colors
   static const Color cardLight = Color(0xFFFFFFFF);
   static const Color cardDark = Color(0xFF2D2D2D);
