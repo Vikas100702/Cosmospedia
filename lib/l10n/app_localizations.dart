@@ -22,12 +22,12 @@ class AppLocalizations{
       'appVersion' : '1.0.0',
 
       // Navigation Drawer
-      'drawerHome' : 'Home',
-      'drawerMissions' : 'Missions',
-      'drawerApod' : 'APOD Gallery',
-      'drawerRovers' : 'Mars Rovers',
-      'drawerNeos' : 'Near-Earth Objects',
-      'drawerEvents' : 'Astronomical Events',
+      'settings' : 'Settings',
+      'language' : 'Language',
+      't&c' : 'Terms and Conditions',
+      'privacyPolicy' : 'Privacy Policies',
+      'helpSupport' : 'Help and Support',
+      'logout' : 'Logout',
 
       // Home Screen
       'homeLatestNews' : 'Latest Space News',
@@ -68,12 +68,12 @@ class AppLocalizations{
   String get appVersion => _localizedValues[locale.languageCode]!['appVersion']!;
 
 // Navigation Drawer
-  String get drawerHome => _localizedValues[locale.languageCode]!['drawerHome']!;
-  String get drawerMissions => _localizedValues[locale.languageCode]!['drawerMissions']!;
-  String get drawerApod => _localizedValues[locale.languageCode]!['drawerApod']!;
-  String get drawerRovers => _localizedValues[locale.languageCode]!['drawerRovers']!;
-  String get drawerNeos => _localizedValues[locale.languageCode]!['drawerNeos']!;
-  String get drawerEvents => _localizedValues[locale.languageCode]!['drawerEvents']!;
+  String get settings => _localizedValues[locale.languageCode]!['settings']!;
+  String get language => _localizedValues[locale.languageCode]!['language']!;
+  String get termConditions => _localizedValues[locale.languageCode]!['t&c']!;
+  String get privacyPolicy => _localizedValues[locale.languageCode]!['privacyPolicy']!;
+  String get helpSupport => _localizedValues[locale.languageCode]!['helpSupport']!;
+  String get logout => _localizedValues[locale.languageCode]!['logout']!;
 
 // Home Screen
   String get homeLatestNews => _localizedValues[locale.languageCode]!['homeLatestNews']!;
