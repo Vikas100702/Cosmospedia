@@ -43,9 +43,9 @@ class HomeScreen extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.3),
-                spreadRadius: 2,
+                spreadRadius: 4,
                 blurRadius: 8,
-                offset: const Offset(0, 4),
+                offset: const Offset(0, 10),
               ),
             ],
           ),
@@ -57,7 +57,7 @@ class HomeScreen extends StatelessWidget {
             child: const Icon(
               Icons.home,
               color: Colors.black,
-              size: 32,
+              size: 38,
             ),
           ),
         ),
