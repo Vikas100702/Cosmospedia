@@ -44,6 +44,9 @@ class AppColors {
   static const Color info = Color(0xFF2196F3);
   static const Color infoDark = Color(0xFF64B5F6);
 
+  //Bottom navigation bar colors
+  static  Color bottomNavColor = const Color(0xFFFFFFFF).withOpacity(0.2);
+
   // Gradient Colors
   static const List<Color> primaryGradient = [
     Color(0xFF1E88E5),

@@ -1,92 +1,62 @@
+import 'package:cosmospedia/utils/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../blocs/home/home_bloc.dart';
+import '../../../blocs/home/home_event.dart';
+import '../../../blocs/home/home_state.dart';
 import '../../../utils/app_colors.dart';
-import '../../../utils/size_config.dart';
+import 'bottom_navigation_bar_widgets.dart';
 
-class CustomNavigationBar extends StatelessWidget {
-  const CustomNavigationBar({super.key});
+class CustomBottomNavigationBar extends StatelessWidget {
+  const CustomBottomNavigationBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
 
-    return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: SizeConfig.width(4),
-        vertical: SizeConfig.height(2),
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(50),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (context, state) {
+        return BottomAppBar(
+          shape: const CircularNotchedRectangle(),
+          color: AppColors.bottomNavColor,
+          notchMargin: SizeConfig.width(1.5),
+          height: SizeConfig.height(8.2),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              buildNavigationItem(
+                context,
+                Icons.calendar_today,
+                "Calendar",
+                state.currentTab == 0,
+                    () => context.read<HomeBloc>().add(SwitchTab(0)),
+              ),
+              buildNavigationItem(
+                context,
+                Icons.cloud,
+                "Weather",
+                state.currentTab == 1,
+                    () => context.read<HomeBloc>().add(SwitchTab(1)),
+              ),
+              SizedBox(width: SizeConfig.width(1)),
+              buildNavigationItem(
+                context,
+                Icons.map,
+                "Map",
+                state.currentTab == 2,
+                    () => context.read<HomeBloc>().add(SwitchTab(2)),
+              ),
+              buildNavigationItem(
+                context,
+                Icons.settings,
+                "Settings",
+                state.currentTab == 3,
+                    () => context.read<HomeBloc>().add(SwitchTab(3)),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(50),
-        child: BottomAppBar(
-          elevation: 0,
-          color: Colors.transparent,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: SizeConfig.width(3),
-              vertical: SizeConfig.height(1),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Expanded(
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.calendar_today,
-                      color: Colors.white,
-                      size: SizeConfig.devicePixelRatio(28),
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
-                Expanded(
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.cloud_outlined,
-                      color: Colors.white,
-                      size: SizeConfig.devicePixelRatio(28),
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
-                Expanded(
-                  child: SizedBox(width: SizeConfig.width(8)),
-                ),
-                Expanded(
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.edit_outlined,
-                      color: Colors.white,
-                      size: SizeConfig.devicePixelRatio(28),
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
-                Expanded(
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.photo_library_outlined,
-                      color: Colors.white,
-                      size: SizeConfig.devicePixelRatio(28),
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

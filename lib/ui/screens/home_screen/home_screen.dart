@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: const CustomNavigationBar(),
+        bottomNavigationBar: CustomBottomNavigationBar(),
         body: SafeArea(
           bottom: false,
           child: BlocBuilder<HomeBloc, HomeState>(
