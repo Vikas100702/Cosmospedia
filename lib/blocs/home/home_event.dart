@@ -8,3 +8,8 @@ abstract class HomeEvent extends Equatable{
 class LoadHomeData extends HomeEvent {}
 
 class RefreshHomeData extends HomeEvent {}
+
+class SwitchTab extends HomeEvent {
+  final int index;
+  SwitchTab(this.index);
+}
