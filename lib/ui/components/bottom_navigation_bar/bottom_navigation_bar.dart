@@ -20,7 +20,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
           shape: const CircularNotchedRectangle(),
           color: AppColors.bottomNavColor,
           notchMargin: SizeConfig.width(1.5),
-          height: SizeConfig.height(8.2),
+          height: SizeConfig.height(8.35),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

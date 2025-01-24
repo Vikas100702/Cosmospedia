@@ -16,7 +16,7 @@ class CustomAppDrawer extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     // Responsive sizing calculations
-    final avatarRadius = screenWidth * 0.2; // Increased to 20% of screen width
+    final avatarRadius = screenWidth * 0.2;
     final textScaleFactor = screenWidth < 360 ? 0.8 : 1.0;
 
     return Drawer(
@@ -49,11 +49,12 @@ class CustomAppDrawer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Flexible(
-                          child: CircleAvatar(
-                            radius:
-                                avatarRadius, // Updated avatar radius to 20%
-                            backgroundImage:
-                                const AssetImage('assets/logo.png'),
+                          child: FittedBox(
+                            fit: BoxFit.contain,
+                            child: CircleAvatar(
+                              radius: screenHeight * 0.1, // Use 10% of screen height for avatar size
+                              backgroundImage: const AssetImage('assets/logo.png'),
+                            ),
                           ),
                         ),
                         SizedBox(height: screenHeight * 0.01),
