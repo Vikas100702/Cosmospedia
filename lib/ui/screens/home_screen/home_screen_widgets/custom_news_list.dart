@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../data/models/apod.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../news_screen/news_screen.dart';
 
 
 Widget buildNewsList(
@@ -53,6 +54,12 @@ Widget buildNewsList(
               child: InkWell(
                 onTap: () {
                   // Navigate to news detail
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => News(apod: item,),
+                    ),
+                  );
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

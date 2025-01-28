@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'blocs/home/home_bloc.dart';
+import 'blocs/news/news_bloc.dart';
 import 'data/repositories/apod_repositories.dart';
 
 void main() {
@@ -18,6 +19,10 @@ void main() {
             apodRepository: apodRepository,
           ),
         ),
+        BlocProvider(
+          create: (context) => NewsBloc(),
+        ),
+
       ],
       child: const MyApp(),
     ),

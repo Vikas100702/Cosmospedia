@@ -30,9 +30,9 @@ class HomeScreen extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
           image: DecorationImage(
-        fit: BoxFit.cover,
-        image: AssetImage("assets/background.png"),
-      )),
+            fit: BoxFit.cover,
+            image: AssetImage("assets/background.png"),
+          )),
       child: Scaffold(
         backgroundColor: AppColors.transparentColor,
         appBar: const CustomAppBar(),
@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: CustomBottomNavigationBar(),
+        bottomNavigationBar: const CustomBottomNavigationBar(),
         body: SafeArea(
           bottom: false,
           child: BlocBuilder<HomeBloc, HomeState>(
@@ -72,7 +72,14 @@ class HomeScreen extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
               if (state.status == HomeStatus.loading) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                  child: Column(
+                    children: [
+                      CircularProgressIndicator(),
+                      Text("Loading"),
+                    ],
+                  ),
+                );
               }
               if (state.status == HomeStatus.failure) {
                 return Center(
