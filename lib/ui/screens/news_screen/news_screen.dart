@@ -25,11 +25,6 @@ class News extends StatelessWidget {
 
               return SingleChildScrollView(
                 child: CustomNewsCard(
-                  /*title: apodNews.title,
-                  date: apodNews.date,
-                  explanation: apodNews.explanation,
-                  imageUrl: apodNews.url,
-                  copyright: apodNews.copyright!,*/
                   title: state.apodNews.title,
                   date: state.apodNews.date,
                   explanation: state.apodNews.explanation,

@@ -50,7 +50,10 @@ class CustomNewsCard extends StatelessWidget {
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) {
-                      Text("Loading Progress is null", style: TextStyle(color: Colors.white),);
+                      Text(
+                        "Loading Progress is null",
+                        style: TextStyle(color: Colors.white),
+                      );
                       return child;
                     }
                     return Container(
@@ -114,7 +117,9 @@ class CustomNewsCard extends StatelessWidget {
           ),
           //Content Section
           Padding(
-            padding: EdgeInsets.all(SizeConfig.width(3)),
+            padding: EdgeInsets.all(
+              SizeConfig.width(3),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -124,7 +129,7 @@ class CustomNewsCard extends StatelessWidget {
                       Icons.calendar_today,
                       size: SizeConfig.devicePixelRatio(16),
                     ),
-                    SizedBox(width: SizeConfig.width(2)),
+                    SizedBox(width: SizeConfig.width(1)),
                     Text(
                       formattedDate,
                       style: TextStyle(
@@ -137,13 +142,13 @@ class CustomNewsCard extends StatelessWidget {
                 SizedBox(height: SizeConfig.height(1.5)),
                 Text(
                   explanation,
+                  textAlign: TextAlign.justify,
                   style: TextStyle(
                     // color: Colors.grey,
                     fontSize: SizeConfig.width(3.8),
-                    height: SizeConfig.height(1.5),
+                    height: SizeConfig.height(0.2),
                   ),
-                  maxLines: 6,
-                  overflow: TextOverflow.ellipsis,
+                  // overflow: TextOverflow.ellipsis  ,
                 ),
                 SizedBox(height: SizeConfig.height(1.5)),
                 TextButton(
