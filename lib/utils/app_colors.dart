@@ -29,7 +29,7 @@ class AppColors {
   static const Color textSecondaryDark = Color(0xFF9E9E9E);
 
   // Error Colors
-  static const Color error = Color(0xFFB00020);
+  static const Color error = Color(0xFFF44336);
   static const Color errorDark = Color(0xFFCF6679);
 
   // Success Colors
@@ -46,6 +46,26 @@ class AppColors {
 
   //Bottom navigation bar colors
   static  Color bottomNavColor = const Color(0xFFFFFFFF).withOpacity(0.2);
+
+  //News Screen Colors
+  static List<Color> newsScreenGradient = [
+    AppColors.transparentColor,
+    AppColors.backgroundDark.withOpacity(0.3),
+    AppColors.backgroundDark.withOpacity(0.8),
+    AppColors.backgroundDark.withOpacity(0.95),
+  ];
+  static List<Color> imagePreviewButtonGradient = [
+    const Color(0xFF18FFFF).withOpacity(0.4),
+    const Color(0xFF448AFF).withOpacity(0.4),
+  ];
+  static Color newsCalendarIconColor = const Color(0xFF18FFFF);
+  static Color newsRocketIconColor = const Color(0xFFFFFFFF);
+
+  //Image Preview Colors
+  static List<Color> imagePreviewGradient = [
+    AppColors.backgroundDark.withOpacity(0.7),
+    AppColors.transparentColor
+  ];
 
   // Gradient Colors
   static const List<Color> primaryGradient = [

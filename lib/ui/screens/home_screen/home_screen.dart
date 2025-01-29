@@ -27,15 +27,53 @@ class HomeScreen extends StatelessWidget {
     final double appBarHeight = screenSize.height * 0.08;
     final double carouselHeight = screenSize.height * (isPortrait ? 0.3 : 0.5);
 
+    // Create a GlobalKey for the Scaffold
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Container(
       decoration: const BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage("assets/background.png"),
-          )),
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: AssetImage("assets/background.png"),
+        ),
+      ),
       child: Scaffold(
+        key: scaffoldKey,
         backgroundColor: AppColors.transparentColor,
-        appBar: const CustomAppBar(),
+        appBar: customAppBar(
+          scaffoldKey: scaffoldKey,
+          context: context,
+          titleWidget: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 8,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              l10n!.appName,
+              style: TextStyle(
+                color: AppColors.backgroundLight,
+                fontWeight: FontWeight.w600,
+                fontSize: screenSize.width * 0.045,
+                letterSpacing: 0.5,
+              ),
+            ),
+          ),
+          leading: IconButton(
+            icon: const Icon(
+              Icons.menu,
+              color: Colors.white,
+              size: 24,
+            ),
+            onPressed: () {
+              // Open the drawer
+              scaffoldKey.currentState?.openDrawer();
+            },
+          ),
+        ),
         drawer: const CustomAppDrawer(),
         floatingActionButton: Container(
           decoration: BoxDecoration(
@@ -93,26 +131,28 @@ class HomeScreen extends StatelessWidget {
                 onRefresh: () async {
                   context.read<HomeBloc>().add(RefreshHomeData());
                 },
-                child: LayoutBuilder(builder: (context, constraints) {
-                  return SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: Column(
-                      children: [
-                        buildImageSlider(
-                          context,
-                          state.apodImages,
-                          carouselHeight,
-                          constraints,
-                        ),
-                        buildNewsList(
-                          context,
-                          state.newsItems,
-                          constraints,
-                        ),
-                      ],
-                    ),
-                  );
-                }),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Column(
+                        children: [
+                          buildImageSlider(
+                            context,
+                            state.apodImages,
+                            carouselHeight,
+                            constraints,
+                          ),
+                          buildNewsList(
+                            context,
+                            state.newsItems,
+                            constraints,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               );
             },
           ),

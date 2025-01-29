@@ -57,7 +57,7 @@ Widget buildNewsList(
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => News(apod: item,),
+                      builder: (context) => NewsScreen(apod: item,),
                     ),
                   );
                 },

@@ -44,6 +44,16 @@ class AppLocalizations{
       'apodShare' : 'Share',
       'apodSave' : 'Save',
 
+      //News Screen
+      'noNewsAvailable': 'No cosmic news available right now 🌌',
+      'imagePreview' : 'Preview Image',
+
+      //ImagePreviewDownload
+      'downloadImage' : 'Download Image',
+      'imageDownloadSuccess' : 'Image downloaded successfully',
+      'imageDownloadError' : 'Error downloading image',
+      'storagePermissionDenied' : 'Storage permission is required to download images',
+
       // Common
       'loading' : 'Loading...',
       'error' : 'Error',
@@ -67,7 +77,7 @@ class AppLocalizations{
   String get appName => _localizedValues[locale.languageCode]!['appName']!;
   String get appVersion => _localizedValues[locale.languageCode]!['appVersion']!;
 
-// Navigation Drawer
+  // Navigation Drawer
   String get settings => _localizedValues[locale.languageCode]!['settings']!;
   String get language => _localizedValues[locale.languageCode]!['language']!;
   String get termConditions => _localizedValues[locale.languageCode]!['t&c']!;
@@ -75,7 +85,7 @@ class AppLocalizations{
   String get helpSupport => _localizedValues[locale.languageCode]!['helpSupport']!;
   String get logout => _localizedValues[locale.languageCode]!['logout']!;
 
-// Home Screen
+  // Home Screen
   String get homeLatestNews => _localizedValues[locale.languageCode]!['homeLatestNews']!;
   String get homeFeaturedImages => _localizedValues[locale.languageCode]!['homeFeaturedImages']!;
   String get homeViewAll => _localizedValues[locale.languageCode]!['homeViewAll']!;
@@ -83,14 +93,24 @@ class AppLocalizations{
   String get homeRetry => _localizedValues[locale.languageCode]!['homeRetry']!;
   String get homeRefresh => _localizedValues[locale.languageCode]!['homeRefresh']!;
 
-// APOD
+  // APOD
   String get apodTitle => _localizedValues[locale.languageCode]!['apodTitle']!;
   String get apodLoadingError => _localizedValues[locale.languageCode]!['apodLoadingError']!;
   String get apodViewFull => _localizedValues[locale.languageCode]!['apodViewFull']!;
   String get apodShare => _localizedValues[locale.languageCode]!['apodShare']!;
   String get apodSave => _localizedValues[locale.languageCode]!['apodSave']!;
 
-// Common
+  //News Screen
+  String get noNewsAvailable => _localizedValues[locale.languageCode]!['noNewsAvailable']!;
+  String get imagePreview => _localizedValues[locale.languageCode]!['imagePreview']!;
+
+  //ImagePreviewDownload
+  String get downloadImage => _localizedValues[locale.languageCode]!['downloadImage']!;
+  String get imageDownloadSuccess => _localizedValues[locale.languageCode]!['imageDownloadSuccess']!;
+  String get imageDownloadError => _localizedValues[locale.languageCode]!['imageDownloadError']!;
+  String get storagePermissionDenied => _localizedValues[locale.languageCode]!['storagePermissionDenied']!;
+
+  // Common
   String get loading => _localizedValues[locale.languageCode]!['loading']!;
   String get error => _localizedValues[locale.languageCode]!['error']!;
   String get retry => _localizedValues[locale.languageCode]!['retry']!;
@@ -102,7 +122,7 @@ class AppLocalizations{
   String get edit => _localizedValues[locale.languageCode]!['edit']!;
   String get share => _localizedValues[locale.languageCode]!['share']!;
 
-// Error Messages
+  // Error Messages
   String get errorNoInternet => _localizedValues[locale.languageCode]!['errorNoInternet']!;
   String get errorTimeout => _localizedValues[locale.languageCode]!['errorTimeout']!;
   String get errorGeneric => _localizedValues[locale.languageCode]!['errorGeneric']!;

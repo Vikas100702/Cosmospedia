@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../data/repositories/apod_repositories.dart';
 import 'home_event.dart';
 import 'home_state.dart';
@@ -17,12 +16,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     LoadHomeData event,
     Emitter<HomeState> emit,
   ) async {
-    emit(state.copyWith(
-      status: HomeStatus.loading,
-    ));
+    emit(
+      state.copyWith(
+        status: HomeStatus.loading,
+      ),
+    );
     try {
-      final apodImages = await apodRepository.getRecentApods(5); //For slider
-      final newsItems = await apodRepository.getRecentApods(5); //For Cards.
+      final apodImages = await apodRepository.getRecentApods(20); //For slider
+      final newsItems = await apodRepository.getRecentApods(20); //For Cards.
       emit(state.copyWith(
         status: HomeStatus.success,
         apodImages: apodImages,
@@ -37,24 +38,28 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _refreshHomeData(
-      RefreshHomeData event,
-      Emitter<HomeState> emit,
-      ) async {
+    RefreshHomeData event,
+    Emitter<HomeState> emit,
+  ) async {
     emit(state.copyWith(
       status: HomeStatus.loading,
     ));
     try {
       final apodImages = await apodRepository.getRecentApods(5); //For slider
       final newsItems = await apodRepository.getRecentApods(5); //For Cards.
-      emit(state.copyWith(
-        apodImages: apodImages,
-        newsItems: newsItems,
-      ));
+      emit(
+        state.copyWith(
+          apodImages: apodImages,
+          newsItems: newsItems,
+        ),
+      );
     } catch (error) {
-      emit(state.copyWith(
-        status: HomeStatus.failure,
-        error: error.toString(),
-      ));
+      emit(
+        state.copyWith(
+          status: HomeStatus.failure,
+          error: error.toString(),
+        ),
+      );
     }
   }
 

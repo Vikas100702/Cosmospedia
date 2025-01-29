@@ -12,19 +12,25 @@ void main() {
   //Initialize Repositories
   final apodRepository = ApodRepository();
   runApp(
-    MultiBlocProvider(
+    MultiRepositoryProvider(
       providers: [
-        BlocProvider(
-          create: (context) => HomeBloc(
-            apodRepository: apodRepository,
-          ),
-        ),
-        BlocProvider(
-          create: (context) => NewsBloc(),
-        ),
-
+        RepositoryProvider.value(value: apodRepository),
       ],
-      child: const MyApp(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => HomeBloc(
+              apodRepository: apodRepository,
+            ),
+          ),
+          BlocProvider(
+            create: (context) => NewsBloc(
+              apodRepository: apodRepository,
+            ),
+          ),
+        ],
+        child: const MyApp(),
+      ),
     ),
   );
 }
