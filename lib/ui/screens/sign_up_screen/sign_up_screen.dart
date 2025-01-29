@@ -1,36 +1,37 @@
-import 'package:cosmospedia/blocs/sign_in/sign_in_bloc.dart';
-import 'package:cosmospedia/ui/screens/home_screen/home_screen.dart';
+import 'package:cosmospedia/blocs/sign_up/sign_up_bloc.dart';
+import 'package:cosmospedia/ui/screens/sign_in_screen/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '';
-import '../sign_up_screen/sign_up_screen.dart';
 
-class SignInScreen extends StatelessWidget {
-  const SignInScreen({super.key});
+import '../home_screen/home_screen.dart';
+
+class SignUpScreen extends StatelessWidget {
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final _emailController = TextEditingController();
     final _passwordController = TextEditingController();
+    final _confirmPasswordController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
 
     return BlocProvider(
-      create: (context) => SignInBloc(),
+      create: (context) => SignUpBloc(),
       child: Scaffold(
-        body: BlocConsumer<SignInBloc, SignInState>(
+        body: BlocConsumer<SignUpBloc, SignUpState>(
           listener: (context, state) {
-            if (state is SignInSuccess) {
+            if (state is SignUpSuccess) {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const HomeScreen()),
               );
-            } else if (state is SignInFailure) {
+            } else if (state is SignUpFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.error)),
               );
             }
           },
-          builder: (BuildContext context, SignInState state) {
+          builder: (BuildContext context, SignUpState state) {
             return Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
@@ -48,7 +49,6 @@ class SignInScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          // Logo or App Name
                           const Icon(
                             Icons.rocket_launch,
                             size: 80,
@@ -56,8 +56,11 @@ class SignInScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 32),
                           Text(
-                            'Welcome Back',
-                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            'Create Account',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium
+                                ?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -79,11 +82,15 @@ class SignInScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: BorderSide.none,
                               ),
-                              prefixIcon: const Icon(Icons.email, color: Colors.white70),
+                              prefixIcon:
+                              const Icon(Icons.email, color: Colors.white70),
                             ),
                             validator: (value) {
                               if (value?.isEmpty ?? true) {
                                 return 'Please enter your email';
+                              }
+                              if (!value!.contains('@')) {
+                                return 'Please enter a valid email';
                               }
                               return null;
                             },
@@ -104,18 +111,48 @@ class SignInScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: BorderSide.none,
                               ),
-                              prefixIcon: const Icon(Icons.lock, color: Colors.white70),
+                              prefixIcon:
+                              const Icon(Icons.lock, color: Colors.white70),
                             ),
                             validator: (value) {
                               if (value?.isEmpty ?? true) {
-                                return 'Please enter your password';
+                                return 'Please enter a password';
+                              }
+                              if (value!.length < 6) {
+                                return 'Password must be at least 6 characters';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+
+                          // Confirm Password Field
+                          TextFormField(
+                            controller: _confirmPasswordController,
+                            obscureText: true,
+                            style: const TextStyle(color: Colors.white),
+                            decoration: InputDecoration(
+                              labelText: 'Confirm Password',
+                              labelStyle: const TextStyle(color: Colors.white70),
+                              filled: true,
+                              fillColor: Colors.white.withOpacity(0.1),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              prefixIcon:
+                              const Icon(Icons.lock_reset, color: Colors.white70),
+                            ),
+                            validator: (value) {
+                              if (value != _passwordController.text) {
+                                return 'Passwords do not match';
                               }
                               return null;
                             },
                           ),
                           const SizedBox(height: 24),
 
-                          // Sign In Button
+                          // Sign Up Button
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
@@ -126,29 +163,28 @@ class SignInScreen extends StatelessWidget {
                               ),
                             ),
                             onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const SignInScreen()));
                             },
-                            child: Text('Sign In',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),),
-                            /*onPressed: state is SignInLoading
+                            child: Text('Sign Up',
+                              style: TextStyle(fontSize: 16,
+                                fontWeight: FontWeight.bold,)),
+                            /*onPressed: state is SignUpLoading
                                 ? null
                                 : () {
                               if (_formKey.currentState?.validate() ?? false) {
-                                context.read<SignInBloc>().add(
-                                  SignInWithEmailPassword(
+                                context.read<SignUpBloc>().add(
+                                  SignUpWithEmailPassword(
                                     _emailController.text,
                                     _passwordController.text,
+                                    _confirmPasswordController.text,
                                   ),
                                 );
                               }
                             },
-                            child: state is SignInLoading
+                            child: state is SignUpLoading
                                 ? const CircularProgressIndicator()
                                 : const Text(
-                              'Sign In',
+                              'Sign Up',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -156,27 +192,17 @@ class SignInScreen extends StatelessWidget {
                             ),*/
                           ),
 
-                          //SignUp Button
+                          // Already have an account link
                           TextButton(
                             onPressed: () {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                                MaterialPageRoute(
+                                    builder: (context) => const SignInScreen()),
                               );
                             },
                             child: const Text(
-                              'Don\'t have an account? Sign Up',
-                              style: TextStyle(color: Colors.white70),
-                            ),
-                          ),
-
-                          // Forgot Password Link
-                          TextButton(
-                            onPressed: () {
-                              // Add forgot password functionality
-                            },
-                            child: const Text(
-                              'Forgot Password?',
+                              'Already have an account? Sign In',
                               style: TextStyle(color: Colors.white70),
                             ),
                           ),

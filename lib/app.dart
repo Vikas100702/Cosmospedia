@@ -1,6 +1,7 @@
 import 'package:cosmospedia/config/theme.dart';
 import 'package:cosmospedia/l10n/app_localizations_delegates.dart';
 import 'package:cosmospedia/ui/screens/home_screen/home_screen.dart';
+import 'package:cosmospedia/ui/screens/sign_in_screen/sign_in_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
         builder: (context) {
           // Use a fallback method to avoid null check
           final l10n = AppLocalizations.of(context) ?? AppLocalizations.of(context);
-          return const HomeScreen();
+          return const SignInScreen();
         },
       )
     );
