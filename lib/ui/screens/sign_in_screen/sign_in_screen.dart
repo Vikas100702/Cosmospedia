@@ -130,8 +130,8 @@ class SignInScreen extends StatelessWidget {
                               if (_formKey.currentState?.validate() ?? false) {
                                 context.read<SignInBloc>().add(
                                   SignInWithEmailPassword(
-                                    email: _emailController.text,
-                                    password: _passwordController.text,
+                                    _emailController.text,
+                                    _passwordController.text,
                                   ),
                                 );
                               }

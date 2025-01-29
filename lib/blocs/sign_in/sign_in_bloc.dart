@@ -14,7 +14,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
           email: event.email,
           password: event.password,
         );
-        emit(SigInInSuccess());
+        emit(SignInSuccess());
       } on FirebaseAuthException catch (e) {
         emit(SignInFailure(e.message ?? 'Authentication failed'));
       }
