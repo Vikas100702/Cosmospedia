@@ -61,9 +61,9 @@ class SignUpScreen extends StatelessWidget {
                                 .textTheme
                                 .headlineMedium
                                 ?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 48),
@@ -75,15 +75,16 @@ class SignUpScreen extends StatelessWidget {
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                               labelText: 'Email',
-                              labelStyle: const TextStyle(color: Colors.white70),
+                              labelStyle:
+                                  const TextStyle(color: Colors.white70),
                               filled: true,
                               fillColor: Colors.white.withOpacity(0.1),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: BorderSide.none,
                               ),
-                              prefixIcon:
-                              const Icon(Icons.email, color: Colors.white70),
+                              prefixIcon: const Icon(Icons.email,
+                                  color: Colors.white70),
                             ),
                             validator: (value) {
                               if (value?.isEmpty ?? true) {
@@ -104,7 +105,8 @@ class SignUpScreen extends StatelessWidget {
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                               labelText: 'Password',
-                              labelStyle: const TextStyle(color: Colors.white70),
+                              labelStyle:
+                                  const TextStyle(color: Colors.white70),
                               filled: true,
                               fillColor: Colors.white.withOpacity(0.1),
                               border: OutlineInputBorder(
@@ -112,7 +114,7 @@ class SignUpScreen extends StatelessWidget {
                                 borderSide: BorderSide.none,
                               ),
                               prefixIcon:
-                              const Icon(Icons.lock, color: Colors.white70),
+                                  const Icon(Icons.lock, color: Colors.white70),
                             ),
                             validator: (value) {
                               if (value?.isEmpty ?? true) {
@@ -133,15 +135,16 @@ class SignUpScreen extends StatelessWidget {
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                               labelText: 'Confirm Password',
-                              labelStyle: const TextStyle(color: Colors.white70),
+                              labelStyle:
+                                  const TextStyle(color: Colors.white70),
                               filled: true,
                               fillColor: Colors.white.withOpacity(0.1),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: BorderSide.none,
                               ),
-                              prefixIcon:
-                              const Icon(Icons.lock_reset, color: Colors.white70),
+                              prefixIcon: const Icon(Icons.lock_reset,
+                                  color: Colors.white70),
                             ),
                             validator: (value) {
                               if (value != _passwordController.text) {
@@ -151,7 +154,6 @@ class SignUpScreen extends StatelessWidget {
                             },
                           ),
                           const SizedBox(height: 24),
-
                           // Sign Up Button
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
@@ -162,12 +164,20 @@ class SignUpScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-                            onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const SignInScreen()));
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const SignInScreen()));
                             },
-                            child: Text('Sign Up',
-                              style: TextStyle(fontSize: 16,
-                                fontWeight: FontWeight.bold,)),
+                            child: const Text(
+                              'Sign Up',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             /*onPressed: state is SignUpLoading
                                 ? null
                                 : () {
