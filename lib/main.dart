@@ -22,6 +22,7 @@ Future<void> main() async {
     MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: apodRepository),
+        RepositoryProvider.value(value: roverRepository)
       ],
       child: MultiBlocProvider(
         providers: [
