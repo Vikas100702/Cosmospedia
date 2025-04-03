@@ -2,20 +2,21 @@ import 'package:cosmospedia/data/models/apod.dart';
 import 'package:equatable/equatable.dart';
 
 enum HomeStatus { initial, loading, success, failure }
+enum CurrentScreen { home, marsRover, weather, map, settings }
 
 class HomeState extends Equatable {
   final HomeStatus status;
   final List<ApodModel> apodImages;
   final List<ApodModel> newsItems;
   final String? error;
-  final int currentTab;
+  final CurrentScreen currentScreen;
 
   const HomeState({
     this.status = HomeStatus.initial,
     this.apodImages = const [],
     this.newsItems = const [],
     this.error,
-    this.currentTab = 0,
+    this.currentScreen = CurrentScreen.home, // Default to Home screen
   });
 
   HomeState copyWith({
@@ -23,17 +24,17 @@ class HomeState extends Equatable {
     List<ApodModel>? apodImages,
     List<ApodModel>? newsItems,
     String? error,
-    int? currentTab,
+    CurrentScreen? currentScreen,
   }) {
     return HomeState(
       status: status ?? this.status,
       apodImages: apodImages ?? this.apodImages,
       newsItems: newsItems ?? this.newsItems,
       error: error ?? this.error,
-      currentTab: currentTab ?? this.currentTab,
+      currentScreen: currentScreen ?? this.currentScreen,
     );
   }
 
   @override
-  List<Object?> get props => [status, apodImages, newsItems, error, currentTab];
+  List<Object?> get props => [status, apodImages, newsItems, error, currentScreen];
 }

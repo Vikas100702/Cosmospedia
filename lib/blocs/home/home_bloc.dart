@@ -9,7 +9,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({required this.apodRepository}) : super(const HomeState()) {
     on<LoadHomeData>(_loadHomeData);
     on<RefreshHomeData>(_refreshHomeData);
-    on<SwitchTab>(_switchTab);
+    on<SwitchScreen>(_switchScreen);
   }
 
   Future<void> _loadHomeData(
@@ -63,7 +63,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  void _switchTab(SwitchTab event, Emitter<HomeState> emit) {
-    emit(state.copyWith(currentTab: event.index));
+  void _switchScreen(SwitchScreen event, Emitter<HomeState> emit){
+    emit(state.copyWith(currentScreen: event.screen));
   }
 }
