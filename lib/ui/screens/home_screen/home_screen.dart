@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../components/app_drawer/app_drawer.dart';
 import '../../components/bottom_navigation_bar/bottom_navigation_bar.dart';
-import 'home_screen_widgets/custom_image_slider.dart';
+import '../../components/image_slider/custom_image_slider.dart';
 import 'home_screen_widgets/custom_news_list.dart';
 
 class HomeScreen extends StatelessWidget {

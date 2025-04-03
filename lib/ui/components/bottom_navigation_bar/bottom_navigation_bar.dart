@@ -27,7 +27,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
               buildNavigationItem(
                 context,
                 Icons.calendar_today,
-                "Calendar",
+                "Mars Rover",
                 state.currentTab == 0,
                     () => context.read<HomeBloc>().add(SwitchTab(0)),
               ),

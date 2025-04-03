@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../data/models/apod.dart';
+import '../../../data/models/apod.dart';
 
 Widget buildImageSlider(
     BuildContext context,

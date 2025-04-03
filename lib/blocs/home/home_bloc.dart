@@ -45,8 +45,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       status: HomeStatus.loading,
     ));
     try {
-      final apodImages = await apodRepository.getRecentApods(5); //For slider
-      final newsItems = await apodRepository.getRecentApods(5); //For Cards.
+      final apodImages = await apodRepository.getRecentApods(20); //For slider
+      final newsItems = await apodRepository.getRecentApods(20); //For Cards.
       emit(
         state.copyWith(
           apodImages: apodImages,

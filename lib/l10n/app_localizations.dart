@@ -54,6 +54,9 @@ class AppLocalizations{
       'imageDownloadError' : 'Error downloading image',
       'storagePermissionDenied' : 'Storage permission is required to download images',
 
+      //Mars Rover Explorer
+      'marsRoverExplorer' : 'Mars Rover Explorer',
+
       // Common
       'loading' : 'Loading...',
       'error' : 'Error',
@@ -109,6 +112,9 @@ class AppLocalizations{
   String get imageDownloadSuccess => _localizedValues[locale.languageCode]!['imageDownloadSuccess']!;
   String get imageDownloadError => _localizedValues[locale.languageCode]!['imageDownloadError']!;
   String get storagePermissionDenied => _localizedValues[locale.languageCode]!['storagePermissionDenied']!;
+
+  //Mars Rover Explorer
+  String get marsRoverExplorer => _localizedValues[locale.languageCode]!['marsRoverExplorer']!;
 
   // Common
   String get loading => _localizedValues[locale.languageCode]!['loading']!;
