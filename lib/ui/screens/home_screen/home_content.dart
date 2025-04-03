@@ -36,7 +36,8 @@ class HomeContent extends StatelessWidget {
           return Center(
             child: Text(
               state.error ?? l10n!.error,
-              style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.04),
+              style:
+                  TextStyle(fontSize: MediaQuery.of(context).size.width * 0.04),
             ),
           );
         }
@@ -54,7 +55,10 @@ class HomeContent extends StatelessWidget {
                       context,
                       _prepareApodDataForSlider(state.apodImages),
                       MediaQuery.of(context).size.height *
-                          (MediaQuery.of(context).orientation == Orientation.portrait ? 0.3 : 0.5),
+                          (MediaQuery.of(context).orientation ==
+                                  Orientation.portrait
+                              ? 0.3
+                              : 0.5),
                       constraints,
                     ),
                     buildNewsList(
@@ -71,7 +75,9 @@ class HomeContent extends StatelessWidget {
       },
     );
   }
-  List<Map<String, String>> _prepareApodDataForSlider(List<ApodModel> apodImages) {
+
+  List<Map<String, String>> _prepareApodDataForSlider(
+      List<ApodModel> apodImages) {
     return apodImages.map((apod) {
       return {
         'url': apod.url,

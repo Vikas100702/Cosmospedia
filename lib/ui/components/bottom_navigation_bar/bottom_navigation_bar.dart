@@ -1,3 +1,4 @@
+import 'package:cosmospedia/ui/screens/rover_screen/rover_screen.dart';
 import 'package:cosmospedia/utils/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,10 +32,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
                 "Mars Rover",
                 state.currentScreen == CurrentScreen.marsRover,
                 () {
-                  context
-                      .read<HomeBloc>()
-                      .add(SwitchScreen(CurrentScreen.marsRover));
-                  Navigator.pushNamed(context, '/rovers');
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const RoverScreen()));
+                  // context
+                  //     .read<HomeBloc>()
+                  //     .add(SwitchScreen(CurrentScreen.marsRover));
                 },
               ),
               buildNavigationItem(
