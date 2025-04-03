@@ -1,4 +1,5 @@
 import 'package:cosmospedia/utils/size_config.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../blocs/home/home_bloc.dart';
@@ -26,17 +27,24 @@ class CustomBottomNavigationBar extends StatelessWidget {
             children: [
               buildNavigationItem(
                 context,
-                Icons.calendar_today,
+                Icons.rocket_launch_rounded,
                 "Mars Rover",
                 state.currentScreen == CurrentScreen.marsRover,
-                    () => context.read<HomeBloc>().add(SwitchScreen(CurrentScreen.marsRover)),
+                () {
+                  context
+                      .read<HomeBloc>()
+                      .add(SwitchScreen(CurrentScreen.marsRover));
+                  Navigator.pushNamed(context, '/rovers');
+                },
               ),
               buildNavigationItem(
                 context,
                 Icons.cloud,
                 "Weather",
                 state.currentScreen == CurrentScreen.weather,
-                    () => context.read<HomeBloc>().add(SwitchScreen(CurrentScreen.weather)),
+                () => context
+                    .read<HomeBloc>()
+                    .add(SwitchScreen(CurrentScreen.weather)),
               ),
               SizedBox(width: SizeConfig.width(1)),
               buildNavigationItem(
@@ -44,14 +52,18 @@ class CustomBottomNavigationBar extends StatelessWidget {
                 Icons.map,
                 "Map",
                 state.currentScreen == CurrentScreen.map,
-                    () => context.read<HomeBloc>().add(SwitchScreen(CurrentScreen.map)),
+                () => context
+                    .read<HomeBloc>()
+                    .add(SwitchScreen(CurrentScreen.map)),
               ),
               buildNavigationItem(
                 context,
                 Icons.settings,
                 "Settings",
                 state.currentScreen == CurrentScreen.settings,
-                    () => context.read<HomeBloc>().add(SwitchScreen(CurrentScreen.settings)),
+                () => context
+                    .read<HomeBloc>()
+                    .add(SwitchScreen(CurrentScreen.settings)),
               ),
             ],
           ),

@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
             currentScreen = const HomeContent();
             break;
           case CurrentScreen.marsRover:
-            currentScreen = const ComingSoonScreen(title: "Mars Rover Explorer");
+            currentScreen = const HomeContent();
             break;
           case CurrentScreen.weather:
             currentScreen = const ComingSoonScreen(title: "Weather");

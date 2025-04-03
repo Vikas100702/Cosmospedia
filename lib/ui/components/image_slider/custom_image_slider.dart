@@ -1,11 +1,10 @@
+// lib/ui/components/image_slider/custom_image_slider.dart
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-import '../../../data/models/apod.dart';
-
 Widget buildImageSlider(
     BuildContext context,
-    List<ApodModel> images,
+    List<Map<String, String>> items,
     double height,
     BoxConstraints constraints,
     ) {
@@ -23,7 +22,7 @@ Widget buildImageSlider(
       autoPlayCurve: Curves.fastOutSlowIn,
       viewportFraction: isPortrait ? 0.85 : 0.7,
     ),
-    items: images.map((image) {
+    items: items.map((item) {
       return Builder(
         builder: (BuildContext context) {
           return Container(
@@ -36,7 +35,7 @@ Widget buildImageSlider(
                 screenSize.width * 0.02,
               ),
               image: DecorationImage(
-                image: NetworkImage(image.url),
+                image: NetworkImage(item['url'] ?? ''),
                 fit: BoxFit.cover,
               ),
             ),
@@ -61,7 +60,7 @@ Widget buildImageSlider(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      image.title,
+                      item['title'] ?? '',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: screenSize.width * 0.04,
@@ -70,12 +69,22 @@ Widget buildImageSlider(
                     ),
                     SizedBox(height: screenSize.height * 0.01),
                     Text(
-                      image.date,
+                      item['date'] ?? '',
                       style: TextStyle(
                         color: Colors.white70,
                         fontSize: screenSize.width * 0.03,
                       ),
                     ),
+                    if (item['description']?.isNotEmpty ?? false)
+                      Text(
+                        item['description']!,
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: screenSize.width * 0.03,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                   ],
                 ),
               ),

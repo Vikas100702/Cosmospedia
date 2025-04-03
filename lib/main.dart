@@ -6,7 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'blocs/home/home_bloc.dart';
 import 'blocs/news/news_bloc.dart';
+import 'blocs/rover/rover_bloc.dart';
 import 'data/repositories/apod_repositories.dart';
+import 'data/repositories/mars/rover_repositories.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -15,6 +17,7 @@ Future<void> main() async {
 
   //Initialize Repositories
   final apodRepository = ApodRepository();
+  final roverRepository = RoverRepository();
   runApp(
     MultiRepositoryProvider(
       providers: [
@@ -33,6 +36,10 @@ Future<void> main() async {
           BlocProvider(
             create: (context) => NewsBloc(
               apodRepository: apodRepository,
+            ),
+          ),BlocProvider(
+            create: (context) => RoverBloc(
+              roverRepository: roverRepository,
             ),
           ),
         ],

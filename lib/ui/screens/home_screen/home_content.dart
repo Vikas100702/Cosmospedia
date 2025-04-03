@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../blocs/home/home_bloc.dart';
 import '../../../blocs/home/home_event.dart';
 import '../../../blocs/home/home_state.dart';
+import '../../../data/models/apod.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../components/image_slider/custom_image_slider.dart';
 import 'home_screen_widgets/custom_news_list.dart';
@@ -51,7 +52,7 @@ class HomeContent extends StatelessWidget {
                   children: [
                     buildImageSlider(
                       context,
-                      state.apodImages,
+                      _prepareApodDataForSlider(state.apodImages),
                       MediaQuery.of(context).size.height *
                           (MediaQuery.of(context).orientation == Orientation.portrait ? 0.3 : 0.5),
                       constraints,
@@ -69,5 +70,15 @@ class HomeContent extends StatelessWidget {
         );
       },
     );
+  }
+  List<Map<String, String>> _prepareApodDataForSlider(List<ApodModel> apodImages) {
+    return apodImages.map((apod) {
+      return {
+        'url': apod.url,
+        'title': apod.title,
+        'date': apod.date,
+        'description': apod.explanation,
+      };
+    }).toList();
   }
 }
