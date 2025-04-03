@@ -1,8 +1,10 @@
 import 'package:cosmospedia/blocs/sign_in/sign_in_bloc.dart';
+import 'package:cosmospedia/ui/components/custom_buttons/custom_text_button/custom_text_button.dart';
 import 'package:cosmospedia/ui/screens/home_screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '';
+import '../../components/custom_buttons/custom_elevated_button/custom_elevated_button.dart';
 import '../sign_up_screen/sign_up_screen.dart';
 
 class SignInScreen extends StatelessWidget {
@@ -116,7 +118,7 @@ class SignInScreen extends StatelessWidget {
                           const SizedBox(height: 24),
 
                           // Sign In Button
-                          ElevatedButton(
+                          /*ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
                               foregroundColor: Colors.black,
@@ -133,7 +135,8 @@ class SignInScreen extends StatelessWidget {
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),),
-                            /*onPressed: state is SignInLoading
+                            */
+                          /*onPressed: state is SignInLoading
                                 ? null
                                 : () {
                               if (_formKey.currentState?.validate() ?? false) {
@@ -153,11 +156,17 @@ class SignInScreen extends StatelessWidget {
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
-                            ),*/
+                            ),*//*
+                          ),*/
+                          CustomElevatedButton(
+                            onPressed: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen(),),);
+                            },
+                            text: 'Sign In',
                           ),
 
                           //SignUp Button
-                          TextButton(
+                          /*TextButton(
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -168,10 +177,17 @@ class SignInScreen extends StatelessWidget {
                               'Don\'t have an account? Sign Up',
                               style: TextStyle(color: Colors.white70),
                             ),
-                          ),
+                          ),*/
+
+                          CustomTextButton(onPressed: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                            );
+                          }, text: 'Don\'t have an account? Sign Up',),
 
                           // Forgot Password Link
-                          TextButton(
+                          /*TextButton(
                             onPressed: () {
                               // Add forgot password functionality
                             },
@@ -179,6 +195,12 @@ class SignInScreen extends StatelessWidget {
                               'Forgot Password?',
                               style: TextStyle(color: Colors.white70),
                             ),
+                          ),*/
+                          CustomTextButton(
+                            onPressed: () {
+                              // Add forgot password functionality
+                            },
+                            text: 'Forgot Password?',
                           ),
                         ],
                       ),

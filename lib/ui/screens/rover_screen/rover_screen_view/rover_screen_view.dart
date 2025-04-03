@@ -6,6 +6,7 @@ import '../../../../blocs/rover/rover_bloc.dart';
 import '../../../../data/models/mars/rover.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../components/custom_app_bar/custom_app_bar.dart';
+import '../../../components/custom_buttons/custom_elevated_button/custom_elevated_button.dart';
 import '../../../components/image_slider/custom_image_slider.dart';
 
 class RoverScreenView extends StatelessWidget {
@@ -87,7 +88,7 @@ class RoverScreenView extends StatelessWidget {
             }
             return RefreshIndicator(
               onRefresh: () async {
-                context.read<RoverBloc>().add(RefreshRoverData());
+                context.read<RoverBloc>().add(const LoadRoverData(roverName: 'curiosity'));
               },
               child: LayoutBuilder(
                 builder: (context, constraints) {
@@ -106,12 +107,29 @@ class RoverScreenView extends StatelessWidget {
                                   : 0.5),
                           constraints,
                         ),
-                        Padding(
-                          padding: EdgeInsets.all(screenSize.width * 0.04),
-                          child: Text(
-                            "Latest images from Mars",
-                            style: Theme.of(context).textTheme.headlineSmall,
-                          ),
+                        SizedBox(height: screenSize.height * 0.04),
+                        CustomElevatedButton(
+                          onPressed: (){},
+                          text: 'Browse By Rover',
+                          width: screenSize.width * 0.9,
+                        ),
+                        SizedBox(height: screenSize.height * 0.04),
+                        CustomElevatedButton(
+                          onPressed: (){},
+                          text: 'Browse By Date',
+                          width: screenSize.width * 0.9,
+                        ),
+                        SizedBox(height: screenSize.height * 0.04),
+                        CustomElevatedButton(
+                          onPressed: (){},
+                          text: 'Browse By Camera',
+                          width: screenSize.width * 0.9,
+                        ),
+                        SizedBox(height: screenSize.height * 0.04),
+                        CustomElevatedButton(
+                          onPressed: (){},
+                          text: 'Saved Photos',
+                          width: screenSize.width * 0.9,
                         ),
                       ],
                     ),

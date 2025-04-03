@@ -3,6 +3,8 @@ import 'package:cosmospedia/ui/screens/sign_in_screen/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../components/custom_buttons/custom_elevated_button/custom_elevated_button.dart';
+import '../../components/custom_buttons/custom_text_button/custom_text_button.dart';
 import '../home_screen/home_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -155,7 +157,7 @@ class SignUpScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 24),
                           // Sign Up Button
-                          ElevatedButton(
+                          /*ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
                               foregroundColor: Colors.black,
@@ -178,7 +180,8 @@ class SignUpScreen extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            /*onPressed: state is SignUpLoading
+                            */
+                          /*onPressed: state is SignUpLoading
                                 ? null
                                 : () {
                               if (_formKey.currentState?.validate() ?? false) {
@@ -199,11 +202,22 @@ class SignUpScreen extends StatelessWidget {
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
-                            ),*/
+                            ),*//*
+                          ),*/
+
+                          CustomElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const SignInScreen()),
+                              );
+                            },
+                            text: 'Sign Up',
                           ),
 
                           // Already have an account link
-                          TextButton(
+                          /*TextButton(
                             onPressed: () {
                               Navigator.pushReplacement(
                                 context,
@@ -215,6 +229,16 @@ class SignUpScreen extends StatelessWidget {
                               'Already have an account? Sign In',
                               style: TextStyle(color: Colors.white70),
                             ),
+                          ),*/
+                          CustomTextButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const SignInScreen()),
+                              );
+                            },
+                            text: 'Already have an account? Sign In',
                           ),
                         ],
                       ),
