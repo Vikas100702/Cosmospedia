@@ -1,4 +1,5 @@
 import 'package:cosmospedia/data/models/mars/rover.dart';
+import 'package:cosmospedia/ui/components/custom_app_bar/custom_app_bar.dart';
 import 'package:cosmospedia/ui/components/custom_buttons/custom_elevated_button/custom_elevated_button.dart';
 import 'package:cosmospedia/ui/screens/rover_screen/rover_details_screen/rover_detail_row_widget/rover_detail_row_widget.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../blocs/rover_manifest/rover_manifest_bloc.dart';
 import '../../../../data/repositories/mars/rover_manifest_repository.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../utils/app_colors.dart';
 
 // Updated RoverDetailsScreen with better styling
 class RoverDetailsScreen extends StatelessWidget {
@@ -20,31 +22,47 @@ class RoverDetailsScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final screenSize = MediaQuery.of(context).size;
 
+    // Create a GlobalKey for the Scaffold
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
     return BlocProvider(
       create: (context) => RoverManifestBloc(
         roverManifestRepository: context.read<RoverManifestRepository>(),
       )..add(LoadRoverManifest(roverName: roverName)),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('$roverName Details'),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.blue[800]!, Colors.blue[600]!],
+      child: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage("assets/background.png"),
+          ),
+        ),
+        child: Scaffold(
+          key: scaffoldKey,
+          backgroundColor: AppColors.transparentColor,
+          appBar: customAppBar(
+            scaffoldKey: scaffoldKey,
+            context: context,
+            titleWidget: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                '$roverName Details',
+                style: TextStyle(
+                  color: AppColors.backgroundLight,
+                  fontWeight: FontWeight.w600,
+                  fontSize: screenSize.width * 0.045,
+                  letterSpacing: 0.5,
+                ),
               ),
             ),
           ),
-        ),
-        body: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage("assets/background.png"),
-            ),
-          ),
-          child: BlocBuilder<RoverManifestBloc, RoverManifestState>(
+          body: BlocBuilder<RoverManifestBloc, RoverManifestState>(
             builder: (context, state) {
               if (state.status == RoverManifestStatus.loading) {
                 return const Center(child: CircularProgressIndicator());
