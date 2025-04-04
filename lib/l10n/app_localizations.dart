@@ -57,6 +57,12 @@ class AppLocalizations{
       //Mars Rover Explorer
       'marsRoverExplorer' : 'Mars Rover Explorer',
 
+      //Browse by Rover
+      'browseByRover' : 'Browse By Rover',
+      'curiosity' : 'Curiosity',
+      'opportunity' : 'Opportunity',
+      'spirit' : 'Spirit',
+
       // Common
       'loading' : 'Loading...',
       'error' : 'Error',
@@ -115,6 +121,12 @@ class AppLocalizations{
 
   //Mars Rover Explorer
   String get marsRoverExplorer => _localizedValues[locale.languageCode]!['marsRoverExplorer']!;
+
+  //browse by Rover
+  String get browseByRover => _localizedValues[locale.languageCode]!['browseByRover']!;
+  String get curiosity => _localizedValues[locale.languageCode]!['curiosity']!;
+  String get opportunity => _localizedValues[locale.languageCode]!['opportunity']!;
+  String get spirit => _localizedValues[locale.languageCode]!['spirit']!;
 
   // Common
   String get loading => _localizedValues[locale.languageCode]!['loading']!;

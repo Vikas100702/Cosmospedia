@@ -20,6 +20,7 @@ Future<void> main() async {
   //Initialize Repositories
   final apodRepository = ApodRepository();
   final roverRepository = RoverRepository();
+  final roverManifestRepository = RoverManifestRepository();
   runApp(
     MultiRepositoryProvider(
       providers: [
