@@ -1,5 +1,7 @@
 import 'package:cosmospedia/app.dart';
+import 'package:cosmospedia/blocs/rover_manifest/rover_manifest_bloc.dart';
 import 'package:cosmospedia/blocs/sign_in/sign_in_bloc.dart';
+import 'package:cosmospedia/data/repositories/mars/rover_manifest_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +24,10 @@ Future<void> main() async {
     MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: apodRepository),
-        RepositoryProvider.value(value: roverRepository)
+        RepositoryProvider.value(value: roverRepository),
+        RepositoryProvider(
+          create: (_) => RoverManifestRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -38,9 +43,15 @@ Future<void> main() async {
             create: (context) => NewsBloc(
               apodRepository: apodRepository,
             ),
-          ),BlocProvider(
+          ),
+          BlocProvider(
             create: (context) => RoverBloc(
               roverRepository: roverRepository,
+            ),
+          ),
+          BlocProvider(
+            create: (context) => RoverManifestBloc(
+              roverManifestRepository: context.read<RoverManifestRepository>(),
             ),
           ),
         ],

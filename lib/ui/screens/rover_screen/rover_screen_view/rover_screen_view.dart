@@ -8,6 +8,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../components/custom_app_bar/custom_app_bar.dart';
 import '../../../components/custom_buttons/custom_elevated_button/custom_elevated_button.dart';
 import '../../../components/image_slider/custom_image_slider.dart';
+import '../rover_list_screen/rover_list_screen.dart';
 
 class RoverScreenView extends StatelessWidget {
   const RoverScreenView({super.key});
@@ -109,7 +110,12 @@ class RoverScreenView extends StatelessWidget {
                         ),
                         SizedBox(height: screenSize.height * 0.04),
                         CustomElevatedButton(
-                          onPressed: (){},
+                          onPressed: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const RoverListScreen()),
+                            );
+                          },
                           text: 'Browse By Rover',
                           width: screenSize.width * 0.9,
                         ),
