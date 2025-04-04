@@ -1,4 +1,5 @@
 import 'package:cosmospedia/data/models/mars/rover.dart';
+import 'package:cosmospedia/ui/components/custom_buttons/custom_elevated_button/custom_elevated_button.dart';
 import 'package:cosmospedia/ui/screens/rover_screen/rover_details_screen/rover_detail_row_widget/rover_detail_row_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -132,9 +133,14 @@ class RoverDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 20),
+                      CustomElevatedButton(onPressed: (){}, text: "Browse by Sol", width: double.infinity),
+                      const SizedBox(height: 20),
+                      CustomElevatedButton(onPressed: (){}, text: "Browse by Earth Date", width: double.infinity),
+                      const SizedBox(height: 20),
+                      CustomElevatedButton(onPressed: (){}, text: "Browse by Camera", width: double.infinity),
 
                       // Photo Manifest Section
-                      Text(
+                      /*Text(
                         'Photo Manifest',
                         style: theme.textTheme.titleLarge?.copyWith(
                           color: Colors.white,
@@ -188,7 +194,7 @@ class RoverDetailsScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                      )).toList(),
+                      )).toList(),*/
                     ],
                   ),
                 );
