@@ -27,7 +27,12 @@ class RoverBloc extends Bloc<RoverEvent, RoverState> {
     );
 
     try {
-      final roverImages = await roverRepository.getRoverPhotos(roverName: 'curiosity');
+      final roverImages = await roverRepository.getRoverPhotos(
+        roverName: event.roverName,
+        sol: event.sol,
+        earthDate: event.earthDate,
+      );
+
       emit(state.copyWith(
         status: RoverStatus.success,
         roverPhotos: roverImages,
@@ -48,7 +53,8 @@ class RoverBloc extends Bloc<RoverEvent, RoverState> {
       status: RoverStatus.loading,
     ));
     try {
-      final roverPhotos = await roverRepository.getRoverPhotos(roverName: 'curiosity');
+      final roverPhotos =
+          await roverRepository.getRoverPhotos(roverName: 'curiosity');
       emit(
         state.copyWith(
           roverPhotos: roverPhotos,

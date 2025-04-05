@@ -13,15 +13,16 @@ class RoverRepository {
   Future<List<RoverModel>> getRoverPhotos({
     int count = 20, // Limit for featured images
     required String roverName,
-    int sol = 1000, // Default sol day
-    String? cameraName,
+    int? sol = 1000, // Default sol day
+    String? cameraName, String? earthDate,
   }) async {
     // final List<RoverModel> roverPhotos = [];
 
     try {
 
       final url = Uri.parse(
-        '${Constants.NASA_MARS_ROVER_BASE_URL}/rovers/$roverName/photos?sol=$sol'
+        '${Constants.NASA_MARS_ROVER_BASE_URL}/rovers/$roverName/photos?'
+            '${earthDate != null ? 'earth_date=$earthDate' : 'sol=$sol'}'
             '${cameraName != null ? '&camera=$cameraName' : ''}'
             '&api_key=${Constants.NASA_API_KEY}',
       );

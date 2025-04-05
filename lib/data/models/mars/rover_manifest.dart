@@ -5,7 +5,7 @@ class RoverManifestModel extends Equatable {
   final String landingDate;
   final String launchDate;
   final String status;
-  final int maxSol;
+  final int? maxSol;
   final String maxDate;
   final int totalPhotos;
   final List<PhotoManifest> photos;
