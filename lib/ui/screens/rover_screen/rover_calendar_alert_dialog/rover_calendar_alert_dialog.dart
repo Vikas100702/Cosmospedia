@@ -1,6 +1,5 @@
 // lib/ui/components/rover/rover_calendar.dart
 import 'package:cosmospedia/data/models/mars/rover_manifest.dart';
-import 'package:cosmospedia/ui/screens/rover_screen/rover_photos_grid/rover_photos_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -116,7 +115,7 @@ class _RoverCalendarState extends State<RoverCalendar> {
     final maxDate = DateTime.parse(manifest.maxDate);
 
     // Ensure focusedDay is within bounds
-    if (_focusedDay.isAfter(maxDate)) {
+    if(_focusedDay.isAfter(maxDate)){
       _focusedDay = maxDate;
     }
     return Container(
@@ -162,16 +161,7 @@ class _RoverCalendarState extends State<RoverCalendar> {
               weekendStyle: TextStyle(color: Colors.white),
             ),
             onDaySelected: (selectedDay, focusedDay) {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RoverPhotosGrid(
-                    roverName: widget.roverName,
-                    selectedDate: selectedDay,
-                  ),
-                ),
-              );
+              Navigator.pop(context, selectedDay);
             },
           ),
           const SizedBox(height: 16),

@@ -1,3 +1,4 @@
+/*
 // lib/ui/screens/rover_screen/rover_photos_grid/rover_photos_grid.dart
 import 'package:cosmospedia/blocs/rover/rover_bloc.dart';
 import 'package:flutter/material.dart';
@@ -107,4 +108,4 @@ class RoverPhotosGrid extends StatelessWidget {
   String _formatDate(DateTime date) {
     return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
-}
+}*/
