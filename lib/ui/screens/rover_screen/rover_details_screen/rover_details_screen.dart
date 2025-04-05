@@ -1,10 +1,11 @@
 import 'package:cosmospedia/data/models/mars/rover.dart';
 import 'package:cosmospedia/ui/components/custom_app_bar/custom_app_bar.dart';
 import 'package:cosmospedia/ui/components/custom_buttons/custom_elevated_button/custom_elevated_button.dart';
+import 'package:cosmospedia/ui/screens/rover_screen/rover_calendar_alert_dialog/rover_calendar_alert_dialog.dart';
 import 'package:cosmospedia/ui/screens/rover_screen/rover_details_screen/rover_detail_row_widget/rover_detail_row_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:intl/intl.dart';
 import '../../../../blocs/rover_manifest/rover_manifest_bloc.dart';
 import '../../../../data/repositories/mars/rover_manifest_repository.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -106,7 +107,8 @@ class RoverDetailsScreen extends StatelessWidget {
                                 children: [
                                   Text(
                                     roverName.toUpperCase(),
-                                    style: theme.textTheme.headlineSmall?.copyWith(
+                                    style:
+                                        theme.textTheme.headlineSmall?.copyWith(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -141,21 +143,68 @@ class RoverDetailsScreen extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 16),
-                              RoverDetailRowWidget(label: 'Launch Date', value: manifest.launchDate),
-                              RoverDetailRowWidget(label: 'Landing Date', value: manifest.landingDate),
-                              RoverDetailRowWidget(label: 'Total Photos', value: manifest.totalPhotos.toString()),
-                              RoverDetailRowWidget(label: 'Max Sol', value: manifest.maxSol.toString()),
-                              RoverDetailRowWidget(label: 'Max Date', value: manifest.maxDate),
+                              RoverDetailRowWidget(
+                                  label: 'Launch Date',
+                                  value: manifest.launchDate),
+                              RoverDetailRowWidget(
+                                  label: 'Landing Date',
+                                  value: manifest.landingDate),
+                              RoverDetailRowWidget(
+                                  label: 'Total Photos',
+                                  value: manifest.totalPhotos.toString()),
+                              RoverDetailRowWidget(
+                                  label: 'Max Sol',
+                                  value: manifest.maxSol.toString()),
+                              RoverDetailRowWidget(
+                                  label: 'Max Date', value: manifest.maxDate),
                             ],
                           ),
                         ),
                       ),
                       const SizedBox(height: 20),
-                      CustomElevatedButton(onPressed: (){}, text: "Browse by Sol", width: double.infinity),
+                      CustomElevatedButton(
+                          onPressed: () {},
+                          text: "Browse by Sol",
+                          width: double.infinity),
                       const SizedBox(height: 20),
-                      CustomElevatedButton(onPressed: (){}, text: "Browse by Earth Date", width: double.infinity),
+                      // In RoverDetailsScreen
+                      CustomElevatedButton(
+                        onPressed: () async {
+                          // Ensure manifest is loaded before showing dialog
+                          context.read<RoverManifestBloc>().add(
+                                LoadRoverManifest(roverName: roverName),
+                              );
+
+                          // Add slight delay to ensure state is updated
+                          await Future.delayed(
+                            const Duration(milliseconds: 100),
+                          );
+
+                          final selectedDate = await showRoverCalendarDialog(
+                            context: context,
+                            roverName: roverName,
+                          );
+
+                          if (selectedDate != null) {
+                            final formattedDate =
+                                DateFormat('yyyy-MM-dd').format(selectedDate);
+                            // Use the selected date to fetch photos
+                            // Example:
+                            // context.read<RoverBloc>().add(LoadRoverPhotosByDate(
+                            //   roverName: roverName,
+                            //   earthDate: formattedDate,
+                            // ));
+                            debugPrint('Selected Date: $formattedDate');
+                          }
+                        },
+                        text: "Browse by Earth Date",
+                        width: double.infinity,
+                      ),
                       const SizedBox(height: 20),
-                      CustomElevatedButton(onPressed: (){}, text: "Browse by Camera", width: double.infinity),
+                      CustomElevatedButton(
+                          onPressed: () {},
+                          text: "Browse by Camera",
+                          width: double.infinity),
 
                       // Photo Manifest Section
                       /*Text(
@@ -220,7 +269,8 @@ class RoverDetailsScreen extends StatelessWidget {
               return Center(
                 child: Text(
                   'No data available',
-                  style: theme.textTheme.bodyLarge?.copyWith(color: Colors.white),
+                  style:
+                      theme.textTheme.bodyLarge?.copyWith(color: Colors.white),
                 ),
               );
             },
