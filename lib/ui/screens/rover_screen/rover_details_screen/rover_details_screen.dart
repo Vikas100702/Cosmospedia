@@ -170,20 +170,16 @@ class RoverDetailsScreen extends StatelessWidget {
                       // In RoverDetailsScreen
                       CustomElevatedButton(
                         onPressed: () async {
-                          // Ensure manifest is loaded before showing dialog
-                          context.read<RoverManifestBloc>().add(
-                                LoadRoverManifest(roverName: roverName),
-                              );
-
-                          // Add slight delay to ensure state is updated
-                          await Future.delayed(
-                            const Duration(milliseconds: 100),
-                          );
-
+                          final manifest = context
+                              .read<RoverManifestBloc>()
+                              .state
+                              .roverManifestModel;
                           final selectedDate = await showRoverCalendarDialog(
                             context: context,
                             roverName: roverName,
+                            manifest: manifest,
                           );
+
 
                           if (selectedDate != null) {
                             final formattedDate =
