@@ -10,6 +10,7 @@ import '../../../../blocs/rover_manifest/rover_manifest_bloc.dart';
 import '../../../../data/repositories/mars/rover_manifest_repository.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../utils/app_colors.dart';
+import '../rover_camera_alert_dialog/rover_camera_alert_dialog.dart';
 
 // Updated RoverDetailsScreen with better styling
 class RoverDetailsScreen extends StatelessWidget {
@@ -197,10 +198,45 @@ class RoverDetailsScreen extends StatelessWidget {
                         width: double.infinity,
                       ),
                       const SizedBox(height: 20),
+                      // In the RoverDetailsScreen widget (add this near the other buttons)
                       CustomElevatedButton(
-                          onPressed: () {},
-                          text: "Browse by Camera",
-                          width: double.infinity),
+                        onPressed: () async {
+                          final manifest = context
+                              .read<RoverManifestBloc>()
+                              .state
+                              .roverManifestModel;
+
+                          if (manifest != null && manifest.photos.isNotEmpty) {
+                            // Get all unique cameras from the manifest
+                            final allCameras = manifest.photos
+                                .expand((photo) => photo.cameras)
+                                .toSet()
+                                .toList();
+
+                            final selectedCamera = await showRoverCameraDialog(
+                              context: context,
+                              cameras: allCameras,
+                            );
+
+                            if (selectedCamera != null) {
+                              // Handle camera selection
+                              debugPrint('Selected Camera: $selectedCamera');
+                              // You can now use this to fetch photos by camera
+                              // Example:
+                              // context.read<RoverBloc>().add(LoadRoverPhotosByCamera(
+                              //   roverName: roverName,
+                              //   cameraName: selectedCamera,
+                              // ));
+                            }
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('No camera data available')),
+                            );
+                          }
+                        },
+                        text: "Browse by Camera",
+                        width: double.infinity,
+                      ),
 
                       // Photo Manifest Section
                       /*Text(
