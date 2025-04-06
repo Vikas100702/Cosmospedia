@@ -102,7 +102,8 @@ class RoverBloc extends Bloc<RoverEvent, RoverState> {
       // Now using the event.roverName and event.sol values
       final roverImages = await roverRepository.getRoverPhotos(
         roverName: event.roverName,
-        sol: event.sol,
+        sol: 1000,
+        earthDate: event.earthDate,
       );
 
       emit(state.copyWith(
