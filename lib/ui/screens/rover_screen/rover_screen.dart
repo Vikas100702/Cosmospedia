@@ -13,7 +13,7 @@ class RoverScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => RoverBloc(
         roverRepository: context.read<RoverRepository>(),
-      )..add(const LoadRoverData(roverName: 'curiosity')),
+      )..add(const LoadRoverData(roverName: 'curiosity', sol: 1000)),
       child: const RoverScreenView(),
     );
   }
