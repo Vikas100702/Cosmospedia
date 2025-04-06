@@ -13,17 +13,24 @@ class RoverRepository {
   Future<List<RoverModel>> getRoverPhotos({
     int count = 20, // Limit for featured images
     required String roverName,
-    int sol = 1000, // Default sol day
+    String? earthDate,
+    int? sol, // Default sol day
     String? cameraName,
   }) async {
     // final List<RoverModel> roverPhotos = [];
 
     try {
-
-      final url = Uri.parse(
+      /*final url = Uri.parse(
         '${Constants.NASA_MARS_ROVER_BASE_URL}/rovers/$roverName/photos?sol=$sol'
             '${cameraName != null ? '&camera=$cameraName' : ''}'
             '&api_key=${Constants.NASA_API_KEY}',
+      );*/
+      final url = Uri.parse(
+        '${Constants.NASA_MARS_ROVER_BASE_URL}/rovers/$roverName/photos?'
+        '${earthDate != null ? 'earth_date=$earthDate&' : ''}'
+        '${sol != null ? 'sol=$sol&' : ''}'
+        '${cameraName != null ? 'camera=$cameraName&' : ''}'
+        'api_key=${Constants.NASA_API_KEY}',
       );
       // Fetch multiple APOD images
       /*for (int i = 0; i < count; i++) {
@@ -49,16 +56,22 @@ class RoverRepository {
 
       final response = await client.get(url);
 
-      if(response.statusCode == 200) {
+      if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final photos = data['photos'] as List<dynamic>;
 
         // Take only the requested number of photos
-        final limitedPhotos = photos.take(count).toList();
+        // final limitedPhotos = photos.take(count).toList();
 
-        return limitedPhotos.map((photo){
+        /*return limitedPhotos.map((photo){
           return RoverModel.fromJson({'photos': [photo]});
-        }).toList();
+        }).toList();*/
+
+        return photos
+            .map((photo) => RoverModel.fromJson({
+                  'photos': [photo]
+                }))
+            .toList();
       } else {
         throw Exception('Failed to load Rover image : ${response.statusCode}');
       }
