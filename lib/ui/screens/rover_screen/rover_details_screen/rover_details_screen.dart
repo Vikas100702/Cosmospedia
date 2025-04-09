@@ -202,12 +202,69 @@ class RoverDetailsScreen extends StatelessWidget {
                       const SizedBox(height: 20),
                       CustomElevatedButton(
                         onPressed: () async {
+                          final sol = await _showSolInputDialog(context);
+                          if (sol == null) return; // User cancelled
+
                           final manifest = context
                               .read<RoverManifestBloc>()
                               .state
                               .roverManifestModel;
 
-                          if (manifest != null && manifest.photos.isNotEmpty) {
+                          if (manifest == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('No manifest data available')),
+                            );
+                            return;
+                          }
+
+                          // Find photo manifest for this sol
+                          final photoManifest = manifest.photos.firstWhere(
+                            (photo) => photo.sol == sol,
+                            // orElse: () => null,
+                          );
+
+                          if (photoManifest == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      'No photo manifest found for this sol')),
+                            );
+                            return;
+                          }
+
+                          // Show camera selection dialog
+                          final selectedCamera = await showRoverCameraDialog(
+                            context: context,
+                            cameras: photoManifest.cameras,
+                          );
+
+                          if (selectedCamera != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BlocProvider(
+                                  create: (context) => RoverBloc(
+                                    roverRepository:
+                                        context.read<RoverRepository>(),
+                                  )..add(
+                                      LoadRoverData(
+                                        roverName: roverName.toLowerCase(),
+                                        cameraName: selectedCamera,
+                                        sol: 1000, // Using a default sol value
+                                      ),
+                                    ),
+                                  child: RoverPhotosGrid(
+                                    roverName: roverName,
+                                    cameraName: selectedCamera,
+                                    sol: sol,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+
+                          /*if (manifest != null && manifest.photos.isNotEmpty) {
                             // Get all unique cameras from the manifest
                             final allCameras = manifest.photos
                                 .expand((photo) => photo.cameras)
@@ -225,14 +282,16 @@ class RoverDetailsScreen extends StatelessWidget {
                                 MaterialPageRoute(
                                   builder: (context) => BlocProvider(
                                     create: (context) => RoverBloc(
-                                      roverRepository: context.read<RoverRepository>(),
+                                      roverRepository:
+                                          context.read<RoverRepository>(),
                                     )..add(
-                                      LoadRoverData(
-                                        roverName: roverName.toLowerCase(),
-                                        cameraName: selectedCamera,
-                                        sol: 1000, // Using a default sol value
+                                        LoadRoverData(
+                                          roverName: roverName.toLowerCase(),
+                                          cameraName: selectedCamera,
+                                          sol:
+                                              1000, // Using a default sol value
+                                        ),
                                       ),
-                                    ),
                                     child: RoverPhotosGrid(
                                       roverName: roverName,
                                       cameraName: selectedCamera,
@@ -243,9 +302,10 @@ class RoverDetailsScreen extends StatelessWidget {
                             }
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('No camera data available')),
+                              const SnackBar(
+                                  content: Text('No camera data available')),
                             );
-                          }
+                          }*/
                         },
                         text: "Browse by Camera",
                         width: double.infinity,
@@ -322,6 +382,41 @@ class RoverDetailsScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Future<int?> _showSolInputDialog(BuildContext context) async {
+    final solController = TextEditingController();
+
+    return showDialog<int>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Enter Sol Value'),
+          content: TextField(
+            controller: solController,
+            keyboardType: TextInputType.number,
+            decoration:
+                const InputDecoration(hintText: 'Enter Mars Sol (e.g. 1000)'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                final sol = int.tryParse(solController.text);
+
+                if (sol != null) {
+                  Navigator.pop(context, sol);
+                }
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

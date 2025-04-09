@@ -737,8 +737,8 @@ class RoverPhotosGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String title;
-    if (cameraName != null) {
-      title = '$roverName Photos - $cameraName';
+    if (cameraName != null && sol != null) {
+      title = '$roverName Photos - $cameraName (Sol $sol)';
     } else if (selectedDate != null) {
       title = '$roverName Photos - $selectedDate';
     } else if (sol != null) {
