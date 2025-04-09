@@ -200,7 +200,6 @@ class RoverDetailsScreen extends StatelessWidget {
                         width: double.infinity,
                       ),
                       const SizedBox(height: 20),
-                      // In the RoverDetailsScreen widget (add this near the other buttons)
                       CustomElevatedButton(
                         onPressed: () async {
                           final manifest = context
@@ -221,21 +220,19 @@ class RoverDetailsScreen extends StatelessWidget {
                             );
 
                             if (selectedCamera != null) {
-                              // Handle camera selection
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => BlocProvider(
                                     create: (context) => RoverBloc(
-                                      roverRepository:
-                                          context.read<RoverRepository>(),
+                                      roverRepository: context.read<RoverRepository>(),
                                     )..add(
-                                        LoadRoverData(
-                                          roverName: roverName.toLowerCase(),
-                                          cameraName: selectedCamera,
-                                          sol: 1000,
-                                        ),
+                                      LoadRoverData(
+                                        roverName: roverName.toLowerCase(),
+                                        cameraName: selectedCamera,
+                                        sol: 1000, // Using a default sol value
                                       ),
+                                    ),
                                     child: RoverPhotosGrid(
                                       roverName: roverName,
                                       cameraName: selectedCamera,
@@ -246,8 +243,7 @@ class RoverDetailsScreen extends StatelessWidget {
                             }
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('No camera data available')),
+                              const SnackBar(content: Text('No camera data available')),
                             );
                           }
                         },

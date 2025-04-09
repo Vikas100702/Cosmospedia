@@ -548,6 +548,7 @@ class RoverPhotosGrid extends StatelessWidget {
 }
 */
 
+/*
 import 'package:cosmospedia/blocs/rover/rover_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -643,6 +644,157 @@ class RoverPhotosGrid extends StatelessWidget {
                           ),
                         );
                       }
+                    },
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Total Photos: ${photos.length}',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              Expanded(
+                child: GridView.builder(
+                  padding: const EdgeInsets.all(8),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                    childAspectRatio: 1,
+                  ),
+                  itemCount: photos.length,
+                  itemBuilder: (context, index) {
+                    final photo = photos[index];
+                    return GestureDetector(
+                      onTap: () {
+                        // TODO: Add photo viewer
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          photo.imgSrc ?? '',
+                          fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes != null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                    : null,
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Center(
+                              child: Icon(Icons.error),
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}*/
+
+// lib/ui/screens/rover_screen/rover_photos_grid/rover_photos_grid.dart
+import 'package:cosmospedia/blocs/rover/rover_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+
+import '../../../../data/models/mars/rover.dart';
+
+class RoverPhotosGrid extends StatelessWidget {
+  final String roverName;
+  final String? cameraName;
+  final DateTime? selectedDate;
+  final int? sol;
+
+  const RoverPhotosGrid({
+    super.key,
+    required this.roverName,
+    this.cameraName,
+    this.selectedDate,
+    this.sol,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    String title;
+    if (cameraName != null) {
+      title = '$roverName Photos - $cameraName';
+    } else if (selectedDate != null) {
+      title = '$roverName Photos - $selectedDate';
+    } else if (sol != null) {
+      title = '$roverName Photos - Sol $sol';
+    } else {
+      title = '$roverName Photos';
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: BlocBuilder<RoverBloc, RoverState>(
+        builder: (context, state) {
+          if (state.status == RoverStatus.loading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (state.status == RoverStatus.failure) {
+            return Center(child: Text(state.error ?? 'Failed to load photos'));
+          }
+
+          // Extract all photos
+          final photos = <Photos>[];
+          for (final rover in state.roverPhotos) {
+            if (rover.photos != null) {
+              photos.addAll(rover.photos!);
+            }
+          }
+
+          if (photos.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.image_not_supported, size: 48),
+                  const SizedBox(height: 16),
+                  Text(
+                    cameraName != null
+                        ? 'No photos available for $cameraName'
+                        : selectedDate != null
+                        ? 'No photos available for $selectedDate'
+                        : 'No photos available',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<RoverBloc>().add(
+                        LoadRoverData(
+                          roverName: roverName.toLowerCase(),
+                          cameraName: cameraName,
+                          earthDate: selectedDate.toString(),
+                          sol: sol,
+                        ),
+                      );
                     },
                     child: const Text('Retry'),
                   ),
