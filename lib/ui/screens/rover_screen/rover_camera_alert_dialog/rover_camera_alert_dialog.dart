@@ -1,5 +1,8 @@
+import 'package:cosmospedia/blocs/rover/rover_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../data/repositories/mars/rover_repositories.dart';
 import '../../../../utils/app_colors.dart';
 
 class RoverCameraAlertDialog extends StatelessWidget {
@@ -50,7 +53,6 @@ class RoverCameraAlertDialog extends StatelessWidget {
                       style: const TextStyle(color: Colors.white),
                     ),
                     onTap: () {
-                      Navigator.pop(context);
                       onCameraSelected(camera);
                     },
                   ),
@@ -71,11 +73,11 @@ class RoverCameraAlertDialog extends StatelessWidget {
     );
   }
 }
+
 Future<String?> showRoverCameraDialog({
   required BuildContext context,
   required List<String> cameras,
 }) async {
-  String? selectedCamera;
   return await showDialog<String>(
     context: context,
     builder: (context) {
@@ -85,7 +87,6 @@ Future<String?> showRoverCameraDialog({
         child: RoverCameraAlertDialog(
           cameras: cameras,
           onCameraSelected: (camera) {
-            selectedCamera = camera;
             Navigator.pop(context, camera);
           },
         ),

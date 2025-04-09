@@ -237,6 +237,7 @@ class RoverDetailsScreen extends StatelessWidget {
                                       ),
                                     child: RoverPhotosGrid(
                                       roverName: roverName,
+                                      cameraName: selectedCamera,
                                     ),
                                   ),
                                 ),
