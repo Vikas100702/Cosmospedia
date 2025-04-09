@@ -9,17 +9,19 @@ abstract class RoverEvent extends Equatable {
 
 class LoadRoverData extends RoverEvent {
   final String roverName;
+  final String? cameraName;
   final String? earthDate;
   final int? sol;
 
   const LoadRoverData({
     required this.roverName,
+    this.cameraName,
     this.earthDate,
     this.sol,
   });
 
   @override
-  List<Object?> get props => [roverName, earthDate, sol];
+  List<Object?> get props => [roverName, cameraName, earthDate, sol];
 }
 
 class RefreshRoverData extends RoverEvent {}

@@ -78,6 +78,7 @@ import 'package:equatable/equatable.dart';
 import '../../data/models/mars/rover.dart';
 
 part 'rover_event.dart';
+
 part 'rover_state.dart';
 
 class RoverBloc extends Bloc<RoverEvent, RoverState> {
@@ -89,9 +90,9 @@ class RoverBloc extends Bloc<RoverEvent, RoverState> {
   }
 
   Future<void> _loadRoverData(
-      LoadRoverData event,
-      Emitter<RoverState> emit,
-      ) async {
+    LoadRoverData event,
+    Emitter<RoverState> emit,
+  ) async {
     emit(
       state.copyWith(
         status: RoverStatus.loading,
@@ -102,7 +103,7 @@ class RoverBloc extends Bloc<RoverEvent, RoverState> {
       // Now using the event.roverName and event.sol values
       final roverImages = await roverRepository.getRoverPhotos(
         roverName: event.roverName,
-        sol: event.sol,
+        cameraName: event.cameraName,
         earthDate: event.earthDate,
       );
 
@@ -118,10 +119,28 @@ class RoverBloc extends Bloc<RoverEvent, RoverState> {
     }
   }
 
+ /* Future<void> _loadRoverPhotosByCamera(
+    LoadRoverData event,
+    Emitter<RoverState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: RoverStatus.loading,
+      ),
+    );
+
+    try {
+      final roverPhotos = await roverRepository.getRoverPhotos(
+        roverName: event.roverName,
+        cameraName: event.cameraName,
+      );
+    }
+  }*/
+
   Future<void> _refreshRoverData(
-      RefreshRoverData event,
-      Emitter<RoverState> emit,
-      ) async {
+    RefreshRoverData event,
+    Emitter<RoverState> emit,
+  ) async {
     emit(state.copyWith(
       status: RoverStatus.loading,
     ));

@@ -382,21 +382,32 @@ import '../../../../data/models/mars/rover.dart';
 
 class RoverPhotosGrid extends StatelessWidget {
   final String roverName;
-  final DateTime selectedDate;
+  final DateTime? selectedDate;
+  final String? cameraName;
 
   const RoverPhotosGrid({
     super.key,
     required this.roverName,
-    required this.selectedDate,
+    this.selectedDate,
+    this.cameraName,
   });
 
   @override
   Widget build(BuildContext context) {
-    final formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+    String title;
+    final formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate!);
+
+    if (cameraName != null) {
+      title = '$roverName Photos - $cameraName - $cameraName';
+    } else if (selectedDate != null) {
+      title = '$roverName Photos - ${DateFormat('yyyy-MM-dd').format(selectedDate!)}';
+    } else {
+      title = '$roverName Photos';
+    }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('$roverName Photos - $formattedDate'),
+        title: Text(title),
       ),
       body: BlocBuilder<RoverBloc, RoverState>(
         builder: (context, state) {

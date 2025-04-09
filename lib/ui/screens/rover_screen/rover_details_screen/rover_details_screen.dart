@@ -1,8 +1,11 @@
+import 'package:cosmospedia/blocs/rover/rover_bloc.dart';
 import 'package:cosmospedia/data/models/mars/rover.dart';
+import 'package:cosmospedia/data/repositories/mars/rover_repositories.dart';
 import 'package:cosmospedia/ui/components/custom_app_bar/custom_app_bar.dart';
 import 'package:cosmospedia/ui/components/custom_buttons/custom_elevated_button/custom_elevated_button.dart';
 import 'package:cosmospedia/ui/screens/rover_screen/rover_calendar_alert_dialog/rover_calendar_alert_dialog.dart';
 import 'package:cosmospedia/ui/screens/rover_screen/rover_details_screen/rover_detail_row_widget/rover_detail_row_widget.dart';
+import 'package:cosmospedia/ui/screens/rover_screen/rover_photos_grid/rover_photos_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -181,7 +184,6 @@ class RoverDetailsScreen extends StatelessWidget {
                             manifest: manifest,
                           );
 
-
                           if (selectedDate != null) {
                             final formattedDate =
                                 DateFormat('yyyy-MM-dd').format(selectedDate);
@@ -220,17 +222,30 @@ class RoverDetailsScreen extends StatelessWidget {
 
                             if (selectedCamera != null) {
                               // Handle camera selection
-                              debugPrint('Selected Camera: $selectedCamera');
-                              // You can now use this to fetch photos by camera
-                              // Example:
-                              // context.read<RoverBloc>().add(LoadRoverPhotosByCamera(
-                              //   roverName: roverName,
-                              //   cameraName: selectedCamera,
-                              // ));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BlocProvider(
+                                    create: (context) => RoverBloc(
+                                      roverRepository:
+                                          context.read<RoverRepository>(),
+                                    )..add(
+                                        LoadRoverData(
+                                          roverName: roverName.toLowerCase(),
+                                          cameraName: selectedCamera,
+                                        ),
+                                      ),
+                                    child: RoverPhotosGrid(
+                                      roverName: roverName,
+                                    ),
+                                  ),
+                                ),
+                              );
                             }
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('No camera data available')),
+                              const SnackBar(
+                                  content: Text('No camera data available')),
                             );
                           }
                         },

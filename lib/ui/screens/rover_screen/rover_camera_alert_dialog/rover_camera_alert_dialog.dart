@@ -75,12 +75,12 @@ Future<String?> showRoverCameraDialog({
   required BuildContext context,
   required List<String> cameras,
 }) async {
+  String? selectedCamera;
   return await showDialog<String>(
     context: context,
     builder: (context) {
-      String? selectedCamera;
       return Dialog(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparentColor,
         insetPadding: const EdgeInsets.all(20),
         child: RoverCameraAlertDialog(
           cameras: cameras,
