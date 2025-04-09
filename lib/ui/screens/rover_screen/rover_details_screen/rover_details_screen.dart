@@ -233,6 +233,7 @@ class RoverDetailsScreen extends StatelessWidget {
                                         LoadRoverData(
                                           roverName: roverName.toLowerCase(),
                                           cameraName: selectedCamera,
+                                          sol: 1000,
                                         ),
                                       ),
                                     child: RoverPhotosGrid(

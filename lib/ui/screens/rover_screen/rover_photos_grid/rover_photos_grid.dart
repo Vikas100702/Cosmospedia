@@ -626,6 +626,7 @@ class RoverPhotosGrid extends StatelessWidget {
                           LoadRoverData(
                             roverName: roverName.toLowerCase(),
                             cameraName: cameraName,
+                            sol: 1000,
                           ),
                         );
                       } else if (selectedDate != null) {
