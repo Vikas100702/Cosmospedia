@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../blocs/rover/rover_bloc.dart';
+import '../../../../blocs/rover_manifest/rover_manifest_bloc.dart';
 import '../../../../data/models/mars/rover.dart';
+import '../../../../data/repositories/mars/rover_manifest_repository.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../components/custom_app_bar/custom_app_bar.dart';
 import '../../../components/custom_buttons/custom_elevated_button/custom_elevated_button.dart';
 import '../../../components/image_slider/custom_image_slider.dart';
+import '../rover_list_screen/rover_card_widget/rover_card_widget.dart';
 import '../rover_list_screen/rover_list_screen.dart';
 
 class RoverScreenView extends StatelessWidget {
@@ -119,6 +122,16 @@ class RoverScreenView extends StatelessWidget {
                             constraints,
                           ),
                           SizedBox(height: screenSize.height * 0.04),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 50),
+                            child: BlocProvider.value(
+                              value: RoverManifestBloc(
+                                roverManifestRepository: RoverManifestRepository(),
+                              )..add(LoadRoverManifest(roverName: l10n.curiosity)),
+                              child: SizedBox(width: double.infinity,child: RoverCardWidget(roverName: l10n.curiosity)),
+                            ),
+                          ),
+                          SizedBox(height: screenSize.height * 0.04),
                           CustomElevatedButton(
                             onPressed: () {
                               Navigator.push(
@@ -129,24 +142,6 @@ class RoverScreenView extends StatelessWidget {
                               );
                             },
                             text: 'Browse By Rover',
-                            width: screenSize.width * 0.9,
-                          ),
-                          SizedBox(height: screenSize.height * 0.04),
-                          CustomElevatedButton(
-                            onPressed: () {},
-                            text: 'Browse By Date',
-                            width: screenSize.width * 0.9,
-                          ),
-                          SizedBox(height: screenSize.height * 0.04),
-                          CustomElevatedButton(
-                            onPressed: () {},
-                            text: 'Browse By Camera',
-                            width: screenSize.width * 0.9,
-                          ),
-                          SizedBox(height: screenSize.height * 0.04),
-                          CustomElevatedButton(
-                            onPressed: () {},
-                            text: 'Saved Photos',
                             width: screenSize.width * 0.9,
                           ),
                         ],

@@ -78,7 +78,7 @@ class RoverListScreen extends StatelessWidget {
                   )..add(LoadRoverManifest(roverName: l10n.curiosity)),
                   child: RoverCardWidget(roverName: l10n.curiosity),
                 ),
-                const SizedBox(height: 16),
+                /*const SizedBox(height: 16),
                 BlocProvider.value(
                   value: RoverManifestBloc(
                     roverManifestRepository: RoverManifestRepository(),
@@ -91,7 +91,7 @@ class RoverListScreen extends StatelessWidget {
                     roverManifestRepository: RoverManifestRepository(),
                   )..add(LoadRoverManifest(roverName: l10n.spirit)),
                   child: RoverCardWidget(roverName: l10n.spirit),
-                ),
+                ),*/
               ],
             ),
           ),

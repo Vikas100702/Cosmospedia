@@ -23,17 +23,21 @@ class RoverScreen extends StatelessWidget {
 
 
 import 'package:cosmospedia/data/repositories/mars/rover_repositories.dart';
+import 'package:cosmospedia/ui/screens/rover_screen/rover_details_screen/rover_details_screen.dart';
 import 'package:cosmospedia/ui/screens/rover_screen/rover_screen_view/rover_screen_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../blocs/rover/rover_bloc.dart';
+import '../../../l10n/app_localizations.dart';
 
 class RoverScreen extends StatelessWidget {
   const RoverScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return BlocProvider(
       create: (context) {
         // Create the RoverBloc with the repository
@@ -49,7 +53,7 @@ class RoverScreen extends StatelessWidget {
 
         return bloc;
       },
-      child: const RoverScreenView(),
+      child: RoverDetailsScreen(roverName: l10n!.curiosity),
     );
   }
 }
