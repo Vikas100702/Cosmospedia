@@ -28,4 +28,13 @@ class RoverManifestRepository {
       throw Exception('Failed to load Rover image: $e');
     }
   }
+
+  Future<int> getMaxSol(String roverName) async {
+    try {
+      final manifest = await getRoverManifest(roverName);
+      return manifest.maxSol;
+    } catch (error) {
+      throw Exception('Failed to get max sol: $error');
+    }
+  }
 }

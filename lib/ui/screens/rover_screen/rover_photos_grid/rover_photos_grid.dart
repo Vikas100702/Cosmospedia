@@ -765,7 +765,16 @@ class RoverPhotosGrid extends StatelessWidget {
           final photos = <Photos>[];
           for (final rover in state.roverPhotos) {
             if (rover.photos != null) {
-              photos.addAll(rover.photos!);
+              for (final photo in rover.photos!) {
+                // Check if photo matches both sol and camera filters
+                final matchesSol = sol == null || photo.sol == sol;
+                final matchesCamera = cameraName == null ||
+                    (photo.camera?.name?.toLowerCase() == cameraName?.toLowerCase());
+
+                if (matchesSol && matchesCamera) {
+                  photos.add(photo);
+                }
+              }
             }
           }
 
@@ -777,8 +786,8 @@ class RoverPhotosGrid extends StatelessWidget {
                   const Icon(Icons.image_not_supported, size: 48),
                   const SizedBox(height: 16),
                   Text(
-                    cameraName != null
-                        ? 'No photos available for $cameraName'
+                    cameraName != null && sol != null
+                        ? 'No photos available for $cameraName on sol $sol'
                         : selectedDate != null
                         ? 'No photos available for $selectedDate'
                         : 'No photos available',

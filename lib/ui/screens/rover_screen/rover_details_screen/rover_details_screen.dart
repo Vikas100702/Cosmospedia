@@ -1,5 +1,4 @@
 import 'package:cosmospedia/blocs/rover/rover_bloc.dart';
-import 'package:cosmospedia/data/models/mars/rover.dart';
 import 'package:cosmospedia/data/repositories/mars/rover_repositories.dart';
 import 'package:cosmospedia/ui/components/custom_app_bar/custom_app_bar.dart';
 import 'package:cosmospedia/ui/components/custom_buttons/custom_elevated_button/custom_elevated_button.dart';
@@ -200,35 +199,33 @@ class RoverDetailsScreen extends StatelessWidget {
                         width: double.infinity,
                       ),
                       const SizedBox(height: 20),
+                      // In RoverDetailsScreen's build method
                       CustomElevatedButton(
                         onPressed: () async {
-                          final sol = await _showSolInputDialog(context);
-                          if (sol == null) return; // User cancelled
-
-                          final manifest = context
-                              .read<RoverManifestBloc>()
-                              .state
-                              .roverManifestModel;
-
+                          final manifest = context.read<RoverManifestBloc>().state.roverManifestModel;
                           if (manifest == null) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('No manifest data available')),
+                              const SnackBar(content: Text('No manifest data available')),
                             );
                             return;
                           }
 
+                          // Get max sol from manifest
+                          final maxSol = manifest.maxSol;
+
+                          // Show sol input dialog with max sol validation
+                          final sol = await _showSolInputDialog(context, maxSol);
+                          if (sol == null) return;
+
                           // Find photo manifest for this sol
                           final photoManifest = manifest.photos.firstWhere(
-                            (photo) => photo.sol == sol,
-                            // orElse: () => null,
+                                (photo) => photo.sol == sol,
+                            orElse: () => null!,
                           );
 
                           if (photoManifest == null) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text(
-                                      'No photo manifest found for this sol')),
+                              SnackBar(content: Text('No photos available for sol $sol')),
                             );
                             return;
                           }
@@ -245,15 +242,14 @@ class RoverDetailsScreen extends StatelessWidget {
                               MaterialPageRoute(
                                 builder: (context) => BlocProvider(
                                   create: (context) => RoverBloc(
-                                    roverRepository:
-                                        context.read<RoverRepository>(),
+                                    roverRepository: context.read<RoverRepository>(),
                                   )..add(
-                                      LoadRoverData(
-                                        roverName: roverName.toLowerCase(),
-                                        cameraName: selectedCamera,
-                                        sol: 1000, // Using a default sol value
-                                      ),
+                                    LoadRoverData(
+                                      roverName: roverName.toLowerCase(),
+                                      cameraName: selectedCamera,
+                                      sol: sol,
                                     ),
+                                  ),
                                   child: RoverPhotosGrid(
                                     roverName: roverName,
                                     cameraName: selectedCamera,
@@ -263,49 +259,6 @@ class RoverDetailsScreen extends StatelessWidget {
                               ),
                             );
                           }
-
-                          /*if (manifest != null && manifest.photos.isNotEmpty) {
-                            // Get all unique cameras from the manifest
-                            final allCameras = manifest.photos
-                                .expand((photo) => photo.cameras)
-                                .toSet()
-                                .toList();
-
-                            final selectedCamera = await showRoverCameraDialog(
-                              context: context,
-                              cameras: allCameras,
-                            );
-
-                            if (selectedCamera != null) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => BlocProvider(
-                                    create: (context) => RoverBloc(
-                                      roverRepository:
-                                          context.read<RoverRepository>(),
-                                    )..add(
-                                        LoadRoverData(
-                                          roverName: roverName.toLowerCase(),
-                                          cameraName: selectedCamera,
-                                          sol:
-                                              1000, // Using a default sol value
-                                        ),
-                                      ),
-                                    child: RoverPhotosGrid(
-                                      roverName: roverName,
-                                      cameraName: selectedCamera,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('No camera data available')),
-                            );
-                          }*/
                         },
                         text: "Browse by Camera",
                         width: double.infinity,
@@ -385,19 +338,39 @@ class RoverDetailsScreen extends StatelessWidget {
     );
   }
 
-  Future<int?> _showSolInputDialog(BuildContext context) async {
+  Future<int?> _showSolInputDialog(BuildContext context, int maxSol) async {
     final solController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
 
     return showDialog<int>(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: const Text('Enter Sol Value'),
-          content: TextField(
-            controller: solController,
-            keyboardType: TextInputType.number,
-            decoration:
-                const InputDecoration(hintText: 'Enter Mars Sol (e.g. 1000)'),
+          content: Form(
+            key: formKey,
+            child: TextFormField(
+              controller: solController,
+              keyboardType: TextInputType.number,
+              decoration:
+                  const InputDecoration(hintText: 'Enter Mars Sol (e.g. 1000)'),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a sol value';
+                }
+                final sol = int.tryParse(value);
+                if (sol == null) {
+                  return 'Please enter a valid number';
+                }
+                if (sol < 0) {
+                  return 'Sol cannot be negative';
+                }
+                if (sol > maxSol) {
+                  return 'Maximum sol is $maxSol';
+                }
+                return null;
+              },
+            ),
           ),
           actions: [
             TextButton(
