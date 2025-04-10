@@ -202,16 +202,20 @@ class RoverDetailsScreen extends StatelessWidget {
                       // In RoverDetailsScreen's build method
                       CustomElevatedButton(
                         onPressed: () async {
-                          final manifest = context.read<RoverManifestBloc>().state.roverManifestModel;
+                          final manifest = context
+                              .read<RoverManifestBloc>()
+                              .state
+                              .roverManifestModel;
                           if (manifest == null) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('No manifest data available')),
+                              const SnackBar(
+                                  content: Text('No manifest data available')),
                             );
                             return;
                           }
 
                           // Get max sol from manifest
-                          final maxSol = manifest.maxSol;
+                          /*final maxSol = manifest.maxSol;
 
                           // Show sol input dialog with max sol validation
                           final sol = await _showSolInputDialog(context, maxSol);
@@ -228,12 +232,14 @@ class RoverDetailsScreen extends StatelessWidget {
                               SnackBar(content: Text('No photos available for sol $sol')),
                             );
                             return;
-                          }
+                          }*/
 
                           // Show camera selection dialog
                           final selectedCamera = await showRoverCameraDialog(
                             context: context,
-                            cameras: photoManifest.cameras,
+                            cameras: manifest.photos
+                                .expand((photo) => photo.cameras)
+                                .toList(),
                           );
 
                           if (selectedCamera != null) {
@@ -242,18 +248,18 @@ class RoverDetailsScreen extends StatelessWidget {
                               MaterialPageRoute(
                                 builder: (context) => BlocProvider(
                                   create: (context) => RoverBloc(
-                                    roverRepository: context.read<RoverRepository>(),
+                                    roverRepository:
+                                        context.read<RoverRepository>(),
                                   )..add(
-                                    LoadRoverData(
-                                      roverName: roverName.toLowerCase(),
-                                      cameraName: selectedCamera,
-                                      sol: sol,
+                                      LoadRoverData(
+                                        roverName: roverName.toLowerCase(),
+                                        cameraName: selectedCamera,
+                                        sol: 1000
+                                      ),
                                     ),
-                                  ),
                                   child: RoverPhotosGrid(
                                     roverName: roverName,
                                     cameraName: selectedCamera,
-                                    sol: sol,
                                   ),
                                 ),
                               ),
@@ -338,7 +344,7 @@ class RoverDetailsScreen extends StatelessWidget {
     );
   }
 
-  Future<int?> _showSolInputDialog(BuildContext context, int maxSol) async {
+  /*Future<int?> _showSolInputDialog(BuildContext context, int maxSol) async {
     final solController = TextEditingController();
     final formKey = GlobalKey<FormState>();
 
@@ -391,5 +397,5 @@ class RoverDetailsScreen extends StatelessWidget {
         );
       },
     );
-  }
+  }*/
 }
