@@ -234,12 +234,16 @@ class RoverDetailsScreen extends StatelessWidget {
                             return;
                           }*/
 
+                          // Get unique camera names using a Set
+                          final uniqueCameras = <String>{};
+                          for (final photo in manifest.photos) {
+                            uniqueCameras.addAll(photo.cameras);
+                          }
+
                           // Show camera selection dialog
                           final selectedCamera = await showRoverCameraDialog(
                             context: context,
-                            cameras: manifest.photos
-                                .expand((photo) => photo.cameras)
-                                .toList(),
+                            cameras: uniqueCameras.toList(),
                           );
 
                           if (selectedCamera != null) {
@@ -254,7 +258,7 @@ class RoverDetailsScreen extends StatelessWidget {
                                       LoadRoverData(
                                         roverName: roverName.toLowerCase(),
                                         cameraName: selectedCamera,
-                                        sol: 1000
+                                        sol: 1000,
                                       ),
                                     ),
                                   child: RoverPhotosGrid(
@@ -344,7 +348,7 @@ class RoverDetailsScreen extends StatelessWidget {
     );
   }
 
-  /*Future<int?> _showSolInputDialog(BuildContext context, int maxSol) async {
+/*Future<int?> _showSolInputDialog(BuildContext context, int maxSol) async {
     final solController = TextEditingController();
     final formKey = GlobalKey<FormState>();
 
