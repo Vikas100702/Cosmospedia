@@ -1,884 +1,10 @@
-/*
-// lib/ui/screens/rover_screen/rover_photos_grid/rover_photos_grid.dart
-import 'package:cosmospedia/blocs/rover/rover_bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../../data/repositories/mars/rover_repositories.dart';
-
-class RoverPhotosGrid extends StatelessWidget {
-  final String roverName;
-  final DateTime selectedDate;
-
-  const RoverPhotosGrid({
-    super.key,
-    required this.roverName,
-    required this.selectedDate,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final formattedDate = _formatDate(selectedDate);
-
-    return BlocProvider(
-      create: (context) => RoverBloc(
-        roverRepository: context.read<RoverRepository>(),
-      )..add(LoadRoverData(
-        roverName: roverName.toLowerCase(),
-        earthDate: formattedDate,
-      )),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('$roverName Photos - $formattedDate'),
-        ),
-        body: BlocBuilder<RoverBloc, RoverState>(
-          builder: (context, state) {
-            if (state.status == RoverStatus.loading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            if (state.status == RoverStatus.failure) {
-              return Center(child: Text(state.error ?? 'Failed to load photos'));
-            }
-
-            if (state.roverPhotos.isEmpty) {
-              return const Center(child: Text('No photos available for this date'));
-            }
-
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    'Total Photos: ${state.roverPhotos.length}',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ),
-                Expanded(
-                  child: GridView.builder(
-                    padding: const EdgeInsets.all(8),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
-                      childAspectRatio: 1,
-                    ),
-                    itemCount: state.roverPhotos.length,
-                    itemBuilder: (context, index) {
-                      final photo = state.roverPhotos[index].photos?.first;
-                      return GestureDetector(
-                        onTap: () {
-                          // TODO: Add photo viewer
-                        },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.network(
-                            photo?.imgSrc ?? '',
-                            fit: BoxFit.cover,
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value: loadingProgress.expectedTotalBytes != null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                      : null,
-                                ),
-                              );
-                            },
-                            errorBuilder: (context, error, stackTrace) {
-                              return const Center(
-                                child: Icon(Icons.error),
-                              );
-                            },
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  String _formatDate(DateTime date) {
-    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
-  }
-}*/
-/*
- */
-/*
-
-
-// lib/ui/screens/rover_screen/rover_photos_grid/rover_photos_grid.dart
-*/
-/*
-
-*/
-/*
-import 'package:cosmospedia/blocs/rover/rover_bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-
-class RoverPhotosGrid extends StatelessWidget {
-  final String roverName;
-  final DateTime selectedDate;
-
-  const RoverPhotosGrid({
-    super.key,
-    required this.roverName,
-    required this.selectedDate,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('$roverName Photos - $formattedDate'),
-      ),
-      body: BlocBuilder<RoverBloc, RoverState>(
-        builder: (context, state) {
-          if (state.status == RoverStatus.loading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state.status == RoverStatus.failure) {
-            return Center(child: Text(state.error ?? 'Failed to load photos'));
-          }
-
-          final hasPhotos = state.roverPhotos.isEmpty && state.roverPhotos.any((rover) => rover.photos?.isNotEmpty ?? false);
-          */
-/*
- */
-/*
-
-*/
-/*
-
-*/
-/*if (state.roverPhotos.isEmpty) {
-            return Center(child: Text('No photos available for $formattedDate'));
-          }*/
-/*
- */
-/*
-
-*/
-/*
-
-*/
-/*
-
-
-          if (!hasPhotos) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.image_not_supported, size: 48),
-                  const SizedBox(height: 16),
-                  Text(
-                    'No photos available for $formattedDate',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Try loading again
-                      context.read<RoverBloc>().add(LoadRoverData(
-                        roverName: roverName.toLowerCase(),
-                        earthDate: formattedDate,
-                      ));
-                    },
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Total Photos: ${state.roverPhotos.length}',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(8),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                    childAspectRatio: 1,
-                  ),
-                  itemCount: state.roverPhotos.length,
-                  itemBuilder: (context, index) {
-                    final photo = state.roverPhotos[index].photos?.first;
-                    return GestureDetector(
-                      onTap: () {
-                        // TODO: Add photo viewer
-                      },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          photo?.imgSrc ?? '',
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes != null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Center(
-                              child: Icon(Icons.error),
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}*/
-/*
-
-*/
-/*
-
-
-// In rover_photos_grid.dart
-import 'package:cosmospedia/blocs/rover/rover_bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-
-class RoverPhotosGrid extends StatelessWidget {
-  final String roverName;
-  final DateTime selectedDate;
-
-  const RoverPhotosGrid({
-    super.key,
-    required this.roverName,
-    required this.selectedDate,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('$roverName Photos - $formattedDate'),
-      ),
-      body: BlocBuilder<RoverBloc, RoverState>(
-        builder: (context, state) {
-          if (state.status == RoverStatus.loading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state.status == RoverStatus.failure) {
-            return Center(child: Text(state.error ?? 'Failed to load photos'));
-          }
-
-          // Extract all photos from the rover models
-          final photos = state.roverPhotos.expand((rover) => rover.photos ?? []).toList();
-
-          if (photos.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.image_not_supported, size: 48),
-                  const SizedBox(height: 16),
-                  Text(
-                    'No photos available for $formattedDate',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<RoverBloc>().add(LoadRoverData(
-                        roverName: roverName.toLowerCase(),
-                        earthDate: formattedDate,
-                      ));
-                    },
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Total Photos: ${photos.length}',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(8),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                    childAspectRatio: 1,
-                  ),
-                  itemCount: photos.length,
-                  itemBuilder: (context, index) {
-                    final photo = photos[index];
-                    return GestureDetector(
-                      onTap: () {
-                        // TODO: Add photo viewer
-                      },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          photo.imgSrc ?? '',
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes != null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Center(
-                              child: Icon(Icons.error),
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-*/
-/*
-
-
-// lib/ui/screens/rover_screen/rover_photos_grid/rover_photos_grid.dart
-import 'package:cosmospedia/blocs/rover/rover_bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-
-import '../../../../data/models/mars/rover.dart';
-
-class RoverPhotosGrid extends StatelessWidget {
-  final String roverName;
-  final DateTime? selectedDate;
-  final String? cameraName;
-
-  const RoverPhotosGrid({
-    super.key,
-    required this.roverName,
-    this.selectedDate,
-    this.cameraName,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    String title;
-    final formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate!);
-
-    if (cameraName != null) {
-      title = '$roverName Photos - $cameraName';
-    } else if (selectedDate != null) {
-      title =
-          '$roverName Photos - ${DateFormat('yyyy-MM-dd').format(selectedDate!)}';
-    } else {
-      title = '$roverName Photos';
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: BlocBuilder<RoverBloc, RoverState>(
-        builder: (context, state) {
-          if (state.status == RoverStatus.loading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state.status == RoverStatus.failure) {
-            return Center(child: Text(state.error ?? 'Failed to load photos'));
-          }
-
-          // Extract all photos from all rover models
-          final photos = <Photos>[];
-          for (final rover in state.roverPhotos) {
-            if (rover.photos != null && rover.photos!.isNotEmpty) {
-              if (cameraName != null) {
-                photos.addAll(rover.photos!.where(
-                  (photo) => photo.camera?.name == cameraName,
-                ));
-              } else {
-                photos.addAll(rover.photos!);
-              }
-            }
-          }
-
-          if (photos.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.image_not_supported, size: 48),
-                  const SizedBox(height: 16),
-                  Text(
-                    cameraName != null
-                        ? 'No photos available for $cameraName'
-                        : 'No photos available for $formattedDate',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<RoverBloc>().add(LoadRoverData(
-                            roverName: roverName.toLowerCase(),
-                            earthDate: formattedDate,
-                            cameraName: cameraName,
-                          ));
-                    },
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Total Photos: ${photos.length}',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(8),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                    childAspectRatio: 1,
-                  ),
-                  itemCount: photos.length,
-                  itemBuilder: (context, index) {
-                    final photo = photos[index];
-                    return GestureDetector(
-                      onTap: () {
-                        // TODO: Add photo viewer
-                      },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          photo.imgSrc ?? '',
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Center(
-                              child: Icon(Icons.error),
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-*/
-
-/*
-import 'package:cosmospedia/blocs/rover/rover_bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-
-import '../../../../data/models/mars/rover.dart';
-
-class RoverPhotosGrid extends StatelessWidget {
-  final String roverName;
-  final DateTime? selectedDate;
-  final String? cameraName;
-
-  const RoverPhotosGrid({
-    super.key,
-    required this.roverName,
-    this.selectedDate,
-    this.cameraName,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    String title;
-    if (cameraName != null) {
-      title = '$roverName Photos - $cameraName';
-    } else if (selectedDate != null) {
-      title = '$roverName Photos - ${DateFormat('yyyy-MM-dd').format(selectedDate!)}';
-    } else {
-      title = '$roverName Photos';
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: BlocBuilder<RoverBloc, RoverState>(
-        builder: (context, state) {
-          if (state.status == RoverStatus.loading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state.status == RoverStatus.failure) {
-            return Center(child: Text(state.error ?? 'Failed to load photos'));
-          }
-
-          // Extract all photos from all rover models
-          final photos = <Photos>[];
-          for (final rover in state.roverPhotos) {
-            if (rover.photos != null) {
-              for (final photo in rover.photos!) {
-                if (cameraName == null ||
-                    (photo.camera?.name?.toLowerCase() == cameraName?.toLowerCase())) {
-                  photos.add(photo);
-                }
-              }
-            }
-          }
-
-          if (photos.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.image_not_supported, size: 48),
-                  const SizedBox(height: 16),
-                  Text(
-                    cameraName != null
-                        ? 'No photos available for $cameraName'
-                        : 'No photos available',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (cameraName != null) {
-                        context.read<RoverBloc>().add(
-                          LoadRoverData(
-                            roverName: roverName.toLowerCase(),
-                            cameraName: cameraName,
-                            sol: 1000,
-                          ),
-                        );
-                      } else if (selectedDate != null) {
-                        context.read<RoverBloc>().add(
-                          LoadRoverData(
-                            roverName: roverName.toLowerCase(),
-                            earthDate: DateFormat('yyyy-MM-dd').format(selectedDate!),
-                          ),
-                        );
-                      } else {
-                        context.read<RoverBloc>().add(
-                          LoadRoverData(
-                            roverName: roverName.toLowerCase(),
-                          ),
-                        );
-                      }
-                    },
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Total Photos: ${photos.length}',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(8),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                    childAspectRatio: 1,
-                  ),
-                  itemCount: photos.length,
-                  itemBuilder: (context, index) {
-                    final photo = photos[index];
-                    return GestureDetector(
-                      onTap: () {
-                        // TODO: Add photo viewer
-                      },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          photo.imgSrc ?? '',
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes != null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Center(
-                              child: Icon(Icons.error),
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}*/
-
-// lib/ui/screens/rover_screen/rover_photos_grid/rover_photos_grid.dart
-/*import 'package:cosmospedia/blocs/rover/rover_bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-
-import '../../../../data/models/mars/rover.dart';
-
-class RoverPhotosGrid extends StatelessWidget {
-  final String roverName;
-  final String? cameraName;
-  final DateTime? selectedDate;
-  final int? sol;
-
-  const RoverPhotosGrid({
-    super.key,
-    required this.roverName,
-    this.cameraName,
-    this.selectedDate,
-    this.sol,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    String title;
-    if (cameraName != null && sol != null) {
-      title = '$roverName Photos - $cameraName (Sol $sol)';
-    } else if (selectedDate != null) {
-      title = '$roverName Photos - $selectedDate';
-    } else if (sol != null) {
-      title = '$roverName Photos - Sol $sol';
-    } else {
-      title = '$roverName Photos';
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: BlocBuilder<RoverBloc, RoverState>(
-        builder: (context, state) {
-          if (state.status == RoverStatus.loading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state.status == RoverStatus.failure) {
-            return Center(child: Text(state.error ?? 'Failed to load photos'));
-          }
-
-          // Extract all photos
-          final photos = <Photos>[];
-          for (final rover in state.roverPhotos) {
-            if (rover.photos != null) {
-              for (final photo in rover.photos!) {
-                // Check if photo matches both sol and camera filters
-                final matchesSol = sol == null || photo.sol == sol;
-                final matchesCamera = cameraName == null ||
-                    (photo.camera?.name?.toLowerCase() == cameraName?.toLowerCase());
-
-                if (matchesSol && matchesCamera) {
-                  photos.add(photo);
-                }
-              }
-            }
-          }
-
-          if (photos.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.image_not_supported, size: 48),
-                  const SizedBox(height: 16),
-                  Text(
-                    cameraName != null && sol != null
-                        ? 'No photos available for $cameraName on sol $sol'
-                        : selectedDate != null
-                        ? 'No photos available for $selectedDate'
-                        : 'No photos available',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<RoverBloc>().add(
-                        LoadRoverData(
-                          roverName: roverName.toLowerCase(),
-                          cameraName: cameraName,
-                          earthDate: selectedDate.toString(),
-                          sol: sol,
-                        ),
-                      );
-                    },
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Total Photos: ${photos.length}',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(8),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                    childAspectRatio: 1,
-                  ),
-                  itemCount: photos.length,
-                  itemBuilder: (context, index) {
-                    final photo = photos[index];
-                    return GestureDetector(
-                      onTap: () {
-                        // TODO: Add photo viewer
-                      },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          photo.imgSrc ?? '',
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes != null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Center(
-                              child: Icon(Icons.error),
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}*/
-
-// lib/ui/screens/rover_screen/rover_photos_grid/rover_photos_grid.dart
 import 'package:cosmospedia/blocs/rover/rover_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
 
+import '../../../../blocs/favorites/favorites_bloc.dart';
 import '../../../../data/models/mars/rover.dart';
 
 class RoverPhotosGrid extends StatelessWidget {
@@ -908,6 +34,14 @@ class RoverPhotosGrid extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite),
+            onPressed: () {
+              // TODO: Navigate to favorites screen
+            },
+          ),
+        ],
       ),
       body: BlocBuilder<RoverBloc, RoverState>(
         builder: (context, state) {
@@ -1024,16 +158,48 @@ class RoverPhotosGrid extends StatelessWidget {
                             // Favorite icon overlay
                             Align(
                               alignment: Alignment.topRight,
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.favorite_border,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () {
-                                  // TODO: Add to favorites
+                              child: BlocBuilder<FavoritesBloc, FavoritesState>(
+                                builder: (context, favState) {
+                                  final isFavorite =
+                                      favState is FavoritesUpdated &&
+                                          favState.favorites
+                                              .any((fav) => fav.id == photo.id);
+                                  return IconButton(
+                                    icon: Icon(
+                                      isFavorite
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      color: isFavorite
+                                          ? Colors.red
+                                          : Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      if (isFavorite) {
+                                        context
+                                            .read<FavoritesBloc>()
+                                            .add(RemoveFavorite(photo));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  'Removed from favorites')),
+                                        );
+                                      } else {
+                                        context
+                                            .read<FavoritesBloc>()
+                                            .add(AddFavorite(photo));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content:
+                                                  Text('Added to favorites')),
+                                        );
+                                      }
+                                    },
+                                  );
                                 },
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -1051,10 +217,16 @@ class RoverPhotosGrid extends StatelessWidget {
   void _showPhotoDetails(BuildContext context, Photos photo) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (context) {
         return Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           height: MediaQuery.of(context).size.height * 0.85,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
           child: Column(
             children: [
               // Photo viewer
@@ -1069,32 +241,101 @@ class RoverPhotosGrid extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
+
               // Photo details
               _buildPhotoDetails(photo),
 
               // Action buttons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.thumb_up),
-                    onPressed: () {
-                      // TODO: Add to favorites
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.thumb_down),
-                    onPressed: () {
-                      // TODO: Implement dislike functionality
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.share),
-                    onPressed: () {
-                      // TODO: Implement share functionality
-                    },
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    BlocBuilder<FavoritesBloc, FavoritesState>(
+                      builder: (context, state) {
+                        final isLiked =
+                            false; // You'll need to implement this based on your state
+                        return IconButton(
+                          icon: Icon(
+                            Icons.thumb_up,
+                            color: isLiked ? Colors.blue : Colors.grey,
+                          ),
+                          onPressed: () {
+                            context
+                                .read<FavoritesBloc>()
+                                .add(ToggleLike(photo, !isLiked));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(isLiked
+                                      ? 'Removed like'
+                                      : 'Liked photo')),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    BlocBuilder<FavoritesBloc, FavoritesState>(
+                      builder: (context, state) {
+                        final isDisliked =
+                            false; // You'll need to implement this based on your state
+                        return IconButton(
+                          icon: Icon(
+                            Icons.thumb_down,
+                            color: isDisliked ? Colors.red : Colors.grey,
+                          ),
+                          onPressed: () {
+                            context
+                                .read<FavoritesBloc>()
+                                .add(ToggleLike(photo, false));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Disliked photo')),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    BlocBuilder<FavoritesBloc, FavoritesState>(
+                      builder: (context, state) {
+                        final isFavorite = state is FavoritesUpdated &&
+                            state.favorites.any((fav) => fav.id == photo.id);
+                        return IconButton(
+                          icon: Icon(
+                            isFavorite ? Icons.favorite : Icons.favorite_border,
+                            color: isFavorite ? Colors.red : Colors.grey,
+                          ),
+                          onPressed: () {
+                            if (isFavorite) {
+                              context
+                                  .read<FavoritesBloc>()
+                                  .add(RemoveFavorite(photo));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Removed from favorites')),
+                              );
+                            } else {
+                              context
+                                  .read<FavoritesBloc>()
+                                  .add(AddFavorite(photo));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Added to favorites')),
+                              );
+                            }
+                          },
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.share, color: Colors.grey),
+                      onPressed: () {
+                        // TODO: Implement share functionality
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Sharing photo...')),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -1104,20 +345,33 @@ class RoverPhotosGrid extends StatelessWidget {
   }
 
   Widget _buildPhotoDetails(Photos photo) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Camera : ${photo.camera?.fullName ?? 'Unknown'}',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        Text('Earth Date: ${photo.earthDate ?? 'Unknown'}'),
-        Text('Sol: ${photo.sol ?? 'Unknown'}'),
-        Text('Rover: ${photo.rover?.name ?? 'Unknown'}'),
-        Text('Rover Status: ${photo.rover?.status ?? 'Unknown'}'),
-        Text('Rover Launch Date: ${photo.rover?.launchDate ?? 'Unknown'}'),
-        Text('Rover Landing Date: ${photo.rover?.landingDate ?? 'Unknown'}'),
-      ],
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Camera: ${photo.camera?.fullName ?? 'Unknown'}',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 4),
+          Text('Earth Date: ${photo.earthDate ?? 'Unknown'}'),
+          const SizedBox(height: 4),
+          Text('Sol: ${photo.sol ?? 'Unknown'}'),
+          const SizedBox(height: 4),
+          Text('Rover: ${photo.rover?.name ?? 'Unknown'}'),
+          const SizedBox(height: 4),
+          Text('Status: ${photo.rover?.status ?? 'Unknown'}'),
+          const SizedBox(height: 4),
+          Text('Launch Date: ${photo.rover?.launchDate ?? 'Unknown'}'),
+          const SizedBox(height: 4),
+          Text('Landing Date: ${photo.rover?.landingDate ?? 'Unknown'}'),
+        ],
+      ),
     );
   }
 }

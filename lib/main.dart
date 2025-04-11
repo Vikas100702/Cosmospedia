@@ -1,4 +1,5 @@
 import 'package:cosmospedia/app.dart';
+import 'package:cosmospedia/blocs/favorites/favorites_bloc.dart';
 import 'package:cosmospedia/blocs/rover_manifest/rover_manifest_bloc.dart';
 import 'package:cosmospedia/blocs/sign_in/sign_in_bloc.dart';
 import 'package:cosmospedia/data/repositories/mars/rover_manifest_repository.dart';
@@ -54,6 +55,9 @@ Future<void> main() async {
             create: (context) => RoverManifestBloc(
               roverManifestRepository: context.read<RoverManifestRepository>(),
             ),
+          ),
+          BlocProvider(
+            create: (context) => FavoritesBloc(),
           ),
         ],
         child: const MyApp(),
