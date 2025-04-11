@@ -877,6 +877,7 @@ import 'package:cosmospedia/blocs/rover/rover_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:photo_view/photo_view.dart';
 
 import '../../../../data/models/mars/rover.dart';
 
@@ -898,7 +899,8 @@ class RoverPhotosGrid extends StatelessWidget {
     if (cameraName != null) {
       title = '$roverName Photos - $cameraName';
     } else if (selectedDate != null) {
-      title = '$roverName Photos - ${DateFormat('yyyy-MM-dd').format(selectedDate!)}';
+      title =
+          '$roverName Photos - ${DateFormat('yyyy-MM-dd').format(selectedDate!)}';
     } else {
       title = '$roverName Photos';
     }
@@ -923,7 +925,8 @@ class RoverPhotosGrid extends StatelessWidget {
             if (rover.photos != null) {
               for (final photo in rover.photos!) {
                 final matchesCamera = cameraName == null ||
-                    (photo.camera?.name?.toLowerCase() == cameraName?.toLowerCase());
+                    (photo.camera?.name?.toLowerCase() ==
+                        cameraName?.toLowerCase());
 
                 if (matchesCamera) {
                   photos.add(photo);
@@ -943,20 +946,20 @@ class RoverPhotosGrid extends StatelessWidget {
                     cameraName != null
                         ? 'No photos available for $cameraName'
                         : selectedDate != null
-                        ? 'No photos available for ${DateFormat('yyyy-MM-dd').format(selectedDate!)}'
-                        : 'No photos available',
+                            ? 'No photos available for ${DateFormat('yyyy-MM-dd').format(selectedDate!)}'
+                            : 'No photos available',
                     style: const TextStyle(fontSize: 18),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
                       context.read<RoverBloc>().add(
-                        LoadRoverData(
-                          roverName: roverName.toLowerCase(),
-                          cameraName: cameraName,
-                          earthDate: selectedDate?.toString(),
-                        ),
-                      );
+                            LoadRoverData(
+                              roverName: roverName.toLowerCase(),
+                              cameraName: cameraName,
+                              earthDate: selectedDate?.toString(),
+                            ),
+                          );
                     },
                     child: const Text('Retry'),
                   ),
@@ -988,29 +991,50 @@ class RoverPhotosGrid extends StatelessWidget {
                     final photo = photos[index];
                     return GestureDetector(
                       onTap: () {
-                        // TODO: Add photo viewer
+                        _showPhotoDetails(context, photo);
                       },
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          photo.imgSrc ?? '',
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes != null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                    : null,
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            Image.network(
+                              photo.imgSrc ?? '',
+                              fit: BoxFit.cover,
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                );
+                              },
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Center(
+                                  child: Icon(Icons.error),
+                                );
+                              },
+                            ),
+                            // Favorite icon overlay
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: IconButton(
+                                icon: const Icon(
+                                  Icons.favorite_border,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  // TODO: Add to favorites
+                                },
                               ),
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Center(
-                              child: Icon(Icons.error),
-                            );
-                          },
+                            )
+                          ],
                         ),
                       ),
                     );
@@ -1021,6 +1045,79 @@ class RoverPhotosGrid extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  void _showPhotoDetails(BuildContext context, Photos photo) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.all(16),
+          height: MediaQuery.of(context).size.height * 0.85,
+          child: Column(
+            children: [
+              // Photo viewer
+              Expanded(
+                child: PhotoView(
+                  imageProvider: NetworkImage(photo.imgSrc ?? ''),
+                  minScale: PhotoViewComputedScale.contained,
+                  maxScale: PhotoViewComputedScale.covered * 2,
+                  backgroundDecoration: const BoxDecoration(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Photo details
+              _buildPhotoDetails(photo),
+
+              // Action buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.thumb_up),
+                    onPressed: () {
+                      // TODO: Add to favorites
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.thumb_down),
+                    onPressed: () {
+                      // TODO: Implement dislike functionality
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.share),
+                    onPressed: () {
+                      // TODO: Implement share functionality
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildPhotoDetails(Photos photo) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Camera : ${photo.camera?.fullName ?? 'Unknown'}',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        Text('Earth Date: ${photo.earthDate ?? 'Unknown'}'),
+        Text('Sol: ${photo.sol ?? 'Unknown'}'),
+        Text('Rover: ${photo.rover?.name ?? 'Unknown'}'),
+        Text('Rover Status: ${photo.rover?.status ?? 'Unknown'}'),
+        Text('Rover Launch Date: ${photo.rover?.launchDate ?? 'Unknown'}'),
+        Text('Rover Landing Date: ${photo.rover?.landingDate ?? 'Unknown'}'),
+      ],
     );
   }
 }
