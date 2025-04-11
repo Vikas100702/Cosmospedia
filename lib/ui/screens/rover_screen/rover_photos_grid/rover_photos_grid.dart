@@ -34,14 +34,6 @@ class RoverPhotosGrid extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.favorite),
-            onPressed: () {
-              // TODO: Navigate to favorites screen
-            },
-          ),
-        ],
       ),
       body: BlocBuilder<RoverBloc, RoverState>(
         builder: (context, state) {
@@ -245,7 +237,7 @@ class RoverPhotosGrid extends StatelessWidget {
               // Photo details
               _buildPhotoDetails(photo),
 
-              // Action buttons
+              /*// Action buttons
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Row(
@@ -266,9 +258,10 @@ class RoverPhotosGrid extends StatelessWidget {
                                 .add(ToggleLike(photo, !isLiked));
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                  content: Text(isLiked
-                                      ? 'Removed like'
-                                      : 'Liked photo')),
+                                content: Text(
+                                  isLiked ? 'Removed like' : 'Liked photo',
+                                ),
+                              ),
                             );
                           },
                         );
@@ -336,7 +329,7 @@ class RoverPhotosGrid extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
+              ),*/
             ],
           ),
         );
@@ -345,33 +338,107 @@ class RoverPhotosGrid extends StatelessWidget {
   }
 
   Widget _buildPhotoDetails(Photos photo) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Camera: ${photo.camera?.fullName ?? 'Unknown'}',
-            style: const TextStyle(fontWeight: FontWeight.bold),
+    return BlocBuilder<FavoritesBloc, FavoritesState>(
+      builder: (context, state) {
+        final isFavorite = state is FavoritesUpdated &&
+            state.favorites.any((fav) => fav.id == photo.id);
+
+        return Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(12),
           ),
-          const SizedBox(height: 4),
-          Text('Earth Date: ${photo.earthDate ?? 'Unknown'}'),
-          const SizedBox(height: 4),
-          Text('Sol: ${photo.sol ?? 'Unknown'}'),
-          const SizedBox(height: 4),
-          Text('Rover: ${photo.rover?.name ?? 'Unknown'}'),
-          const SizedBox(height: 4),
-          Text('Status: ${photo.rover?.status ?? 'Unknown'}'),
-          const SizedBox(height: 4),
-          Text('Launch Date: ${photo.rover?.launchDate ?? 'Unknown'}'),
-          const SizedBox(height: 4),
-          Text('Landing Date: ${photo.rover?.landingDate ?? 'Unknown'}'),
-        ],
-      ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Camera: ${photo.camera?.fullName ?? 'Unknown'}',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 4),
+              Text('Earth Date: ${photo.earthDate ?? 'Unknown'}'),
+              const SizedBox(height: 4),
+              Text('Sol: ${photo.sol ?? 'Unknown'}'),
+              const SizedBox(height: 4),
+              Text('Rover: ${photo.rover?.name ?? 'Unknown'}'),
+              const SizedBox(height: 4),
+              Text('Status: ${photo.rover?.status ?? 'Unknown'}'),
+              const SizedBox(height: 4),
+              Text('Launch Date: ${photo.rover?.launchDate ?? 'Unknown'}'),
+              const SizedBox(height: 4),
+              Text('Landing Date: ${photo.rover?.landingDate ?? 'Unknown'}'),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  //Like Photo
+                 /* IconButton(
+                    icon: Icon(
+                      Icons.thumb_up,
+                      color: Colors.blue,
+                    ),
+                    onPressed: () {
+                      context.read<FavoritesBloc>().add(
+                            ToggleLike(photo, true),
+                          );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Liked photo')),
+                      );
+                    },
+                  ),
+                  //Dislike Photo
+                  IconButton(
+                    icon: Icon(
+                      Icons.thumb_down,
+                      color: Colors.red,
+                    ),
+                    onPressed: () {
+                      context.read<FavoritesBloc>().add(ToggleLike(photo, false));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Disliked photo')),
+                      );
+                    },
+                  ),*/
+
+                  //Add to Favorites
+                  IconButton(
+                    icon: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: isFavorite ? Colors.red : Colors.grey,
+                    ),
+
+                    onPressed: () {
+                      if (isFavorite) {
+                        context.read<FavoritesBloc>().add(RemoveFavorite(photo));
+                        /*ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Removed from favorites')),
+                        );*/
+                      } else {
+                        context.read<FavoritesBloc>().add(AddFavorite(photo));
+                        /*ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Added to favorites')),
+                        );*/
+                      }
+                    },
+                  ),
+
+                  //Share Photo
+                  IconButton(
+                    icon: Icon(Icons.share, color: Colors.grey),
+                    onPressed: () {
+                      // TODO: Implement share functionality
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Sharing photo...')),
+                      );
+                    },
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }

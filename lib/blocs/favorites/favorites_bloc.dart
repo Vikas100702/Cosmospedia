@@ -9,6 +9,8 @@ part 'favorites_event.dart';
 part 'favorites_state.dart';
 
 class FavoritesBloc extends Bloc<FavouritesEvent, FavoritesState> {
+  final List<Photos> _favorites = [];
+
   FavoritesBloc() : super(FavouritesInitial()) {
     on<AddFavorite>(_onAddFavorite);
     on<RemoveFavorite>(_onRemoveFavorite);
@@ -16,14 +18,24 @@ class FavoritesBloc extends Bloc<FavouritesEvent, FavoritesState> {
   }
 
   void _onAddFavorite(AddFavorite event, Emitter<FavoritesState> emit) {
-    // Implement add to favorites
+    if (!_favorites.any((photo) => photo.id == event.photo.id)) {
+      _favorites.add(event.photo);
+      emit(FavoritesUpdated(List.from(_favorites)));
+    }
   }
 
   void _onRemoveFavorite(RemoveFavorite event, Emitter<FavoritesState> emit) {
-    // Implement remove from favorites
+    _favorites.removeWhere((photo) => photo.id == event.photo.id);
+    emit(FavoritesUpdated((List.from(_favorites))));
   }
 
   void _onToggleLike(ToggleLike event, Emitter<FavoritesState> emit) {
-    // Implement like/dislike toggle
+    // You can implement like/dislike logic here if needed
+    // For now, we'll just treat it as a favorite action
+    if (event.isLiked) {
+      _onAddFavorite(AddFavorite(event.photo), emit);
+    } else {
+      // For dislike, you might want to track this separately
+    }
   }
 }
