@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/models/asteroids/asteroids_model.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../utils/app_colors.dart';
 
 class AsteroidsScreen extends StatelessWidget {
   const AsteroidsScreen({super.key});
@@ -12,49 +13,104 @@ class AsteroidsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final screenSize = MediaQuery.of(context).size;
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-    return Scaffold(
-      appBar: customAppBar(
-        context: context,
-        title: l10n?.asteroidsTitle,
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: AssetImage("assets/background.png"),
+          opacity: 0.3,
+        ),
       ),
-      body:
-          BlocBuilder<AsteroidsBloc, AsteroidsState>(builder: (context, state) {
-        if (state is AsteroidsLoading) {
-          context.read<AsteroidsBloc>().add(LoadAsteroids());
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is AsteroidsLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is AsteroidsError) {
-          return Center(child: Text(state.error));
-        } else if (state is AsteroidsLoaded) {
-          return _buildAsteroidsList(state.asteroids, context);
-        }
-        return const SizedBox();
-      }),
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: AppColors.transparentColor,
+        appBar: customAppBar(
+          scaffoldKey: scaffoldKey,
+          context: context,
+          titleWidget: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 8,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              l10n?.asteroidsTitle ?? 'Asteroids',
+              style: TextStyle(
+                color: AppColors.backgroundLight,
+                fontWeight: FontWeight.w600,
+                fontSize: screenSize.width * 0.045,
+                letterSpacing: 0.5,
+              ),
+            ),
+          ),
+        ),
+        body: BlocBuilder<AsteroidsBloc, AsteroidsState>(
+          builder: (context, state) {
+            if (state is AsteroidsInitial) {
+              context.read<AsteroidsBloc>().add(LoadAsteroids());
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is AsteroidsLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is AsteroidsError) {
+              return Center(
+                child: Text(
+                  state.error,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              );
+            } else if (state is AsteroidsLoaded) {
+              return _buildAsteroidsList(state.asteroids, context);
+            }
+            return const SizedBox();
+          },
+        ),
+      ),
     );
   }
 
-  Widget _buildAsteroidsList(
-      List<Asteroid> asteroids, BuildContext context) {
+  Widget _buildAsteroidsList(List<Asteroid> asteroids, BuildContext context) {
+    final theme = Theme.of(context);
+
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Asteroids List',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              IconButton(
-                icon: const Icon(Icons.filter_list),
-                onPressed: () {
-                  // TODO: Implement filter functionality
-                },
-              ),
-            ],
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Asteroids List',
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blue[800],
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.filter_list, color: Colors.white),
+                    onPressed: () {
+                      // TODO: Implement filter functionality
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         Expanded(
@@ -70,49 +126,183 @@ class AsteroidsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAsteroidsCard(Asteroid asteroids, BuildContext context) {
-    final closestApproach = asteroids.closeApproachData.isNotEmpty
-        ? asteroids.closeApproachData.first
+  Widget _buildAsteroidsCard(Asteroid asteroid, BuildContext context) {
+    final theme = Theme.of(context);
+    final closestApproach = asteroid.closeApproachData.isNotEmpty
+        ? asteroid.closeApproachData.first
         : null;
+
+    // Determine hazard level color
+    final hazardColor = asteroid.isPotentiallyHazardous
+        ? Colors.red[400]
+        : Colors.green[400];
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      elevation: 8,
+      color: Colors.white.withOpacity(0.1),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '${asteroids.name} (${asteroids.designation})',
-              style: Theme.of(context).textTheme.titleLarge,
+            Row(
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.blue[800],
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.public,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        asteroid.name,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        asteroid.designation,
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          color: Colors.white70,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              'Diameter: ${asteroids.estimatedDiameter.kilometers.min.toStringAsFixed(2)} - ${asteroids.estimatedDiameter.kilometers.max.toStringAsFixed(2)} km',
+            const Divider(color: Colors.white30, height: 24),
+
+            // Asteroid stats
+            _buildDetailRow(
+                context,
+                'Diameter',
+                '${asteroid.estimatedDiameter.kilometers.min.toStringAsFixed(2)} - ${asteroid.estimatedDiameter.kilometers.max.toStringAsFixed(2)} km'
             ),
-            Text(
-              'Absolute Magnitude: ${asteroids.absoluteMagnitudeH}',
+            _buildDetailRow(
+                context,
+                'Absolute Magnitude',
+                asteroid.absoluteMagnitudeH.toString()
             ),
-            Text(
-              'Potentially Hazardous: ${asteroids.isPotentiallyHazardous ? 'Yes' : 'No'}',
-              style: TextStyle(
-                color: asteroids.isPotentiallyHazardous ? Colors.red : Colors.green,
-              ),
+            _buildHazardStatusRow(
+                context,
+                'Potentially Hazardous',
+                asteroid.isPotentiallyHazardous ? 'Yes' : 'No',
+                hazardColor
             ),
+
             if (closestApproach != null) ...[
-              const SizedBox(height: 8),
-              Text(
-                'Closest Approach:',
-                style: Theme.of(context).textTheme.titleMedium,
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.white24),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Closest Approach',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    _buildDetailRow(context, 'Date', closestApproach.date),
+                    _buildDetailRow(
+                        context,
+                        'Distance',
+                        '${closestApproach.missDistance.kilometers.toStringAsFixed(0)} km'
+                    ),
+                    _buildDetailRow(
+                        context,
+                        'Relative Velocity',
+                        '${closestApproach.relativeVelocity.kilometersPerSecond.toStringAsFixed(2)} km/s'
+                    ),
+                  ],
+                ),
               ),
-              Text('Date: ${closestApproach.date}'),
-              Text(
-                  'Distance: ${closestApproach.missDistance.kilometers.toStringAsFixed(2)} km'),
-              Text(
-                  'Relative Velocity: ${closestApproach.relativeVelocity.kilometersPerSecond.toStringAsFixed(2)} km/s'),
             ],
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(BuildContext context, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 14,
+            ),
+          ),
+          Text(
+            value,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHazardStatusRow(BuildContext context, String label, String value, Color? valueColor) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 14,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: valueColor,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              value,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
