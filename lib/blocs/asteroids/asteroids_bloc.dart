@@ -9,6 +9,7 @@ part 'asteroids_state.dart';
 
 class AsteroidsBloc extends Bloc<AsteroidsEvent, AsteroidsState> {
   final AsteroidsRepository asteroidsRepository;
+  List<Asteroid>? cachedAsteroids; // Add cache for asteroids
   AsteroidsBloc({required this.asteroidsRepository}) : super(AsteroidsInitial()) {
     on<LoadAsteroids>(_onLoadAsteroids);
     on<SelectAsteroid>((event, emit) {
@@ -17,10 +18,18 @@ class AsteroidsBloc extends Bloc<AsteroidsEvent, AsteroidsState> {
   }
 
   Future<void> _onLoadAsteroids(LoadAsteroids event, Emitter<AsteroidsState> emit) async {
+
+    // Return cached data if available
+    if (cachedAsteroids != null) {
+      emit(AsteroidsLoaded(asteroids: cachedAsteroids!));
+      return;
+    }
+
     emit(AsteroidsLoading());
 
     try {
       final asteroids = await asteroidsRepository.getAsteroids();
+      cachedAsteroids = asteroids; // Cache the asteroids
       emit(AsteroidsLoaded(asteroids: asteroids));
     } catch (error) {
       emit(AsteroidsError(error: error.toString()));
