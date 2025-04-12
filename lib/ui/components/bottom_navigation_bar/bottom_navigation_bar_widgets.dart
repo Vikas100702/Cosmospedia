@@ -13,26 +13,28 @@
 
     SizeConfig.init(context);
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            color: isActive ? AppColors.backgroundLight : Colors.white,
-            size: SizeConfig.devicePixelRatio(21),
-          ),
-          SizedBox(height: SizeConfig.devicePixelRatio(0.1)),
-          Text(
-            label,
-            style: TextStyle(
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
               color: isActive ? AppColors.backgroundLight : Colors.white,
-              fontSize: SizeConfig.devicePixelRatio(12),
-              fontWeight: FontWeight.w500,
+              size: SizeConfig.devicePixelRatio(21),
             ),
-          ),
-        ],
+            SizedBox(height: SizeConfig.devicePixelRatio(0.1)),
+            Text(
+              label,
+              style: TextStyle(
+                color: isActive ? AppColors.backgroundLight : Colors.white,
+                fontSize: SizeConfig.devicePixelRatio(12),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

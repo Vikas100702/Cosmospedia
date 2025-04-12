@@ -132,12 +132,12 @@ class CustomBottomNavigationBar extends StatelessWidget {
               ),
               buildNavigationItem(
                 context,
-                Icons.cloud,
-                "Weather",
-                state.currentScreen == CurrentScreen.weather,
+                Icons.cloud_circle,
+                "Asteroids",
+                state.currentScreen == CurrentScreen.asteroids,
                     () => context
                     .read<HomeBloc>()
-                    .add(SwitchScreen(CurrentScreen.weather)),
+                    .add(SwitchScreen(CurrentScreen.asteroids)),
               ),
               SizedBox(width: SizeConfig.width(1)),
               buildNavigationItem(

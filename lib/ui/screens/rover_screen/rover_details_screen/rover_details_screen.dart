@@ -165,11 +165,6 @@ class RoverDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      CustomElevatedButton(
-                          onPressed: () {},
-                          text: "Browse by Sol",
-                          width: double.infinity),
-                      const SizedBox(height: 20),
                       // In RoverDetailsScreen
                       CustomElevatedButton(
                         onPressed: () async {
@@ -186,12 +181,6 @@ class RoverDetailsScreen extends StatelessWidget {
                           if (selectedDate != null) {
                             final formattedDate =
                                 DateFormat('yyyy-MM-dd').format(selectedDate);
-                            // Use the selected date to fetch photos
-                            // Example:
-                            // context.read<RoverBloc>().add(LoadRoverPhotosByDate(
-                            //   roverName: roverName,
-                            //   earthDate: formattedDate,
-                            // ));
                             debugPrint('Selected Date: $formattedDate');
                           }
                         },
@@ -213,26 +202,6 @@ class RoverDetailsScreen extends StatelessWidget {
                             );
                             return;
                           }
-
-                          // Get max sol from manifest
-                          /*final maxSol = manifest.maxSol;
-
-                          // Show sol input dialog with max sol validation
-                          final sol = await _showSolInputDialog(context, maxSol);
-                          if (sol == null) return;
-
-                          // Find photo manifest for this sol
-                          final photoManifest = manifest.photos.firstWhere(
-                                (photo) => photo.sol == sol,
-                            orElse: () => null!,
-                          );
-
-                          if (photoManifest == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('No photos available for sol $sol')),
-                            );
-                            return;
-                          }*/
 
                           // Get unique camera names using a Set
                           final uniqueCameras = <String>{};
@@ -273,63 +242,6 @@ class RoverDetailsScreen extends StatelessWidget {
                         text: "Browse by Camera",
                         width: double.infinity,
                       ),
-
-                      // Photo Manifest Section
-                      /*Text(
-                        'Photo Manifest',
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-
-                      // Photo Manifest List
-                      ...manifest.photos.map((photo) => Card(
-                        color: Colors.white.withOpacity(0.1),
-                        margin: const EdgeInsets.only(bottom: 10),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  const Icon(Icons.camera_alt, size: 16, color: Colors.white70),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    'Sol ${photo.sol}',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Earth Date: ${photo.earthDate}',
-                                style: const TextStyle(color: Colors.white70),
-                              ),
-                              Text(
-                                'Total Photos: ${photo.totalPhotos}',
-                                style: const TextStyle(color: Colors.white70),
-                              ),
-                              const SizedBox(height: 8),
-                              Wrap(
-                                spacing: 4,
-                                children: photo.cameras.map((camera) => Chip(
-                                  label: Text(
-                                    camera,
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                  backgroundColor: Colors.blue.withOpacity(0.2),
-                                )).toList(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )).toList(),*/
                     ],
                   ),
                 );

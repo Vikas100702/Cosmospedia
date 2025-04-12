@@ -372,35 +372,6 @@ class RoverPhotosGrid extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  //Like Photo
-                 /* IconButton(
-                    icon: Icon(
-                      Icons.thumb_up,
-                      color: Colors.blue,
-                    ),
-                    onPressed: () {
-                      context.read<FavoritesBloc>().add(
-                            ToggleLike(photo, true),
-                          );
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Liked photo')),
-                      );
-                    },
-                  ),
-                  //Dislike Photo
-                  IconButton(
-                    icon: Icon(
-                      Icons.thumb_down,
-                      color: Colors.red,
-                    ),
-                    onPressed: () {
-                      context.read<FavoritesBloc>().add(ToggleLike(photo, false));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Disliked photo')),
-                      );
-                    },
-                  ),*/
-
                   //Add to Favorites
                   IconButton(
                     icon: Icon(
