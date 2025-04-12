@@ -80,7 +80,6 @@ class CustomBottomNavigationBar extends StatelessWidget {
 import 'package:cosmospedia/ui/screens/asteroids_screen/asteroids_screen.dart';
 import 'package:cosmospedia/ui/screens/rover_screen/rover_screen.dart';
 import 'package:cosmospedia/utils/size_config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../blocs/home/home_bloc.dart';

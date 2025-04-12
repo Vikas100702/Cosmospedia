@@ -132,7 +132,7 @@ class AppLocalizations{
   String get spirit => _localizedValues[locale.languageCode]!['spirit']!;
 
   //Asteroids
-  String get asteroidsTitle => _localizedValues[locale.languageCode]!['asteroidsNearEarth']!;
+  String get asteroidsTitle => _localizedValues[locale.languageCode]!['asteroidsTitle']!;
 
   // Common
   String get loading => _localizedValues[locale.languageCode]!['loading']!;
