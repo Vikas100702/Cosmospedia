@@ -63,6 +63,9 @@ class AppLocalizations{
       'opportunity' : 'Opportunity',
       'spirit' : 'Spirit',
 
+      //Asteroids
+      'asteroidsTitle' : 'Asteroids Near Earth',
+
       // Common
       'loading' : 'Loading...',
       'error' : 'Error',
@@ -127,6 +130,9 @@ class AppLocalizations{
   String get curiosity => _localizedValues[locale.languageCode]!['curiosity']!;
   String get opportunity => _localizedValues[locale.languageCode]!['opportunity']!;
   String get spirit => _localizedValues[locale.languageCode]!['spirit']!;
+
+  //Asteroids
+  String get asteroidsTitle => _localizedValues[locale.languageCode]!['asteroidsNearEarth']!;
 
   // Common
   String get loading => _localizedValues[locale.languageCode]!['loading']!;
