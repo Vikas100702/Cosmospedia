@@ -29,3 +29,12 @@ final class AsteroidsError extends AsteroidsState {
   List<Object> get props => [error];
 }
 
+final class AsteroidSelected extends AsteroidsState {
+  final Asteroid asteroid;
+
+  const AsteroidSelected({required this.asteroid});
+
+  @override
+  List<Object> get props => [asteroid];
+}
+

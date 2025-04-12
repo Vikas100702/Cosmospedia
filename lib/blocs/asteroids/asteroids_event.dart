@@ -8,3 +8,12 @@ abstract class AsteroidsEvent extends Equatable {
 }
 
 class LoadAsteroids extends AsteroidsEvent {}
+
+class SelectAsteroid extends AsteroidsEvent {
+  final Asteroid asteroid;
+
+  const SelectAsteroid(this.asteroid);
+
+  @override
+  List<Object> get props => [asteroid];
+}

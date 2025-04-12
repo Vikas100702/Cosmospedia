@@ -11,6 +11,9 @@ class AsteroidsBloc extends Bloc<AsteroidsEvent, AsteroidsState> {
   final AsteroidsRepository asteroidsRepository;
   AsteroidsBloc({required this.asteroidsRepository}) : super(AsteroidsInitial()) {
     on<LoadAsteroids>(_onLoadAsteroids);
+    on<SelectAsteroid>((event, emit) {
+      emit(AsteroidSelected(asteroid: event.asteroid));
+    });
   }
 
   Future<void> _onLoadAsteroids(LoadAsteroids event, Emitter<AsteroidsState> emit) async {
