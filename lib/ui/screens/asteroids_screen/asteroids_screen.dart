@@ -1,6 +1,5 @@
 import 'package:cosmospedia/blocs/asteroids/asteroids_bloc.dart';
 import 'package:cosmospedia/ui/components/custom_app_bar/custom_app_bar.dart';
-import 'package:cosmospedia/ui/screens/asteroids_screen/asteroid_details_screen/asteroids_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,74 +16,59 @@ class AsteroidsScreen extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-    return BlocListener<AsteroidsBloc, AsteroidsState>(
-      listener: (context, state) {
-        // Load data if we're in initial state
-        if (state is AsteroidsInitial) {
-          context.read<AsteroidsBloc>().add(LoadAsteroids());
-        }
-      },
-      child: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage("assets/background.png"),
-            opacity: 0.3,
-          ),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: AssetImage("assets/background.png"),
+          opacity: 0.4,
         ),
-        child: Scaffold(
-          key: scaffoldKey,
-          backgroundColor: AppColors.transparentColor,
-          appBar: customAppBar(
-            scaffoldKey: scaffoldKey,
-            context: context,
-            titleWidget: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                l10n?.asteroidsTitle ?? 'Asteroids',
-                style: TextStyle(
-                  color: AppColors.backgroundLight,
-                  fontWeight: FontWeight.w600,
-                  fontSize: screenSize.width * 0.045,
-                  letterSpacing: 0.5,
-                ),
+      ),
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: AppColors.transparentColor,
+        appBar: customAppBar(
+          scaffoldKey: scaffoldKey,
+          context: context,
+          titleWidget: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 8,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              l10n?.asteroidsTitle ?? 'Asteroids',
+              style: TextStyle(
+                color: AppColors.backgroundLight,
+                fontWeight: FontWeight.w600,
+                fontSize: screenSize.width * 0.045,
+                letterSpacing: 0.5,
               ),
             ),
           ),
-          body: BlocBuilder<AsteroidsBloc, AsteroidsState>(
-            builder: (context, state) {
-              if (state is AsteroidsInitial || state is AsteroidsLoading) {
-                context.read<AsteroidsBloc>().add(LoadAsteroids());
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is AsteroidsError) {
-                return Center(
-                  child: Text(
-                    state.error,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                );
-              } else if (state is AsteroidsLoaded) {
-                return _buildAsteroidsList(state.asteroids, context);
-              } else if (state is AsteroidSelected) {
-                // This handles the case when coming back from detail screen
-                // The bloc should maintain the loaded state
-                final asteroids =
-                    context.read<AsteroidsBloc>().cachedAsteroids;
-                if (asteroids != null) {
-                  return _buildAsteroidsList(asteroids, context);
-                }
-                return const Center(child: CircularProgressIndicator());
-              }
-              return const SizedBox();
-            },
-          ),
+        ),
+        body: BlocBuilder<AsteroidsBloc, AsteroidsState>(
+          builder: (context, state) {
+            if (state is AsteroidsInitial) {
+              context.read<AsteroidsBloc>().add(LoadAsteroids());
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is AsteroidsLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is AsteroidsError) {
+              return Center(
+                child: Text(
+                  state.error,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              );
+            } else if (state is AsteroidsLoaded) {
+              return _buildAsteroidsList(state.asteroids, context);
+            }
+            return const SizedBox();
+          },
         ),
       ),
     );
@@ -149,110 +133,116 @@ class AsteroidsScreen extends StatelessWidget {
         : null;
 
     // Determine hazard level color
-    final hazardColor =
-        asteroid.isPotentiallyHazardous ? Colors.red[400] : Colors.green[400];
+    final hazardColor = asteroid.isPotentiallyHazardous
+        ? Colors.red[400]
+        : Colors.green[400];
 
-    return GestureDetector(
-      onTap: () {
-        context.read<AsteroidsBloc>().add(SelectAsteroid(asteroid));
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AsteroidsDetailScreen(asteroid: asteroid),
-          ),
-        );
-      },
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        elevation: 8,
-        color: Colors.white.withOpacity(0.1),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.blue[800],
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.public,
-                      size: 30,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          asteroid.name,
-                          style: theme.textTheme.titleLarge?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          asteroid.designation,
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            color: Colors.white70,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const Divider(color: Colors.white30, height: 24),
-
-              // Asteroid stats
-              _buildDetailRow(context, 'Diameter',
-                  '${asteroid.estimatedDiameter.kilometers.min.toStringAsFixed(2)} - ${asteroid.estimatedDiameter.kilometers.max.toStringAsFixed(2)} km'),
-              _buildDetailRow(context, 'Absolute Magnitude',
-                  asteroid.absoluteMagnitudeH.toString()),
-              _buildHazardStatusRow(context, 'Potentially Hazardous',
-                  asteroid.isPotentiallyHazardous ? 'Yes' : 'No', hazardColor),
-
-              if (closestApproach != null) ...[
-                const SizedBox(height: 16),
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      elevation: 8,
+      color: Colors.white.withOpacity(0.1),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  width: 50,
+                  height: 50,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.05),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.white24),
+                    color: Colors.blue[800],
+                    shape: BoxShape.circle,
                   ),
+                  child: const Icon(
+                    Icons.public,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Closest Approach',
-                        style: theme.textTheme.titleMedium?.copyWith(
+                        asteroid.name,
+                        style: theme.textTheme.titleLarge?.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      _buildDetailRow(context, 'Date', closestApproach.date),
-                      _buildDetailRow(context, 'Distance',
-                          '${closestApproach.missDistance.kilometers.toStringAsFixed(0)} km'),
-                      _buildDetailRow(context, 'Relative Velocity',
-                          '${closestApproach.relativeVelocity.kilometersPerSecond.toStringAsFixed(2)} km/s'),
+                      Text(
+                        asteroid.designation,
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          color: Colors.white70,
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ],
+            ),
+            const Divider(color: Colors.white30, height: 24),
+
+            // Asteroid stats
+            _buildDetailRow(
+                context,
+                'Diameter',
+                '${asteroid.estimatedDiameter.kilometers.min.toStringAsFixed(2)} - ${asteroid.estimatedDiameter.kilometers.max.toStringAsFixed(2)} km'
+            ),
+            _buildDetailRow(
+                context,
+                'Absolute Magnitude',
+                asteroid.absoluteMagnitudeH.toString()
+            ),
+            _buildHazardStatusRow(
+                context,
+                'Potentially Hazardous',
+                asteroid.isPotentiallyHazardous ? 'Yes' : 'No',
+                hazardColor
+            ),
+
+            if (closestApproach != null) ...[
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.white24),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Closest Approach',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    _buildDetailRow(context, 'Date', closestApproach.date),
+                    _buildDetailRow(
+                        context,
+                        'Distance',
+                        '${closestApproach.missDistance.kilometers.toStringAsFixed(0)} km'
+                    ),
+                    _buildDetailRow(
+                        context,
+                        'Relative Velocity',
+                        '${closestApproach.relativeVelocity.kilometersPerSecond.toStringAsFixed(2)} km/s'
+                    ),
+                  ],
+                ),
+              ),
             ],
-          ),
+          ],
         ),
       ),
     );
@@ -284,8 +274,7 @@ class AsteroidsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHazardStatusRow(
-      BuildContext context, String label, String value, Color? valueColor) {
+  Widget _buildHazardStatusRow(BuildContext context, String label, String value, Color? valueColor) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
