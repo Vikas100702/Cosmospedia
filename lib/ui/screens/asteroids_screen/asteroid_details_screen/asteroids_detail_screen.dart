@@ -55,7 +55,7 @@ class AsteroidsDetailScreen extends StatelessWidget {
             ),
           ),
         ),
-        body: AsteroidDetailWidget(asteroid: asteroid),
+        body: AsteroidsDetailWidgets(asteroid: asteroid),
       ),
     );
   }
