@@ -1,0 +1,2 @@
+D:/Flutter Projects/MCA Project/Cosmospedia/android/app/.cxx/RelWithDebInfo/3f1j1c6v/x86_64/CMakeFiles/edit_cache.dir
+D:/Flutter Projects/MCA Project/Cosmospedia/android/app/.cxx/RelWithDebInfo/3f1j1c6v/x86_64/CMakeFiles/rebuild_cache.dir
