@@ -17,59 +17,76 @@ class AsteroidsScreen extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage("assets/background.png"),
-          opacity: 0.4,
+    return BlocListener<AsteroidsBloc, AsteroidsState>(
+      listener: (context, state) {
+        // Load data if we're in initial state
+        if (state is AsteroidsInitial) {
+          context.read<AsteroidsBloc>().add(LoadAsteroids());
+        }
+      },
+      child: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage("assets/background.png"),
+            opacity: 0.4,
+          ),
         ),
-      ),
-      child: Scaffold(
-        key: scaffoldKey,
-        backgroundColor: AppColors.transparentColor,
-        appBar: customAppBar(
-          scaffoldKey: scaffoldKey,
-          context: context,
-          titleWidget: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 8,
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              l10n?.asteroidsTitle ?? 'Asteroids',
-              style: TextStyle(
-                color: AppColors.backgroundLight,
-                fontWeight: FontWeight.w600,
-                fontSize: screenSize.width * 0.045,
-                letterSpacing: 0.5,
+        child: Scaffold(
+          key: scaffoldKey,
+          backgroundColor: AppColors.transparentColor,
+          appBar: customAppBar(
+            scaffoldKey: scaffoldKey,
+            context: context,
+            titleWidget: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                l10n?.asteroidsTitle ?? 'Asteroids',
+                style: TextStyle(
+                  color: AppColors.backgroundLight,
+                  fontWeight: FontWeight.w600,
+                  fontSize: screenSize.width * 0.045,
+                  letterSpacing: 0.5,
+                ),
               ),
             ),
           ),
-        ),
-        body: BlocBuilder<AsteroidsBloc, AsteroidsState>(
-          builder: (context, state) {
-            if (state is AsteroidsInitial) {
-              context.read<AsteroidsBloc>().add(LoadAsteroids());
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is AsteroidsLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is AsteroidsError) {
-              return Center(
-                child: Text(
-                  state.error,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              );
-            } else if (state is AsteroidsLoaded) {
-              return _buildAsteroidsList(state.asteroids, context);
-            }
-            return const SizedBox();
-          },
+          body: BlocBuilder<AsteroidsBloc, AsteroidsState>(
+            builder: (context, state) {
+              if (state is AsteroidsInitial) {
+                context.read<AsteroidsBloc>().add(LoadAsteroids());
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is AsteroidsLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is AsteroidsError) {
+                return Center(
+                  child: Text(
+                    state.error,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                );
+              } else if (state is AsteroidsLoaded) {
+                return _buildAsteroidsList(state.asteroids, context);
+              } else if (state is AsteroidSelected) {
+                // This handles the case when coming back from detail screen
+                // The bloc should maintain the loaded state
+
+                final asteroids = context.read<AsteroidsBloc>().cachedAsteroids;
+                if (asteroids != null) {
+                  return _buildAsteroidsList(asteroids, context);
+                }
+                return const Center(child: CircularProgressIndicator());
+              }
+              return const SizedBox();
+            },
+          ),
         ),
       ),
     );

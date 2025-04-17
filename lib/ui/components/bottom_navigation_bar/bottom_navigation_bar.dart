@@ -79,6 +79,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
 // lib/ui/components/bottom_navigation_bar/bottom_navigation_bar.dart
 import 'package:cosmospedia/ui/screens/asteroids_screen/asteroids_screen.dart';
 import 'package:cosmospedia/ui/screens/rover_screen/rover_screen.dart';
+import 'package:cosmospedia/ui/screens/space_weather/space_weather_dashboard.dart';
 import 'package:cosmospedia/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -145,12 +146,15 @@ class CustomBottomNavigationBar extends StatelessWidget {
               SizedBox(width: SizeConfig.width(1)),
               buildNavigationItem(
                 context,
-                Icons.map,
-                "Map",
-                state.currentScreen == CurrentScreen.map,
-                () => context
-                    .read<HomeBloc>()
-                    .add(SwitchScreen(CurrentScreen.map)),
+                Icons.cloud,
+                "Space Weather Explorer",
+                state.currentScreen == CurrentScreen.weather,
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SpaceWeatherDashboard(),
+                  ),
+                ),
               ),
               buildNavigationItem(
                 context,
