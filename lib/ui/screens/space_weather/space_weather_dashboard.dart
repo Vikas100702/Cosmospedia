@@ -1,6 +1,8 @@
 import 'package:cosmospedia/ui/components/custom_app_bar/custom_app_bar.dart';
+import 'package:cosmospedia/ui/screens/space_weather/cme/cme_screen.dart';
 import 'package:cosmospedia/utils/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class SpaceWeatherDashboard extends StatelessWidget {
   const SpaceWeatherDashboard({super.key});
@@ -15,47 +17,56 @@ class SpaceWeatherDashboard extends StatelessWidget {
       {
         'title': 'Coronal Mass Ejections',
         'icon': Icons.flare,
-        'description': 'A CME is a massive burst of solar plasma and magnetic fields from the Sun’s surface. It can travel through space and, if directed at Earth, may disrupt satellites, GPS, and power systems. These fields tell us when and where the CME happened, which satellite observed it, and how it\'s linked to other solar events.',
+        'description':
+            'A CME is a massive burst of solar plasma and magnetic fields from the Sun’s surface. It can travel through space and, if directed at Earth, may disrupt satellites, GPS, and power systems. These fields tell us when and where the CME happened, which satellite observed it, and how it\'s linked to other solar events.',
       },
       {
         'title': 'Solar Flares',
         'icon': Icons.whatshot,
-        'description': 'Solar flares are sudden explosions of energy on the Sun, classified by their strength (X being the strongest). They can disrupt communication and navigation systems. These details explain when the flare occurred, how strong it was, and from which region of the Sun it came.',
+        'description':
+            'Solar flares are sudden explosions of energy on the Sun, classified by their strength (X being the strongest). They can disrupt communication and navigation systems. These details explain when the flare occurred, how strong it was, and from which region of the Sun it came.',
       },
       {
         'title': 'Geomagnetic Storms',
         'icon': Icons.thunderstorm,
-        'description': 'A geomagnetic storm is a temporary disturbance of Earth\'s magnetic field caused by solar activity. It can affect power grids, satellite operations, and even cause auroras. The Kp index here tells how strong the storm was, and related events show what caused it.',
+        'description':
+            'A geomagnetic storm is a temporary disturbance of Earth\'s magnetic field caused by solar activity. It can affect power grids, satellite operations, and even cause auroras. The Kp index here tells how strong the storm was, and related events show what caused it.',
       },
       {
         'title': 'Interplanetary Shocks',
         'icon': Icons.waves,
-        'description': 'Interplanetary shocks are sudden disturbances in the solar wind, usually caused by fast CMEs. When they pass satellites or planets, they can impact space missions. These fields help locate when and where the shock was detected and what solar activity triggered it.',
+        'description':
+            'Interplanetary shocks are sudden disturbances in the solar wind, usually caused by fast CMEs. When they pass satellites or planets, they can impact space missions. These fields help locate when and where the shock was detected and what solar activity triggered it.',
       },
       {
         'title': 'Solar Energetic Particles',
         'icon': Icons.bolt,
-        'description': 'SEPs are high-energy particles ejected by solar flares or CMEs that travel through space. They can be dangerous for astronauts and satellites. This info tells when they were detected, what caused them, and where they were observed.',
+        'description':
+            'SEPs are high-energy particles ejected by solar flares or CMEs that travel through space. They can be dangerous for astronauts and satellites. This info tells when they were detected, what caused them, and where they were observed.',
       },
       {
         'title': 'Magnetopause Crossings',
         'icon': Icons.compare_arrows,
-        'description': 'SEPs are high-energy particles ejected by solar flares or CMEs that travel through space. They can be dangerous for astronauts and satellites. This info tells when they were detected, what caused them, and where they were observed.',
+        'description':
+            'SEPs are high-energy particles ejected by solar flares or CMEs that travel through space. They can be dangerous for astronauts and satellites. This info tells when they were detected, what caused them, and where they were observed.',
       },
       {
         'title': 'Radiation Belt Enhancements',
         'icon': Icons.radio,
-        'description': 'Radiation belts around Earth can become more intense due to space weather, which may damage spacecraft electronics. These enhancements are tracked to warn satellite operators. The data shows when the belts were energized and which satellite observed it.',
+        'description':
+            'Radiation belts around Earth can become more intense due to space weather, which may damage spacecraft electronics. These enhancements are tracked to warn satellite operators. The data shows when the belts were energized and which satellite observed it.',
       },
       {
         'title': 'High Speed Streams',
         'icon': Icons.air,
-        'description': 'High-speed solar wind streams from coronal holes can stir up geomagnetic storms on Earth. These winds are not as explosive as CMEs but can still affect satellites and cause auroras. The fields indicate when this stream reached Earth and its possible source.',
+        'description':
+            'High-speed solar wind streams from coronal holes can stir up geomagnetic storms on Earth. These winds are not as explosive as CMEs but can still affect satellites and cause auroras. The fields indicate when this stream reached Earth and its possible source.',
       },
       {
         'title': 'WSA+Enlil Simulations',
         'icon': Icons.sim_card,
-        'description': 'This is a computer simulation predicting the path of a CME through space. It helps forecast when and where it might hit Earth or spacecraft. Users can see the estimated impact time, duration, and whether other planets or probes are affected too.',
+        'description':
+            'This is a computer simulation predicting the path of a CME through space. It helps forecast when and where it might hit Earth or spacecraft. Users can see the estimated impact time, duration, and whether other planets or probes are affected too.',
       },
     ];
 
@@ -106,6 +117,23 @@ class SpaceWeatherDashboard extends StatelessWidget {
                 description: event['description'] as String,
                 onTap: () {
                   // Handle event card tap
+                  final now = DateTime.now();
+                  final weekAgo = now.subtract(const Duration(days: 7));
+                  final dateFormat = DateFormat('yyyy-MM-dd');
+
+                  // Ensure dates are in correct format
+                  final formattedStartDate = dateFormat.format(weekAgo);
+                  final formattedEndDate = dateFormat.format(now);
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CMEScreen(
+                        startDate: formattedStartDate,
+                        endDate: formattedEndDate,
+                      ),
+                    ),
+                  );
                 },
               );
             },
