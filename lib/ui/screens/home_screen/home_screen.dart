@@ -1,3 +1,4 @@
+import 'package:cosmospedia/ui/screens/asteroids_screen/asteroids_screen.dart';
 import 'package:cosmospedia/ui/screens/home_screen/home_content.dart';
 import 'package:cosmospedia/ui/screens/rover_screen/rover_screen.dart';
 import 'package:flutter/material.dart';
@@ -38,9 +39,9 @@ class HomeScreen extends StatelessWidget {
             currentScreen = const RoverScreen();
             break;
           case CurrentScreen.asteroids:
-            currentScreen = const ComingSoonScreen(title: "Weather");
+            currentScreen = const AsteroidsScreen();
             break;
-          case CurrentScreen.map:
+          case CurrentScreen.weather:
             currentScreen = const ComingSoonScreen(title: "Space Map");
             break;
           case CurrentScreen.settings:

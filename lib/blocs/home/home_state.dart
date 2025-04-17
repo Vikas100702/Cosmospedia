@@ -2,7 +2,7 @@ import 'package:cosmospedia/data/models/apod.dart';
 import 'package:equatable/equatable.dart';
 
 enum HomeStatus { initial, loading, success, failure }
-enum CurrentScreen { home, marsRover, asteroids, map, settings }
+enum CurrentScreen { home, marsRover, asteroids, weather, settings }
 
 class HomeState extends Equatable {
   final HomeStatus status;
