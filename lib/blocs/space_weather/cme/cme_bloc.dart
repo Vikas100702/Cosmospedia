@@ -27,23 +27,26 @@ class CMEBloc extends Bloc<CMEEvent, CMEState> {
         endDate: event.endDate,
       );
 
+      List<CMEAnalysisModel> cmeAnalysisList = [];
       if (event.loadAnalysis) {
-        final cmeAnalysisList = await cmeRepository.getCMEAnalyses(
-          startDate: event.startDate,
-          endDate: event.endDate,
-        );
-        emit(state.copyWith(
-          status: CMEStatus.success,
-          cmeList: cmeList,
-          cmeAnalysisList: cmeAnalysisList,
-        ));
-      } else {
-        emit(state.copyWith(
-          status: CMEStatus.success,
-          cmeList: cmeList,
-        ));
+        try {
+          cmeAnalysisList = await cmeRepository.getCMEAnalyses(
+            startDate: event.startDate,
+            endDate: event.endDate,
+          );
+        } catch (e) {
+          print('Error loading CME analysis: $e');
+          // Continue with empty analysis list
+        }
       }
-    } catch (error) {
+
+      emit(state.copyWith(
+        status: CMEStatus.success,
+        cmeList: cmeList,
+        cmeAnalysisList: cmeAnalysisList,
+      ));
+    } catch (error, stackTrace) {
+      print('Error in _loadCMEData: $error\n$stackTrace');
       emit(state.copyWith(
         status: CMEStatus.failure,
         error: error.toString(),

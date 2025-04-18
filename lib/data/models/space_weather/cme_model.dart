@@ -11,7 +11,7 @@ class CmeModel extends Equatable {
   final String submissionTime;
   final int versionId;
   final String link;
-  final List<CMEAnalysis> cmeAnalyses;
+  final List<CMEAnalysis>? cmeAnalyses; // Made nullable
   final List<dynamic>? linkedEvents;
 
   const CmeModel({
@@ -25,8 +25,8 @@ class CmeModel extends Equatable {
     required this.submissionTime,
     required this.versionId,
     required this.link,
-    required this.cmeAnalyses,
-    required this.linkedEvents,
+    this.cmeAnalyses, // Now nullable
+    this.linkedEvents,
   });
 
   factory CmeModel.fromJson(Map<String, dynamic> json) {
@@ -34,8 +34,8 @@ class CmeModel extends Equatable {
       activityID: json['activityID'] as String,
       catalog: json['catalog'] as String,
       startTime: json['startTime'] as String,
-      instruments: (json['instruments'] as List)
-          .map((e) => Instrument.fromJson(e))
+      instruments: (json['instruments'] as List<dynamic>)
+          .map((e) => Instrument.fromJson(e as Map<String, dynamic>))
           .toList(),
       sourceLocation: json['sourceLocation'] as String?,
       activeRegionNum: json['activeRegionNum'] as int?,
@@ -43,9 +43,11 @@ class CmeModel extends Equatable {
       submissionTime: json['submissionTime'] as String,
       versionId: json['versionId'] as int,
       link: json['link'] as String,
-      cmeAnalyses: (json['cmeAnalyses'] as List)
-          .map((e) => CMEAnalysis.fromJson(e))
-          .toList(),
+      cmeAnalyses: json['cmeAnalyses'] != null
+          ? (json['cmeAnalyses'] as List<dynamic>)
+              .map((e) => CMEAnalysis.fromJson(e as Map<String, dynamic>))
+              .toList()
+          : null,
       linkedEvents: json['linkedEvents'] as List<dynamic>?,
     );
   }
@@ -126,63 +128,93 @@ class CMEAnalysis extends Equatable {
   });
 
   factory CMEAnalysis.fromJson(Map<String, dynamic> json) {
-    return CMEAnalysis(
-      isMostAccurate: json['isMostAccurate'] as bool,
-      time21_5: json['time21_5'] as String,
-      latitude: json['latitude'] != null ? (json['latitude'] as num).toDouble() : null,
-      longitude: json['longitude'] != null ? (json['longitude'] as num).toDouble() : null,
-      halfAngle: json['halfAngle'] != null ? (json['halfAngle'] as num).toDouble() : null,
-      speed: json['speed'] != null ? (json['speed'] as num).toDouble() : null,
-      type: json['type'] as String,
-      featureCode: json['featureCode'] as String?,
-      imageType: json['imageType'] as String?,
-      measurementTechnique: json['measurementTechnique'] as String?,
-      note: json['note'] as String?,
-      levelOfData: json['levelOfData'] as int?,
-      tilt: json['tilt'] != null ? (json['tilt'] as num).toDouble() : null,
-      minorHalfWidth: json['minorHalfWidth'] != null ? (json['minorHalfWidth'] as num).toDouble() : null,
-      speedMeasuredAtHeight: json['speedMeasuredAtHeight'] != null ? (json['speedMeasuredAtHeight'] as num).toDouble() : null,
-      submissionTime: json['submissionTime'] as String,
-      link: json['link'] as String,
-      enlilList: json['enlilList'] != null
-          ? (json['enlilList'] as List).map((e) => Enlil.fromJson(e)).toList()
-          : null,
-    );
+    try {
+      return CMEAnalysis(
+        isMostAccurate: json['isMostAccurate'] is bool
+            ? json['isMostAccurate'] as bool
+            : json['isMostAccurate']?.toString().toLowerCase() == 'true',
+        time21_5: _parseString(json['time21_5']),
+        latitude: _parseDouble(json['latitude']),
+        longitude: _parseDouble(json['longitude']),
+        halfAngle: _parseDouble(json['halfAngle']),
+        speed: _parseDouble(json['speed']),
+        type: _parseString(json['type']),
+        featureCode: _parseString(json['featureCode']),
+        imageType: _parseString(json['imageType']),
+        measurementTechnique: _parseString(json['measurementTechnique']),
+        note: _parseString(json['note']),
+        levelOfData: _parseInt(json['levelOfData']),
+        tilt: _parseDouble(json['tilt']),
+        minorHalfWidth: _parseDouble(json['minorHalfWidth']),
+        speedMeasuredAtHeight: _parseDouble(json['speedMeasuredAtHeight']),
+        submissionTime: _parseString(json['submissionTime']),
+        link: _parseString(json['link']),
+        enlilList: json['enlilList'] is List
+            ? (json['enlilList'] as List).map((e) => Enlil.fromJson(e)).toList()
+            : null,
+      );
+    } catch (e, stack) {
+      print('Error parsing CMEAnalysis: $e\n$stack');
+      print('Problematic JSON: $json');
+      rethrow;
+    }
+  }
+
+  static String _parseString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
+  }
+
+  static double? _parseDouble(dynamic value) {
+    if (value == null) return null;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is String) return double.tryParse(value);
+    return null;
+  }
+
+  static int? _parseInt(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is double) return value.toInt();
+    if (value is String) return int.tryParse(value);
+    return null;
   }
 
   @override
   List<Object?> get props => [
-    isMostAccurate,
-    time21_5,
-    latitude,
-    longitude,
-    halfAngle,
-    speed,
-    type,
-    featureCode,
-    imageType,
-    measurementTechnique,
-    note,
-    levelOfData,
-    tilt,
-    minorHalfWidth,
-    speedMeasuredAtHeight,
-    submissionTime,
-    link,
-    enlilList,
-  ];
+        isMostAccurate,
+        time21_5,
+        latitude,
+        longitude,
+        halfAngle,
+        speed,
+        type,
+        featureCode,
+        imageType,
+        measurementTechnique,
+        note,
+        levelOfData,
+        tilt,
+        minorHalfWidth,
+        speedMeasuredAtHeight,
+        submissionTime,
+        link,
+        enlilList,
+      ];
 }
 
 class Enlil extends Equatable {
   final String modelCompletionTime;
-  final double? au;  // Made nullable
+  final double? au;
   final String? estimatedShockArrivalTime;
   final String? estimatedDuration;
-  final double? rmin_re;  // Made nullable
-  final double? kp_18;    // Made nullable
-  final double? kp_90;    // Made nullable
-  final double? kp_135;   // Made nullable
-  final double? kp_180;   // Made nullable
+  final double? rmin_re;
+  final double? kp_18;
+  final double? kp_90;
+  final double? kp_135;
+  final double? kp_180;
   final bool isEarthGB;
   final String link;
   final List<Impact> impactList;
@@ -205,21 +237,47 @@ class Enlil extends Equatable {
   });
 
   factory Enlil.fromJson(Map<String, dynamic> json) {
-    return Enlil(
-      modelCompletionTime: json['modelCompletionTime'] as String,
-      au: json['au'] != null ? (json['au'] as num).toDouble() : null,
-      estimatedShockArrivalTime: json['estimatedShockArrivalTime'] as String?,
-      estimatedDuration: json['estimatedDuration'] as String?,
-      rmin_re: json['rmin_re'] != null ? (json['rmin_re'] as num).toDouble() : null,
-      kp_18: json['kp_18'] != null ? (json['kp_18'] as num).toDouble() : null,
-      kp_90: json['kp_90'] != null ? (json['kp_90'] as num).toDouble() : null,
-      kp_135: json['kp_135'] != null ? (json['kp_135'] as num).toDouble() : null,
-      kp_180: json['kp_180'] != null ? (json['kp_180'] as num).toDouble() : null,
-      isEarthGB: json['isEarthGB'] as bool,
-      link: json['link'] as String,
-      impactList: (json['impactList'] as List).map((e) => Impact.fromJson(e)).toList(),
-      cmeIDs: (json['cmeIDs'] as List).map((e) => e as String).toList(),
-    );
+    try {
+      return Enlil(
+        modelCompletionTime: _parseString(json['modelCompletionTime']),
+        au: _parseDouble(json['au']),
+        estimatedShockArrivalTime: _parseString(json['estimatedShockArrivalTime']),
+        estimatedDuration: _parseString(json['estimatedDuration']),
+        rmin_re: _parseDouble(json['rmin_re']),
+        kp_18: _parseDouble(json['kp_18']),
+        kp_90: _parseDouble(json['kp_90']),
+        kp_135: _parseDouble(json['kp_135']),
+        kp_180: _parseDouble(json['kp_180']),
+        isEarthGB: json['isEarthGB'] is bool
+            ? json['isEarthGB'] as bool
+            : json['isEarthGB']?.toString().toLowerCase() == 'true',
+        link: _parseString(json['link']),
+        impactList: json['impactList'] is List
+            ? (json['impactList'] as List).map((e) => Impact.fromJson(e)).toList()
+            : [],
+        cmeIDs: json['cmeIDs'] is List
+            ? (json['cmeIDs'] as List).map((e) => e.toString()).toList()
+            : [],
+      );
+    } catch (e, stack) {
+      print('Error parsing Enlil: $e\n$stack');
+      print('Problematic JSON: $json');
+      rethrow;
+    }
+  }
+
+  static String _parseString(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    return value.toString();
+  }
+
+  static double? _parseDouble(dynamic value) {
+    if (value == null) return null;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is String) return double.tryParse(value);
+    return null;
   }
 
   @override
@@ -265,10 +323,10 @@ class Impact extends Equatable {
 
 class CMEAnalysisModel extends Equatable {
   final String time21_5;
-  final double latitude;
-  final double longitude;
-  final double halfAngle;
-  final double speed;
+  final double? latitude; // Made nullable
+  final double? longitude; // Made nullable
+  final double? halfAngle; // Made nullable
+  final double? speed; // Made nullable
   final String type;
   final bool isMostAccurate;
   final String? associatedCMEID;
@@ -288,10 +346,10 @@ class CMEAnalysisModel extends Equatable {
 
   const CMEAnalysisModel({
     required this.time21_5,
-    required this.latitude,
-    required this.longitude,
-    required this.halfAngle,
-    required this.speed,
+    this.latitude,
+    this.longitude,
+    this.halfAngle,
+    this.speed,
     required this.type,
     required this.isMostAccurate,
     this.associatedCMEID,
@@ -313,10 +371,16 @@ class CMEAnalysisModel extends Equatable {
   factory CMEAnalysisModel.fromJson(Map<String, dynamic> json) {
     return CMEAnalysisModel(
       time21_5: json['time21_5'] as String,
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
-      halfAngle: (json['halfAngle'] as num).toDouble(),
-      speed: (json['speed'] as num).toDouble(),
+      latitude: json['latitude'] != null
+          ? (json['latitude'] as num).toDouble()
+          : null,
+      longitude: json['longitude'] != null
+          ? (json['longitude'] as num).toDouble()
+          : null,
+      halfAngle: json['halfAngle'] != null
+          ? (json['halfAngle'] as num).toDouble()
+          : null,
+      speed: json['speed'] != null ? (json['speed'] as num).toDouble() : null,
       type: json['type'] as String,
       isMostAccurate: json['isMostAccurate'] as bool,
       associatedCMEID: json['associatedCMEID'] as String?,
@@ -327,9 +391,13 @@ class CMEAnalysisModel extends Equatable {
       dataLevel: json['dataLevel'] as String,
       measurementTechnique: json['measurementTechnique'] as String?,
       imageType: json['imageType'] as String?,
-      tilt: json['tilt'] as double?,
-      minorHalfWidth: json['minorHalfWidth'] as double?,
-      speedMeasuredAtHeight: json['speedMeasuredAtHeight'] as double?,
+      tilt: json['tilt'] != null ? (json['tilt'] as num).toDouble() : null,
+      minorHalfWidth: json['minorHalfWidth'] != null
+          ? (json['minorHalfWidth'] as num).toDouble()
+          : null,
+      speedMeasuredAtHeight: json['speedMeasuredAtHeight'] != null
+          ? (json['speedMeasuredAtHeight'] as num).toDouble()
+          : null,
       submissionTime: json['submissionTime'] as String,
       versionId: json['versionId'] as int,
       link: json['link'] as String,
@@ -338,26 +406,26 @@ class CMEAnalysisModel extends Equatable {
 
   @override
   List<Object?> get props => [
-    time21_5,
-    latitude,
-    longitude,
-    halfAngle,
-    speed,
-    type,
-    isMostAccurate,
-    associatedCMEID,
-    note,
-    associatedCMEstartTime,
-    catalog,
-    featureCode,
-    dataLevel,
-    measurementTechnique,
-    imageType,
-    tilt,
-    minorHalfWidth,
-    speedMeasuredAtHeight,
-    submissionTime,
-    versionId,
-    link,
-  ];
+        time21_5,
+        latitude,
+        longitude,
+        halfAngle,
+        speed,
+        type,
+        isMostAccurate,
+        associatedCMEID,
+        note,
+        associatedCMEstartTime,
+        catalog,
+        featureCode,
+        dataLevel,
+        measurementTechnique,
+        imageType,
+        tilt,
+        minorHalfWidth,
+        speedMeasuredAtHeight,
+        submissionTime,
+        versionId,
+        link,
+      ];
 }
