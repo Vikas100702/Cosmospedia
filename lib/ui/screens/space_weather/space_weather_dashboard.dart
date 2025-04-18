@@ -1,6 +1,13 @@
+import 'package:cosmospedia/data/repositories/space_weather/cme_repository.dart';
 import 'package:cosmospedia/ui/components/custom_app_bar/custom_app_bar.dart';
+import 'package:cosmospedia/ui/screens/coming_soon_screen.dart';
+import 'package:cosmospedia/ui/screens/space_weather/cme/cme_screen.dart';
 import 'package:cosmospedia/utils/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+
+import '../../../blocs/space_weather/cme/cme_bloc.dart';
 
 class SpaceWeatherDashboard extends StatelessWidget {
   const SpaceWeatherDashboard({super.key});
@@ -10,107 +17,155 @@ class SpaceWeatherDashboard extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
+    return BlocProvider(
+      create: (context) => CMEBloc(cmeRepository: CMERepository()),
+      child: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage("assets/background.png"),
+            opacity: 0.4,
+          ),
+        ),
+        child: Scaffold(
+          key: scaffoldKey,
+          backgroundColor: AppColors.transparentColor,
+          appBar: customAppBar(
+            scaffoldKey: scaffoldKey,
+            context: context,
+            titleWidget: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                'Space Weather Explorer',
+                style: TextStyle(
+                  color: AppColors.backgroundLight,
+                  fontWeight: FontWeight.w600,
+                  fontSize: screenSize.width * 0.045,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
+          ),
+          body: const _SpaceWeatherContent(),
+        ),
+      ),
+    );
+  }
+}
+
+class _SpaceWeatherContent extends StatelessWidget {
+  const _SpaceWeatherContent();
+
+  @override
+  Widget build(BuildContext context) {
     // List of space weather events with icons
     final spaceEvents = [
       {
         'title': 'Coronal Mass Ejections',
         'icon': Icons.flare,
-        'description': 'A CME is a massive burst of solar plasma and magnetic fields from the Sun’s surface. It can travel through space and, if directed at Earth, may disrupt satellites, GPS, and power systems. These fields tell us when and where the CME happened, which satellite observed it, and how it\'s linked to other solar events.',
+        'description':
+            'A CME is a massive burst of solar plasma and magnetic fields from the Sun’s surface. It can travel through space and, if directed at Earth, may disrupt satellites, GPS, and power systems. These fields tell us when and where the CME happened, which satellite observed it, and how it\'s linked to other solar events.',
+        'onTap': (BuildContext context) {
+          // Handle event card tap
+          final now = DateTime.now();
+          final weekAgo = now.subtract(const Duration(days: 7));
+          final dateFormat = DateFormat('yyyy-MM-dd');
+
+          // Ensure dates are in correct format
+          final formattedStartDate = dateFormat.format(weekAgo);
+          final formattedEndDate = dateFormat.format(now);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CMEScreen(
+                startDate: formattedStartDate,
+                endDate: formattedEndDate,
+              ),
+            ),
+          );
+        }
       },
       {
         'title': 'Solar Flares',
         'icon': Icons.whatshot,
-        'description': 'Solar flares are sudden explosions of energy on the Sun, classified by their strength (X being the strongest). They can disrupt communication and navigation systems. These details explain when the flare occurred, how strong it was, and from which region of the Sun it came.',
+        'description':
+            'Solar flares are sudden explosions of energy on the Sun, classified by their strength (X being the strongest). They can disrupt communication and navigation systems. These details explain when the flare occurred, how strong it was, and from which region of the Sun it came.',
+        'onTap': const ComingSoonScreen(title: 'Solar Flares'),
       },
       {
         'title': 'Geomagnetic Storms',
         'icon': Icons.thunderstorm,
-        'description': 'A geomagnetic storm is a temporary disturbance of Earth\'s magnetic field caused by solar activity. It can affect power grids, satellite operations, and even cause auroras. The Kp index here tells how strong the storm was, and related events show what caused it.',
+        'description':
+            'A geomagnetic storm is a temporary disturbance of Earth\'s magnetic field caused by solar activity. It can affect power grids, satellite operations, and even cause auroras. The Kp index here tells how strong the storm was, and related events show what caused it.',
+        'onTap': const ComingSoonScreen(title: 'Geomagnetic Storms'),
       },
       {
         'title': 'Interplanetary Shocks',
         'icon': Icons.waves,
-        'description': 'Interplanetary shocks are sudden disturbances in the solar wind, usually caused by fast CMEs. When they pass satellites or planets, they can impact space missions. These fields help locate when and where the shock was detected and what solar activity triggered it.',
+        'description':
+            'Interplanetary shocks are sudden disturbances in the solar wind, usually caused by fast CMEs. When they pass satellites or planets, they can impact space missions. These fields help locate when and where the shock was detected and what solar activity triggered it.',
+        'onTap': const ComingSoonScreen(title: 'Interplanetary Shocks'),
       },
       {
         'title': 'Solar Energetic Particles',
         'icon': Icons.bolt,
-        'description': 'SEPs are high-energy particles ejected by solar flares or CMEs that travel through space. They can be dangerous for astronauts and satellites. This info tells when they were detected, what caused them, and where they were observed.',
+        'description':
+            'SEPs are high-energy particles ejected by solar flares or CMEs that travel through space. They can be dangerous for astronauts and satellites. This info tells when they were detected, what caused them, and where they were observed.',
+        'onTap': const ComingSoonScreen(title: 'Solar Energetic Particles'),
       },
       {
         'title': 'Magnetopause Crossings',
         'icon': Icons.compare_arrows,
-        'description': 'SEPs are high-energy particles ejected by solar flares or CMEs that travel through space. They can be dangerous for astronauts and satellites. This info tells when they were detected, what caused them, and where they were observed.',
+        'description':
+            'SEPs are high-energy particles ejected by solar flares or CMEs that travel through space. They can be dangerous for astronauts and satellites. This info tells when they were detected, what caused them, and where they were observed.',
+        'onTap': const ComingSoonScreen(title: 'Magnetopause Crossings'),
       },
       {
         'title': 'Radiation Belt Enhancements',
         'icon': Icons.radio,
-        'description': 'Radiation belts around Earth can become more intense due to space weather, which may damage spacecraft electronics. These enhancements are tracked to warn satellite operators. The data shows when the belts were energized and which satellite observed it.',
+        'description':
+            'Radiation belts around Earth can become more intense due to space weather, which may damage spacecraft electronics. These enhancements are tracked to warn satellite operators. The data shows when the belts were energized and which satellite observed it.',
+        'onTap': const ComingSoonScreen(title: 'Radiation Belt Enhancements'),
       },
       {
         'title': 'High Speed Streams',
         'icon': Icons.air,
-        'description': 'High-speed solar wind streams from coronal holes can stir up geomagnetic storms on Earth. These winds are not as explosive as CMEs but can still affect satellites and cause auroras. The fields indicate when this stream reached Earth and its possible source.',
+        'description':
+            'High-speed solar wind streams from coronal holes can stir up geomagnetic storms on Earth. These winds are not as explosive as CMEs but can still affect satellites and cause auroras. The fields indicate when this stream reached Earth and its possible source.',
+        'onTap': const ComingSoonScreen(title: 'High Speed Streams'),
       },
       {
         'title': 'WSA+Enlil Simulations',
         'icon': Icons.sim_card,
-        'description': 'This is a computer simulation predicting the path of a CME through space. It helps forecast when and where it might hit Earth or spacecraft. Users can see the estimated impact time, duration, and whether other planets or probes are affected too.',
+        'description':
+            'This is a computer simulation predicting the path of a CME through space. It helps forecast when and where it might hit Earth or spacecraft. Users can see the estimated impact time, duration, and whether other planets or probes are affected too.',
+        'onTap': const ComingSoonScreen(title: 'WSA+Enlil Simulations'),
       },
     ];
 
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage("assets/background.png"),
-          opacity: 0.4,
-        ),
-      ),
-      child: Scaffold(
-        key: scaffoldKey,
-        backgroundColor: AppColors.transparentColor,
-        appBar: customAppBar(
-          scaffoldKey: scaffoldKey,
-          context: context,
-          titleWidget: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 8,
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              'Space Weather Explorer',
-              style: TextStyle(
-                color: AppColors.backgroundLight,
-                fontWeight: FontWeight.w600,
-                fontSize: screenSize.width * 0.045,
-                letterSpacing: 0.5,
-              ),
-            ),
-          ),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ListView.builder(
-            itemCount: spaceEvents.length,
-            itemBuilder: (context, index) {
-              final event = spaceEvents[index];
-              return _buildEventCard(
-                context,
-                title: event['title'] as String,
-                icon: event['icon'] as IconData,
-                description: event['description'] as String,
-                onTap: () {
-                  // Handle event card tap
-                },
-              );
-            },
-          ),
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ListView.builder(
+        itemCount: spaceEvents.length,
+        itemBuilder: (context, index) {
+          final event = spaceEvents[index];
+          return _buildEventCard(
+            context,
+            title: event['title'] as String,
+            icon: event['icon'] as IconData,
+            description: event['description'] as String,
+            onTap: () =>
+                (event['onTap'] as Function(BuildContext context))(context),
+          );
+        },
       ),
     );
   }
