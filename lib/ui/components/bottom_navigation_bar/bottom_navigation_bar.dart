@@ -147,7 +147,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
               buildNavigationItem(
                 context,
                 Icons.cloud,
-                "Space Weather Explorer",
+                "Weather",
                 state.currentScreen == CurrentScreen.weather,
                 () => Navigator.push(
                   context,

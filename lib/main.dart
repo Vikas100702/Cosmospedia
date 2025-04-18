@@ -3,8 +3,10 @@ import 'package:cosmospedia/blocs/asteroids/asteroids_bloc.dart';
 import 'package:cosmospedia/blocs/favorites/favorites_bloc.dart';
 import 'package:cosmospedia/blocs/rover_manifest/rover_manifest_bloc.dart';
 import 'package:cosmospedia/blocs/sign_in/sign_in_bloc.dart';
+import 'package:cosmospedia/blocs/space_weather/cme/cme_bloc.dart';
 import 'package:cosmospedia/data/repositories/asteroids/asteroids_repository.dart';
 import 'package:cosmospedia/data/repositories/mars/rover_manifest_repository.dart';
+import 'package:cosmospedia/data/repositories/space_weather/cme_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,12 +27,14 @@ Future<void> main() async {
   final roverRepository = RoverRepository();
   final roverManifestRepository = RoverManifestRepository();
   final asteroidRepository = AsteroidsRepository();
+  final cmeRepository = CMERepository();
   runApp(
     MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: apodRepository),
         RepositoryProvider.value(value: roverRepository),
         RepositoryProvider.value(value: asteroidRepository),
+        RepositoryProvider.value(value: cmeRepository),
         RepositoryProvider(
           create: (_) => RoverManifestRepository(),
         ),
@@ -66,6 +70,11 @@ Future<void> main() async {
           BlocProvider(
             create: (context) => AsteroidsBloc(
               asteroidsRepository: context.read<AsteroidsRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => CMEBloc(
+              cmeRepository: context.read<CMERepository>(),
             ),
           )
         ],
