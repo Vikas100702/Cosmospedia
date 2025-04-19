@@ -1,7 +1,9 @@
+import 'package:cosmospedia/blocs/space_weather/gst/gst_bloc.dart';
 import 'package:cosmospedia/data/repositories/space_weather/cme_repository.dart';
 import 'package:cosmospedia/ui/components/custom_app_bar/custom_app_bar.dart';
 import 'package:cosmospedia/ui/screens/coming_soon_screen.dart';
 import 'package:cosmospedia/ui/screens/space_weather/cme/cme_screen.dart';
+import 'package:cosmospedia/ui/screens/space_weather/gst/gst_screen.dart';
 import 'package:cosmospedia/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -98,14 +100,21 @@ class _SpaceWeatherContent extends StatelessWidget {
         'icon': Icons.whatshot,
         'description':
             'Solar flares are sudden explosions of energy on the Sun, classified by their strength (X being the strongest). They can disrupt communication and navigation systems. These details explain when the flare occurred, how strong it was, and from which region of the Sun it came.',
-        'onTap': const ComingSoonScreen(title: 'Solar Flares'),
+        'onTap': const ComingSoonScreen(title: 'Interplanetary Shocks'),
       },
       {
         'title': 'Geomagnetic Storms',
         'icon': Icons.thunderstorm,
         'description':
             'A geomagnetic storm is a temporary disturbance of Earth\'s magnetic field caused by solar activity. It can affect power grids, satellite operations, and even cause auroras. The Kp index here tells how strong the storm was, and related events show what caused it.',
-        'onTap': const ComingSoonScreen(title: 'Geomagnetic Storms'),
+        'onTap': (BuildContext context) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const GstScreen(),
+            ),
+          );
+        },
       },
       {
         'title': 'Interplanetary Shocks',

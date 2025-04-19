@@ -80,7 +80,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              leading: IconButton(
+              /*leading: IconButton(
                 icon: const Icon(
                   Icons.menu,
                   color: Colors.white,
@@ -89,9 +89,9 @@ class HomeScreen extends StatelessWidget {
                 onPressed: () {
                   scaffoldKey.currentState?.openDrawer();
                 },
-              ),
+              ),*/
             ),
-            drawer: const CustomAppDrawer(),
+            /*drawer: const CustomAppDrawer(),*/
             floatingActionButton: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,

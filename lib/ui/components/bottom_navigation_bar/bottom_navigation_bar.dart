@@ -83,12 +83,15 @@ import 'package:cosmospedia/ui/screens/space_weather/space_weather_dashboard.dar
 import 'package:cosmospedia/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import '../../../blocs/home/home_bloc.dart';
 import '../../../blocs/home/home_event.dart';
 import '../../../blocs/home/home_state.dart';
 import '../../../blocs/rover/rover_bloc.dart';
 import '../../../data/repositories/mars/rover_repositories.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../utils/app_colors.dart';
+import '../../screens/space_weather/cme/cme_screen.dart';
 import 'bottom_navigation_bar_widgets.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
@@ -97,6 +100,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
+    final l10n = AppLocalizations.of(context);
 
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
@@ -149,21 +153,104 @@ class CustomBottomNavigationBar extends StatelessWidget {
                 Icons.cloud,
                 "Weather",
                 state.currentScreen == CurrentScreen.weather,
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SpaceWeatherDashboard(),
-                  ),
-                ),
+                () {
+                  final now = DateTime.now();
+                  final weekAgo = now.subtract(const Duration(days: 7));
+                  final dateFormat = DateFormat('yyyy-MM-dd');
+
+                  // Ensure dates are in correct format
+                  final formattedStartDate = dateFormat.format(weekAgo);
+                  final formattedEndDate = dateFormat.format(now);
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CMEScreen(
+                        startDate: formattedStartDate,
+                        endDate: formattedEndDate,
+                      ),
+                    ),
+                  );
+                }
               ),
               buildNavigationItem(
                 context,
                 Icons.settings,
                 "Settings",
                 state.currentScreen == CurrentScreen.settings,
-                () => context
-                    .read<HomeBloc>()
-                    .add(SwitchScreen(CurrentScreen.settings)),
+                () => _showSettingsMenu(context, l10n!),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showSettingsMenu(BuildContext context, AppLocalizations l10n) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.backgroundDark.withOpacity(0.9),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.settings, color: Colors.white),
+                title: Text(l10n.settings, style: const TextStyle(color: Colors.white)),
+                onTap: () {
+                  Navigator.pop(context);
+                  context.read<HomeBloc>().add(SwitchScreen(CurrentScreen.settings));
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.language, color: Colors.white),
+                title: Text(l10n.language, style: const TextStyle(color: Colors.white)),
+                onTap: () {
+                  // Handle language change
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.list, color: Colors.white),
+                title: Text(l10n.termConditions, style: const TextStyle(color: Colors.white)),
+                onTap: () {
+                  // Handle terms and conditions
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.privacy_tip, color: Colors.white),
+                title: Text(l10n.privacyPolicy, style: const TextStyle(color: Colors.white)),
+                onTap: () {
+                  // Handle privacy policy
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.help, color: Colors.white),
+                title: Text(l10n.helpSupport, style: const TextStyle(color: Colors.white)),
+                onTap: () {
+                  // Handle help and support
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.logout, color: Colors.white),
+                title: Text(l10n.logout, style: const TextStyle(color: Colors.white)),
+                onTap: () {
+                  // Handle logout
+                  Navigator.pop(context);
+                },
               ),
             ],
           ),
