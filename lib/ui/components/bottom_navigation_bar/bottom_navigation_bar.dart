@@ -91,6 +91,7 @@ import '../../../blocs/rover/rover_bloc.dart';
 import '../../../data/repositories/mars/rover_repositories.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../utils/app_colors.dart';
+import '../../screens/my_profile/MyProfileScreen.dart';
 import '../../screens/space_weather/cme/cme_screen.dart';
 import 'bottom_navigation_bar_widgets.dart';
 
@@ -175,10 +176,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
               ),
               buildNavigationItem(
                 context,
-                Icons.settings,
-                "Settings",
+                Icons.person,
+                "My Profile",
                 state.currentScreen == CurrentScreen.settings,
-                () => _showSettingsMenu(context, l10n!),
+                    () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyProfileScreen()),
+                ),
               ),
             ],
           ),
@@ -187,7 +191,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
     );
   }
 
-  void _showSettingsMenu(BuildContext context, AppLocalizations l10n) {
+ /* void _showSettingsMenu(BuildContext context, AppLocalizations l10n) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -212,9 +216,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
                   context.read<HomeBloc>().add(SwitchScreen(CurrentScreen.settings));
                 },
               ),
-              ListTile(
+             ListTile(
                 leading: const Icon(Icons.language, color: Colors.white),
-                title: Text(l10n.language, style: const TextStyle(color: Colors.white)),
+                title: Text("FAQs", style: const TextStyle(color: Colors.white)),
                 onTap: () {
                   // Handle language change
                   Navigator.pop(context);
@@ -257,5 +261,6 @@ class CustomBottomNavigationBar extends StatelessWidget {
         );
       },
     );
-  }
+  }*/
 }
+
