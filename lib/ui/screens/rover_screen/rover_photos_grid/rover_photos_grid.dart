@@ -1,10 +1,10 @@
-import 'package:cosmospedia/blocs/rover/rover_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
 
 import '../../../../blocs/favorites/favorites_bloc.dart';
+import '../../../../blocs/rover/rover_bloc.dart';
 import '../../../../data/models/mars/rover.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../ui/components/custom_app_bar/custom_app_bar.dart';
@@ -28,11 +28,10 @@ class RoverPhotosGrid extends StatelessWidget {
       title = '$roverName Photos - $cameraName';
     } else if (selectedDate != null) {
       title =
-      '$roverName Photos - ${DateFormat('yyyy-MM-dd').format(selectedDate!)}';
+          '$roverName Photos - ${DateFormat('yyyy-MM-dd').format(selectedDate!)}';
     } else {
       title = '$roverName Photos';
     }
-
     // Create a GlobalKey for the Scaffold
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     final screenSize = MediaQuery.of(context).size;
@@ -82,23 +81,16 @@ class RoverPhotosGrid extends StatelessWidget {
                   child: Text(state.error ?? 'Failed to load photos'));
             }
 
-            // Extract and filter photos based on selected date
+            // Extract all photos
             final photos = <Photos>[];
             for (final rover in state.roverPhotos) {
               if (rover.photos != null) {
                 for (final photo in rover.photos!) {
-                  // Check if photo matches the selected date (if any)
-                  final matchesDate = selectedDate == null ||
-                      (photo.earthDate != null &&
-                          photo.earthDate ==
-                              DateFormat('yyyy-MM-dd').format(selectedDate!));
-
-                  // Check if photo matches the selected camera (if any)
                   final matchesCamera = cameraName == null ||
                       (photo.camera?.name?.toLowerCase() ==
                           cameraName?.toLowerCase());
 
-                  if (matchesCamera || matchesDate) {
+                  if (matchesCamera) {
                     photos.add(photo);
                   }
                 }
@@ -117,20 +109,20 @@ class RoverPhotosGrid extends StatelessWidget {
                       cameraName != null
                           ? 'No photos available for $cameraName'
                           : selectedDate != null
-                          ? 'No photos available for ${DateFormat('yyyy-MM-dd').format(selectedDate!)}'
-                          : 'No photos available',
+                              ? 'No photos available for ${DateFormat('yyyy-MM-dd').format(selectedDate!)}'
+                              : 'No photos available',
                       style: const TextStyle(fontSize: 18, color: Colors.white),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () {
                         context.read<RoverBloc>().add(
-                          LoadRoverData(
-                            roverName: roverName.toLowerCase(),
-                            cameraName: cameraName,
-                            earthDate: selectedDate?.toString(),
-                          ),
-                        );
+                              LoadRoverData(
+                                roverName: roverName.toLowerCase(),
+                                cameraName: cameraName,
+                                earthDate: selectedDate?.toString(),
+                              ),
+                            );
                       },
                       child: const Text('Retry'),
                     ),
@@ -146,15 +138,15 @@ class RoverPhotosGrid extends StatelessWidget {
                   child: Text(
                     'Total Photos: ${photos.length}',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Colors.white,
-                    ),
+                          color: Colors.white,
+                        ),
                   ),
                 ),
                 Expanded(
                   child: GridView.builder(
                     padding: const EdgeInsets.all(8),
                     gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 8,
                       mainAxisSpacing: 8,
@@ -181,13 +173,13 @@ class RoverPhotosGrid extends StatelessWidget {
                                   return Center(
                                     child: CircularProgressIndicator(
                                       value:
-                                      loadingProgress.expectedTotalBytes !=
-                                          null
-                                          ? loadingProgress
-                                          .cumulativeBytesLoaded /
-                                          loadingProgress
-                                              .expectedTotalBytes!
-                                          : null,
+                                          loadingProgress.expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
                                     ),
                                   );
                                 },
@@ -201,10 +193,10 @@ class RoverPhotosGrid extends StatelessWidget {
                               Align(
                                 alignment: Alignment.topRight,
                                 child:
-                                BlocBuilder<FavoritesBloc, FavoritesState>(
+                                    BlocBuilder<FavoritesBloc, FavoritesState>(
                                   builder: (context, favState) {
                                     final isFavorite = favState
-                                    is FavoritesUpdated &&
+                                            is FavoritesUpdated &&
                                         favState.favorites
                                             .any((fav) => fav.id == photo.id);
                                     return IconButton(
@@ -235,7 +227,7 @@ class RoverPhotosGrid extends StatelessWidget {
                                               .showSnackBar(
                                             const SnackBar(
                                                 content:
-                                                Text('Added to favorites')),
+                                                    Text('Added to favorites')),
                                           );
                                         }
                                       },
@@ -337,7 +329,7 @@ class RoverPhotosGrid extends StatelessWidget {
                             value: event == null
                                 ? 0
                                 : event.cumulativeBytesLoaded /
-                                (event.expectedTotalBytes ?? 1),
+                                    (event.expectedTotalBytes ?? 1),
                           ),
                         ),
                       ),
@@ -345,7 +337,6 @@ class RoverPhotosGrid extends StatelessWidget {
                   ),
                 ),
               ),
-
               // Photo details with space theme
               Expanded(
                 flex: 2,
@@ -464,7 +455,6 @@ class RoverPhotosGrid extends StatelessWidget {
                         );
                       },
                     ),
-
                     // Share button
                     _buildActionButton(
                       icon: Icons.share,
