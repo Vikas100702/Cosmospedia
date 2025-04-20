@@ -2,6 +2,7 @@ import 'package:cosmospedia/ui/components/custom_app_bar/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/app_colors.dart';
+import 'FaqScreen.dart';
 
 class MyProfileScreen extends StatelessWidget {
   const MyProfileScreen({super.key});
@@ -287,7 +288,14 @@ class MyProfileScreen extends StatelessWidget {
           subtitle: "Find answers to common questions",
           icon: Icons.question_answer,
           gradientColors: [Colors.purple[700]!, Colors.deepPurple[400]!],
-          onTap: () => _showComingSoonDialog(context, "FAQs"),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const FaqScreen(),
+              ),
+            );
+          },
         ),
 
         const SizedBox(height: 24),
@@ -469,8 +477,6 @@ class MyProfileScreen extends StatelessWidget {
       ),
     );
   }
-
-  // Simplified handlers that show dialogs instead of using BLoC
 
   void _showComingSoonDialog(BuildContext context, String feature) {
     showDialog(
