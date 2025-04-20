@@ -23,7 +23,7 @@ class AppLocalizations{
 
       // Navigation Drawer
       'settings' : 'Settings',
-      'language' : 'Language',
+      'faqs' : 'FAQs',
       't&c' : 'Terms and Conditions',
       'privacyPolicy' : 'Privacy Policies',
       'helpSupport' : 'Help and Support',

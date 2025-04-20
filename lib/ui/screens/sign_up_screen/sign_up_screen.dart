@@ -12,6 +12,7 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _nameController = TextEditingController();
     final _emailController = TextEditingController();
     final _passwordController = TextEditingController();
     final _confirmPasswordController = TextEditingController();
@@ -63,12 +64,37 @@ class SignUpScreen extends StatelessWidget {
                                 .textTheme
                                 .headlineMedium
                                 ?.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 48),
+
+                          // Name Field (New)
+                          TextFormField(
+                            controller: _nameController,
+                            keyboardType: TextInputType.name,
+                            style: const TextStyle(color: Colors.white),
+                            decoration: InputDecoration(
+                              labelText: 'Name',
+                              labelStyle: const TextStyle(color: Colors.white70),
+                              filled: true,
+                              fillColor: Colors.white.withOpacity(0.1),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              prefixIcon: const Icon(Icons.person, color: Colors.white70),
+                            ),
+                            validator: (value) {
+                              if (value?.isEmpty ?? true) {
+                                return 'Please enter your name';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
 
                           // Email Field
                           TextFormField(
@@ -78,7 +104,7 @@ class SignUpScreen extends StatelessWidget {
                             decoration: InputDecoration(
                               labelText: 'Email',
                               labelStyle:
-                                  const TextStyle(color: Colors.white70),
+                              const TextStyle(color: Colors.white70),
                               filled: true,
                               fillColor: Colors.white.withOpacity(0.1),
                               border: OutlineInputBorder(
@@ -108,7 +134,7 @@ class SignUpScreen extends StatelessWidget {
                             decoration: InputDecoration(
                               labelText: 'Password',
                               labelStyle:
-                                  const TextStyle(color: Colors.white70),
+                              const TextStyle(color: Colors.white70),
                               filled: true,
                               fillColor: Colors.white.withOpacity(0.1),
                               border: OutlineInputBorder(
@@ -116,7 +142,7 @@ class SignUpScreen extends StatelessWidget {
                                 borderSide: BorderSide.none,
                               ),
                               prefixIcon:
-                                  const Icon(Icons.lock, color: Colors.white70),
+                              const Icon(Icons.lock, color: Colors.white70),
                             ),
                             validator: (value) {
                               if (value?.isEmpty ?? true) {
@@ -138,7 +164,7 @@ class SignUpScreen extends StatelessWidget {
                             decoration: InputDecoration(
                               labelText: 'Confirm Password',
                               labelStyle:
-                                  const TextStyle(color: Colors.white70),
+                              const TextStyle(color: Colors.white70),
                               filled: true,
                               fillColor: Colors.white.withOpacity(0.1),
                               border: OutlineInputBorder(
@@ -156,80 +182,24 @@ class SignUpScreen extends StatelessWidget {
                             },
                           ),
                           const SizedBox(height: 24),
+
                           // Sign Up Button
-                          /*ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
+                          CustomElevatedButton(
                             onPressed: () {
-                              Navigator.push(
+                              if (_formKey.currentState?.validate() ?? false) {
+                                // Now you can use _nameController.text along with other fields
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SignInScreen()));
-                            },
-                            child: const Text(
-                              'Sign Up',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            */
-                          /*onPressed: state is SignUpLoading
-                                ? null
-                                : () {
-                              if (_formKey.currentState?.validate() ?? false) {
-                                context.read<SignUpBloc>().add(
-                                  SignUpWithEmailPassword(
-                                    _emailController.text,
-                                    _passwordController.text,
-                                    _confirmPasswordController.text,
+                                    builder: (context) => const SignInScreen(),
                                   ),
                                 );
                               }
-                            },
-                            child: state is SignUpLoading
-                                ? const CircularProgressIndicator()
-                                : const Text(
-                              'Sign Up',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),*//*
-                          ),*/
-
-                          CustomElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const SignInScreen()),
-                              );
                             },
                             text: 'Sign Up',
                           ),
 
                           // Already have an account link
-                          /*TextButton(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const SignInScreen()),
-                              );
-                            },
-                            child: const Text(
-                              'Already have an account? Sign In',
-                              style: TextStyle(color: Colors.white70),
-                            ),
-                          ),*/
                           CustomTextButton(
                             onPressed: () {
                               Navigator.pushReplacement(
