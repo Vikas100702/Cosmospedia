@@ -587,7 +587,8 @@ class MyProfileScreen extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue[700],
             ),
-            child: const Text("Update Password"),
+            child: const Text("Update Password",
+              style: TextStyle(color: Colors.white),),
           ),
         ],
       ),
@@ -655,7 +656,7 @@ class MyProfileScreen extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue[700],
             ),
-            child: const Text("Save"),
+            child: const Text("Save",style: TextStyle(color: Colors.white),),
           ),
         ],
       ),
@@ -697,7 +698,7 @@ class MyProfileScreen extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red[400],
             ),
-            child: const Text("Log Out"),
+            child: const Text("Log Out",style: TextStyle(color: Colors.white),),
           ),
         ],
       ),
