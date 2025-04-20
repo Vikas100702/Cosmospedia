@@ -81,16 +81,20 @@ class RoverPhotosGrid extends StatelessWidget {
               return Center(child: Text(state.error ?? 'Failed to load photos'));
             }
 
-            // Extract all photos
+            // Extract and filter photos based on selected date
             final photos = <Photos>[];
             for (final rover in state.roverPhotos) {
               if (rover.photos != null) {
                 for (final photo in rover.photos!) {
+                  // Check if photo matches the selected date (if any)
+                  final matchesDate = selectedDate == null || (photo.earthDate != null && photo.earthDate == DateFormat('yyyy-MM-dd').format(selectedDate!));
+
+                  // Check if photo matches the selected camera (if any)
                   final matchesCamera = cameraName == null ||
                       (photo.camera?.name?.toLowerCase() ==
                           cameraName?.toLowerCase());
 
-                  if (matchesCamera) {
+                  if (matchesCamera || matchesDate) {
                     photos.add(photo);
                   }
                 }
