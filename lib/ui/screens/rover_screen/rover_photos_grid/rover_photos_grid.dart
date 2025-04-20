@@ -78,7 +78,8 @@ class RoverPhotosGrid extends StatelessWidget {
             }
 
             if (state.status == RoverStatus.failure) {
-              return Center(child: Text(state.error ?? 'Failed to load photos'));
+              return Center(
+                  child: Text(state.error ?? 'Failed to load photos'));
             }
 
             // Extract and filter photos based on selected date
@@ -87,7 +88,10 @@ class RoverPhotosGrid extends StatelessWidget {
               if (rover.photos != null) {
                 for (final photo in rover.photos!) {
                   // Check if photo matches the selected date (if any)
-                  final matchesDate = selectedDate == null || (photo.earthDate != null && photo.earthDate == DateFormat('yyyy-MM-dd').format(selectedDate!));
+                  final matchesDate = selectedDate == null ||
+                      (photo.earthDate != null &&
+                          photo.earthDate ==
+                              DateFormat('yyyy-MM-dd').format(selectedDate!));
 
                   // Check if photo matches the selected camera (if any)
                   final matchesCamera = cameraName == null ||
@@ -106,7 +110,8 @@ class RoverPhotosGrid extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.image_not_supported, size: 48, color: Colors.white),
+                    const Icon(Icons.image_not_supported,
+                        size: 48, color: Colors.white),
                     const SizedBox(height: 16),
                     Text(
                       cameraName != null
@@ -148,7 +153,8 @@ class RoverPhotosGrid extends StatelessWidget {
                 Expanded(
                   child: GridView.builder(
                     padding: const EdgeInsets.all(8),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                    const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 8,
                       mainAxisSpacing: 8,
@@ -174,11 +180,13 @@ class RoverPhotosGrid extends StatelessWidget {
                                   if (loadingProgress == null) return child;
                                   return Center(
                                     child: CircularProgressIndicator(
-                                      value: loadingProgress.expectedTotalBytes !=
+                                      value:
+                                      loadingProgress.expectedTotalBytes !=
                                           null
                                           ? loadingProgress
                                           .cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes!
+                                          loadingProgress
+                                              .expectedTotalBytes!
                                           : null,
                                     ),
                                   );
@@ -192,12 +200,13 @@ class RoverPhotosGrid extends StatelessWidget {
                               // Favorite icon overlay
                               Align(
                                 alignment: Alignment.topRight,
-                                child: BlocBuilder<FavoritesBloc, FavoritesState>(
+                                child:
+                                BlocBuilder<FavoritesBloc, FavoritesState>(
                                   builder: (context, favState) {
-                                    final isFavorite =
-                                        favState is FavoritesUpdated &&
-                                            favState.favorites
-                                                .any((fav) => fav.id == photo.id);
+                                    final isFavorite = favState
+                                    is FavoritesUpdated &&
+                                        favState.favorites
+                                            .any((fav) => fav.id == photo.id);
                                     return IconButton(
                                       icon: Icon(
                                         isFavorite
@@ -323,10 +332,12 @@ class RoverPhotosGrid extends StatelessWidget {
                         ),
                         loadingBuilder: (context, event) => Center(
                           child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue[300]!),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.blue[300]!),
                             value: event == null
                                 ? 0
-                                : event.cumulativeBytesLoaded / (event.expectedTotalBytes ?? 1),
+                                : event.cumulativeBytesLoaded /
+                                (event.expectedTotalBytes ?? 1),
                           ),
                         ),
                       ),
@@ -420,12 +431,16 @@ class RoverPhotosGrid extends StatelessWidget {
                             state.favorites.any((fav) => fav.id == photo.id);
 
                         return _buildActionButton(
-                          icon: isFavorite ? Icons.favorite : Icons.favorite_border,
+                          icon: isFavorite
+                              ? Icons.favorite
+                              : Icons.favorite_border,
                           label: isFavorite ? 'Favorited' : 'Favorite',
                           color: isFavorite ? Colors.red : Colors.white,
                           onPressed: () {
                             if (isFavorite) {
-                              context.read<FavoritesBloc>().add(RemoveFavorite(photo));
+                              context
+                                  .read<FavoritesBloc>()
+                                  .add(RemoveFavorite(photo));
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Removed from favorites'),
@@ -434,7 +449,9 @@ class RoverPhotosGrid extends StatelessWidget {
                                 ),
                               );
                             } else {
-                              context.read<FavoritesBloc>().add(AddFavorite(photo));
+                              context
+                                  .read<FavoritesBloc>()
+                                  .add(AddFavorite(photo));
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Added to favorites'),
