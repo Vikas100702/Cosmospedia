@@ -4,6 +4,7 @@ import 'package:cosmospedia/blocs/favorites/favorites_bloc.dart';
 import 'package:cosmospedia/blocs/rover_manifest/rover_manifest_bloc.dart';
 import 'package:cosmospedia/blocs/sign_in/sign_in_bloc.dart';
 import 'package:cosmospedia/blocs/space_weather/cme/cme_bloc.dart';
+import 'package:cosmospedia/blocs/space_weather/gst/gst_bloc.dart';
 import 'package:cosmospedia/data/repositories/asteroids/asteroids_repository.dart';
 import 'package:cosmospedia/data/repositories/mars/rover_manifest_repository.dart';
 import 'package:cosmospedia/data/repositories/space_weather/cme_repository.dart';
@@ -16,6 +17,7 @@ import 'blocs/news/news_bloc.dart';
 import 'blocs/rover/rover_bloc.dart';
 import 'data/repositories/apod_repositories.dart';
 import 'data/repositories/mars/rover_repositories.dart';
+import 'data/repositories/space_weather/gst_repository.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -28,6 +30,7 @@ Future<void> main() async {
   final roverManifestRepository = RoverManifestRepository();
   final asteroidRepository = AsteroidsRepository();
   final cmeRepository = CMERepository();
+  final gstRepository = GstRepository();
   runApp(
     MultiRepositoryProvider(
       providers: [
@@ -35,6 +38,7 @@ Future<void> main() async {
         RepositoryProvider.value(value: roverRepository),
         RepositoryProvider.value(value: asteroidRepository),
         RepositoryProvider.value(value: cmeRepository),
+        RepositoryProvider.value(value: gstRepository),
         RepositoryProvider(
           create: (_) => RoverManifestRepository(),
         ),
@@ -76,7 +80,12 @@ Future<void> main() async {
             create: (context) => CMEBloc(
               cmeRepository: context.read<CMERepository>(),
             ),
-          )
+          ),
+          BlocProvider(
+            create: (context) => GstBloc(
+              gstRepository: context.read<GstRepository>(),
+            ),
+          ),
         ],
         child: const MyApp(),
       ),

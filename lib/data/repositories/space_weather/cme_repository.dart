@@ -15,7 +15,7 @@ class CMERepository {
   }) async {
     try {
       final url = Uri.parse(
-        '${Constants.NASA_CME_BASE_URL}/CME?startDate=$startDate&endDate=$endDate&api_key=${Constants.NASA_API_KEY}',
+        '${Constants.NASA_DONKI_BASE_URL}/CME?startDate=$startDate&endDate=$endDate&api_key=${Constants.NASA_API_KEY}',
       );
 
       final response = await client.get(url);
@@ -78,7 +78,7 @@ class CMERepository {
   }) async {
     try {
       var url = Uri.parse(
-        '${Constants.NASA_CME_BASE_URL}/CMEAnalysis?'
+        '${Constants.NASA_DONKI_BASE_URL}/CMEAnalysis?'
         'startDate=$startDate&'
         'endDate=$endDate&'
         'mostAccurateOnly=$mostAccurateOnly&'
