@@ -1,6 +1,7 @@
 import 'package:cosmospedia/blocs/sign_in/sign_in_bloc.dart';
 import 'package:cosmospedia/ui/components/custom_buttons/custom_text_button/custom_text_button.dart';
 import 'package:cosmospedia/ui/screens/home_screen/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '';
@@ -87,6 +88,9 @@ class SignInScreen extends StatelessWidget {
                               if (value?.isEmpty ?? true) {
                                 return 'Please enter your email';
                               }
+                              if(!value!.contains('@')){
+                                return 'Please enter a valid email';
+                              }
                               return null;
                             },
                           ),
@@ -111,6 +115,9 @@ class SignInScreen extends StatelessWidget {
                             validator: (value) {
                               if (value?.isEmpty ?? true) {
                                 return 'Please enter your password';
+                              }
+                              if (value!.length < 6) {
+                                return 'Password must be at least 6 characters';
                               }
                               return null;
                             },
@@ -159,10 +166,22 @@ class SignInScreen extends StatelessWidget {
                             ),*//*
                           ),*/
                           CustomElevatedButton(
-                            onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen(),),);
+                            onPressed: () {
+                              if (state is SignInLoading) {
+                                // Do nothing when in loading state
+                                return;
+                              }
+
+                              if (_formKey.currentState?.validate() ?? false) {
+                                context.read<SignInBloc>().add(
+                                  SignInWithEmailPassword(
+                                    _emailController.text,
+                                    _passwordController.text,
+                                  ),
+                                );
+                              }
                             },
-                            text: 'Sign In',
+                            text: state is SignInLoading ? 'Signing In...' : 'Sign In',
                           ),
 
                           //SignUp Button
@@ -199,6 +218,7 @@ class SignInScreen extends StatelessWidget {
                           CustomTextButton(
                             onPressed: () {
                               // Add forgot password functionality
+                              _showPasswordResetDialog(context, _emailController);
                             },
                             text: 'Forgot Password?',
                           ),
@@ -212,6 +232,55 @@ class SignInScreen extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+
+  void _showPasswordResetDialog(BuildContext context, TextEditingController emailController) {
+    final resetEmailController = TextEditingController(text: emailController.text);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Reset Password'),
+          content: TextFormField(
+            controller: resetEmailController,
+            decoration: const InputDecoration(
+              labelText: 'Email',
+              hintText: 'Enter your email address',
+            ),
+            keyboardType: TextInputType.emailAddress,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                try {
+                  await FirebaseAuth.instance.sendPasswordResetEmail(
+                    email: resetEmailController.text.trim(),
+                  );
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Password reset email sent')),
+                    );
+                    Navigator.pop(context);
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error: ${e.toString()}')),
+                    );
+                  }
+                }
+              },
+              child: const Text('Send Reset Link'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
