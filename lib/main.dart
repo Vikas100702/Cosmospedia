@@ -22,7 +22,11 @@ import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   //Initialize Repositories
   final apodRepository = ApodRepository();
@@ -31,6 +35,7 @@ Future<void> main() async {
   final asteroidRepository = AsteroidsRepository();
   final cmeRepository = CMERepository();
   final gstRepository = GstRepository();
+
   runApp(
     MultiRepositoryProvider(
       providers: [
