@@ -29,7 +29,7 @@ class AsteroidsScreen extends StatelessWidget {
           image: DecorationImage(
             fit: BoxFit.cover,
             image: AssetImage("assets/background.png"),
-            opacity: 0.3,
+            opacity: 0.5,
           ),
         ),
         child: Scaffold(
