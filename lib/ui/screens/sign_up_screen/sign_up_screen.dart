@@ -2,6 +2,7 @@ import 'package:cosmospedia/blocs/sign_up/sign_up_bloc.dart';
 import 'package:cosmospedia/ui/screens/sign_in_screen/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../components/custom_buttons/custom_elevated_button/custom_elevated_button.dart';
 import '../../components/custom_buttons/custom_text_button/custom_text_button.dart';
@@ -12,7 +13,6 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _nameController = TextEditingController();
     final _emailController = TextEditingController();
     final _passwordController = TextEditingController();
     final _confirmPasswordController = TextEditingController();
@@ -70,31 +70,6 @@ class SignUpScreen extends StatelessWidget {
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 48),
-
-                          // Name Field (New)
-                          TextFormField(
-                            controller: _nameController,
-                            keyboardType: TextInputType.name,
-                            style: const TextStyle(color: Colors.white),
-                            decoration: InputDecoration(
-                              labelText: 'Name',
-                              labelStyle: const TextStyle(color: Colors.white70),
-                              filled: true,
-                              fillColor: Colors.white.withOpacity(0.1),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide.none,
-                              ),
-                              prefixIcon: const Icon(Icons.person, color: Colors.white70),
-                            ),
-                            validator: (value) {
-                              if (value?.isEmpty ?? true) {
-                                return 'Please enter your name';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 16),
 
                           // Email Field
                           TextFormField(
@@ -186,17 +161,22 @@ class SignUpScreen extends StatelessWidget {
                           // Sign Up Button
                           CustomElevatedButton(
                             onPressed: () {
+                              if (state is SignUpLoading) {
+                                // Do nothing when in loading state
+                                return;
+                              }
+
                               if (_formKey.currentState?.validate() ?? false) {
-                                // Now you can use _nameController.text along with other fields
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const SignInScreen(),
+                                context.read<SignUpBloc>().add(
+                                  SignUpWithEmailPassword(
+                                    _emailController.text,
+                                    _passwordController.text,
+                                    _confirmPasswordController.text,
                                   ),
                                 );
                               }
                             },
-                            text: 'Sign Up',
+                            text: state is SignUpLoading ? 'Creating Account...' : 'Sign Up',
                           ),
 
                           // Already have an account link

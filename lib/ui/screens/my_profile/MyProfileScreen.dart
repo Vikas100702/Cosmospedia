@@ -1,4 +1,6 @@
 import 'package:cosmospedia/ui/components/custom_app_bar/custom_app_bar.dart';
+import 'package:cosmospedia/ui/screens/sign_in_screen/sign_in_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/app_colors.dart';
@@ -9,14 +11,17 @@ class MyProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+    final currentUser = FirebaseAuth.instance.currentUser;
 
-    // Mock user data - in a real app, this would come from your state management
+    // User data from firebase
     final user = {
-      'name': 'Alex Cosmos',
-      'email': 'alex@cosmospedia.com',
-      'initials': 'AC',
+      'name': currentUser?.displayName ?? 'Cosmos Explorer',
+      'email': currentUser?.email ?? 'user@cosmospedia.com',
+      'initials': _getInitials(currentUser?.displayName ?? 'CE'),
     };
 
     return Container(
@@ -65,6 +70,13 @@ class MyProfileScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _getInitials(String name) {
+    if (name.isEmpty) return 'CE';
+    final parts = name.split(' ');
+    if (parts.length == 1) return parts[0][0].toUpperCase();
+    return '${parts[0][0]}${parts[parts.length - 1][0]}'.toUpperCase();
   }
 
   Widget _buildUserHeader(BuildContext context, Map<String, dynamic> user) {
@@ -368,7 +380,8 @@ class MyProfileScreen extends StatelessWidget {
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -390,14 +403,13 @@ class MyProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileOptionCard(
-      BuildContext context, {
-        required String title,
-        required String subtitle,
-        required IconData icon,
-        required List<Color> gradientColors,
-        required VoidCallback onTap,
-      }) {
+  Widget _buildProfileOptionCard(BuildContext context, {
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required List<Color> gradientColors,
+    required VoidCallback onTap,
+  }) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 4,
@@ -481,113 +493,127 @@ class MyProfileScreen extends StatelessWidget {
   void _showComingSoonDialog(BuildContext context, String feature) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey[900],
-        title: Text(
-          feature,
-          style: const TextStyle(color: Colors.white),
-        ),
-        content: Text(
-          "This feature is coming soon to Cosmospedia!",
-          style: TextStyle(color: Colors.white70),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              "OK",
-              style: TextStyle(color: Colors.blue[300]),
+      builder: (context) =>
+          AlertDialog(
+            backgroundColor: Colors.grey[900],
+            title: Text(
+              feature,
+              style: const TextStyle(color: Colors.white),
             ),
+            content: Text(
+              "This feature is coming soon to Cosmospedia!",
+              style: TextStyle(color: Colors.white70),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  "OK",
+                  style: TextStyle(color: Colors.blue[300]),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
   void _handleNameEdit(BuildContext context) {
     final controller = TextEditingController(text: "Alex Cosmos");
-    _showEditDialog(context, "Edit Name", "Update your display name", controller);
+    _showEditDialog(
+        context, "Edit Name", "Update your display name", controller);
   }
 
   void _handleMailEdit(BuildContext context) {
     final controller = TextEditingController(text: "alex@cosmospedia.com");
-    _showEditDialog(context, "Edit Email", "Update your email address", controller);
+    _showEditDialog(
+        context, "Edit Email", "Update your email address", controller);
   }
 
   void _handlePasswordChange(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey[900],
-        title: const Text(
-          "Change Password",
-          style: TextStyle(color: Colors.white),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              obscureText: true,
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white.withOpacity(0.1),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
+      builder: (context) =>
+          AlertDialog(
+            backgroundColor: Colors.grey[900],
+            title: const Text(
+              "Change Password",
+              style: TextStyle(color: Colors.white),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  obscureText: true,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.1),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: "Current password",
+                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                  ),
                 ),
-                hintText: "Current password",
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                const SizedBox(height: 16),
+                TextField(
+                  obscureText: true,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.1),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: "New password",
+                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  obscureText: true,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.1),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: "Confirm new password",
+                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  "Cancel",
+                  style: TextStyle(color: Colors.blue[300]),
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              obscureText: true,
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white.withOpacity(0.1),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Password updated successfully"),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue[700],
                 ),
-                hintText: "New password",
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+
+                child: const Text("Update Password"),
               ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              obscureText: true,
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white.withOpacity(0.1),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
-                ),
-                hintText: "Confirm new password",
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              "Cancel",
-              style: TextStyle(color: Colors.blue[300]),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Password updated successfully"),
-                  backgroundColor: Colors.green,
-                ),
+            ],
+
               );
             },
             style: ElevatedButton.styleFrom(
@@ -595,119 +621,147 @@ class MyProfileScreen extends StatelessWidget {
             ),
             child: const Text("Update Password",
               style: TextStyle(color: Colors.white),),
+
           ),
-        ],
-      ),
     );
   }
 
-  void _showEditDialog(
-      BuildContext context,
-      String title,
-      String description,
-      TextEditingController controller
-      ) {
+  void _showEditDialog(BuildContext context, String title, String description,
+      TextEditingController controller) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey[900],
-        title: Text(
-          title,
-          style: const TextStyle(color: Colors.white),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              description,
-              style: const TextStyle(color: Colors.white70),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: controller,
+      builder: (context) =>
+          AlertDialog(
+            backgroundColor: Colors.grey[900],
+            title: Text(
+              title,
               style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white.withOpacity(0.1),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  description,
+                  style: const TextStyle(color: Colors.white70),
                 ),
-                hintText: "Enter new value",
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: controller,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.1),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: "Enter new value",
+                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                  ),
+                ),
+              ],
+            ),
+
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  "Cancel",
+                  style: TextStyle(color: Colors.blue[300]),
+                ),
               ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              "Cancel",
-              style: TextStyle(color: Colors.blue[300]),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // Show success message
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text("${title.split(' ')[1]} updated successfully"),
-                  backgroundColor: Colors.green,
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  // Show success message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                          "${title.split(' ')[1]} updated successfully"),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue[700],
                 ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue[700],
-            ),
+                child: const Text("Save"),
+              ),
+            ],
+
             child: const Text("Save",style: TextStyle(color: Colors.white),),
+
           ),
-        ],
-      ),
     );
   }
 
-  void _handleLogout(BuildContext context) {
-    showDialog(
+  Future<void> _handleLogout(BuildContext context) async {
+    final shouldLogout = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey[900],
-        title: const Text(
-          "Log Out",
-          style: TextStyle(color: Colors.white),
-        ),
-        content: const Text(
-          "Are you sure you want to log out of your account?",
-          style: TextStyle(color: Colors.white70),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              "Cancel",
-              style: TextStyle(color: Colors.blue[300]),
+      builder: (context) =>
+          AlertDialog(
+            backgroundColor: Colors.grey[900],
+            title: const Text(
+              "Log Out",
+              style: TextStyle(color: Colors.white),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // In a real app, you would navigate to login screen
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Logged out successfully"),
-                  backgroundColor: Colors.blue,
+            content: const Text(
+              "Are you sure you want to log out of your account?",
+              style: TextStyle(color: Colors.white70),
+            ),
+
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  "Cancel",
+                  style: TextStyle(color: Colors.blue[300]),
                 ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red[400],
-            ),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  Navigator.pop(context, true);
+                  // In a real app, you would navigate to login screen
+                  /*ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Logged out successfully"),
+                      backgroundColor: Colors.blue,
+                    ),
+                  );*/
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red[400],
+                ),
+                child: const Text("Log Out"),
+              ),
+            ],
             child: const Text("Log Out",style: TextStyle(color: Colors.white),),
+
           ),
-        ],
-      ),
     );
+
+    if (shouldLogout == true) {
+      try {
+        await FirebaseAuth.instance.signOut();
+        if (!context.mounted) return;
+
+        // Navigate to sign in screen and remove all previous routes
+        Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(
+            builder: (context) => const SignInScreen(),
+          ),
+              (route) => false,
+        );
+      } catch (e) {
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Logout failed: ${e.toString()}"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }
