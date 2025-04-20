@@ -10,7 +10,7 @@ class RoverModel extends Equatable {
   factory RoverModel.fromJson(Map<String, dynamic> json) {
     return RoverModel(
       photos: json['photos'] != null
-          ? List<Photos>.from(json['photos'].weather((v) => Photos.fromJson(v)))
+          ? List<Photos>.from(json['photos'].map((v) => Photos.fromJson(v)))
           : null,
     );
   }

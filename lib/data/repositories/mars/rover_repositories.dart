@@ -67,6 +67,7 @@ class RoverRepository {
           return RoverModel.fromJson({'photos': [photo]});
         }).toList();*/
 
+        // Create a list of RoverModel with each photo
         return photos
             .map((photo) => RoverModel.fromJson({
                   'photos': [photo]
