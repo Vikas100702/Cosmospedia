@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/app_colors.dart';
+import 'FaqScreen.dart';
 
 class MyProfileScreen extends StatelessWidget {
   const MyProfileScreen({super.key});
@@ -299,7 +300,14 @@ class MyProfileScreen extends StatelessWidget {
           subtitle: "Find answers to common questions",
           icon: Icons.question_answer,
           gradientColors: [Colors.purple[700]!, Colors.deepPurple[400]!],
-          onTap: () => _showComingSoonDialog(context, "FAQs"),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const FaqScreen(),
+              ),
+            );
+          },
         ),
 
         const SizedBox(height: 24),
@@ -482,8 +490,6 @@ class MyProfileScreen extends StatelessWidget {
     );
   }
 
-  // Simplified handlers that show dialogs instead of using BLoC
-
   void _showComingSoonDialog(BuildContext context, String feature) {
     showDialog(
       context: context,
@@ -603,9 +609,19 @@ class MyProfileScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue[700],
                 ),
+
                 child: const Text("Update Password"),
               ),
             ],
+
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue[700],
+            ),
+            child: const Text("Update Password",
+              style: TextStyle(color: Colors.white),),
+
           ),
     );
   }
@@ -646,6 +662,7 @@ class MyProfileScreen extends StatelessWidget {
                 ),
               ],
             ),
+
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -672,6 +689,9 @@ class MyProfileScreen extends StatelessWidget {
                 child: const Text("Save"),
               ),
             ],
+
+            child: const Text("Save",style: TextStyle(color: Colors.white),),
+
           ),
     );
   }
@@ -690,6 +710,7 @@ class MyProfileScreen extends StatelessWidget {
               "Are you sure you want to log out of your account?",
               style: TextStyle(color: Colors.white70),
             ),
+
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -715,6 +736,8 @@ class MyProfileScreen extends StatelessWidget {
                 child: const Text("Log Out"),
               ),
             ],
+            child: const Text("Log Out",style: TextStyle(color: Colors.white),),
+
           ),
     );
 
