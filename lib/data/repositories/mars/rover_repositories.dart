@@ -26,7 +26,7 @@ class RoverRepository {
             '&api_key=${Constants.NASA_API_KEY}',
       );*/
       final url = Uri.parse(
-        '${Constants.NASA_MARS_ROVER_BASE_URL}/rovers/$roverName/photos?'
+        '${Constants.NASA_MARS_ROVER_BASE_URL}/rovers/curiosity/photos?'
         '${earthDate != null ? 'earth_date=$earthDate&' : ''}'
         '${sol != null ? 'sol=$sol&' : ''}'
         '${cameraName != null ? 'camera=$cameraName&' : ''}'

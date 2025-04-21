@@ -90,7 +90,9 @@ class RoverPhotosGrid extends StatelessWidget {
                       (photo.camera?.name?.toLowerCase() ==
                           cameraName?.toLowerCase());
 
-                  if (matchesCamera) {
+                  final matchesDate = selectedDate == null || (photo.earthDate == DateFormat('yyy-MM-dd').format(selectedDate!));
+
+                  if (matchesCamera && matchesDate) {
                     photos.add(photo);
                   }
                 }
