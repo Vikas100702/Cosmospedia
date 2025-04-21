@@ -105,7 +105,7 @@ class RoverBloc extends Bloc<RoverEvent, RoverState> {
         roverName: event.roverName,
         cameraName: event.cameraName,
         earthDate: event.earthDate,
-        sol: event.sol ?? 1000,
+        sol: event.sol,
       );
 
       emit(state.copyWith(
