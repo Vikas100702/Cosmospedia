@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart'; // Add this import for RenderAbstractViewport
 
 import '../../../l10n/app_localizations.dart';
 import '../../../utils/app_colors.dart';
@@ -36,14 +37,27 @@ class FaqScreen extends StatefulWidget {
   State<FaqScreen> createState() => _FaqScreenState();
 }
 
-class _FaqScreenState extends State<FaqScreen> {
+class _FaqScreenState extends State<FaqScreen> with AutomaticKeepAliveClientMixin {
   final List<FaqCategory> _faqCategories = [];
   bool _isLoading = true;
+  final ScrollController _scrollController = ScrollController();
+
+  // Keys for preserving expanded state across rebuilds
+  final Map<String, GlobalKey> _itemKeys = {};
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
     _loadFaqs();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void _loadFaqs() async {
@@ -54,6 +68,13 @@ class _FaqScreenState extends State<FaqScreen> {
       _faqCategories.addAll(_generateFaqCategories());
       _isLoading = false;
     });
+
+    // Create keys for each FAQ item
+    for (int catIndex = 0; catIndex < _faqCategories.length; catIndex++) {
+      for (int itemIndex = 0; itemIndex < _faqCategories[catIndex].items.length; itemIndex++) {
+        _itemKeys['cat${catIndex}_item$itemIndex'] = GlobalKey();
+      }
+    }
   }
 
   List<FaqCategory> _generateFaqCategories() {
@@ -229,6 +250,7 @@ class _FaqScreenState extends State<FaqScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // Required for AutomaticKeepAliveClientMixin
     final l10n = AppLocalizations.of(context);
     final screenSize = MediaQuery.of(context).size;
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -257,7 +279,7 @@ class _FaqScreenState extends State<FaqScreen> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-               'Frequently Asked Questions',
+              'Frequently Asked Questions',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
@@ -328,6 +350,8 @@ class _FaqScreenState extends State<FaqScreen> {
         Expanded(
           child: ListView.builder(
             padding: const EdgeInsets.only(bottom: 16),
+            key: const PageStorageKey('faq_list'),
+            controller: _scrollController,
             itemCount: _faqCategories.length,
             itemBuilder: (context, index) {
               final category = _faqCategories[index];
@@ -339,7 +363,7 @@ class _FaqScreenState extends State<FaqScreen> {
     );
   }
 
-  Widget _buildFaqCategory(FaqCategory category, BuildContext context, int index) {
+  Widget _buildFaqCategory(FaqCategory category, BuildContext context, int categoryIndex) {
     final theme = Theme.of(context);
 
     // Color mapping based on category - matching the screenshot styles
@@ -357,132 +381,195 @@ class _FaqScreenState extends State<FaqScreen> {
     // Default to purple if not found
     Color iconColor = categoryColorMap[category.title] ?? const Color(0xFF8E44AD);
 
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      elevation: 4, // Reduced elevation
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      color: Colors.transparent, // Transparent base
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.3), // More translucent
+    return RepaintBoundary(
+      child: Card(
+        key: ValueKey('category_$categoryIndex'),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        elevation: 4, // Reduced elevation
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: iconColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      category.icon,
-                      size: 30,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Text(
-                      category.title,
-                      style: theme.textTheme.titleLarge?.copyWith(
+        color: Colors.transparent, // Transparent base
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.3), // More translucent
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: iconColor,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        category.icon,
+                        size: 30,
                         color: Colors.white,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 12),
-                child: Divider(color: Colors.white30, height: 1),
-              ),
-              ListView.separated(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: category.items.length,
-                separatorBuilder: (context, index) => const Divider(
-                  color: Colors.white30,
-                  height: 1,
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        category.title,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                itemBuilder: (context, index) {
-                  final item = category.items[index];
-                  return _buildFaqItem(item, context, iconColor);
-                },
-              ),
-            ],
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  child: Divider(color: Colors.white30, height: 1),
+                ),
+                ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: category.items.length,
+                  separatorBuilder: (context, index) => const Divider(
+                    color: Colors.white30,
+                    height: 1,
+                  ),
+                  itemBuilder: (context, itemIndex) {
+                    final item = category.items[itemIndex];
+                    final String keyId = 'cat${categoryIndex}_item$itemIndex';
+                    return _buildFaqItem(
+                      item,
+                      context,
+                      iconColor,
+                      category,
+                      categoryIndex,
+                      itemIndex,
+                      _itemKeys[keyId] ?? GlobalKey(),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildFaqItem(FaqItem item, BuildContext context, Color categoryColor) {
+  void _toggleFaqItem(FaqItem item, GlobalKey itemKey, int categoryIndex, int itemIndex) {
+    final beforeScrollPosition = _scrollController.position.pixels;
+
+    setState(() {
+      // Close all other open items first
+      for (var cat in _faqCategories) {
+        for (var faq in cat.items) {
+          if (faq != item && faq.isExpanded) {
+            faq.isExpanded = false;
+          }
+        }
+      }
+
+      // Toggle the current item
+      item.isExpanded = !item.isExpanded;
+    });
+
+    // Don't attempt to scroll if closing the item
+    if (!item.isExpanded) return;
+
+    // Wait for layout calculation to complete
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Restore previous scroll position first to prevent jumping
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(beforeScrollPosition);
+
+        // Then smoothly scroll to the selected item - using Scrollable.ensureVisible
+        final context = itemKey.currentContext;
+        if (context != null) {
+          Scrollable.ensureVisible(
+            context,
+            alignment: 0.0,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      }
+    });
+  }
+
+  Widget _buildFaqItem(
+      FaqItem item,
+      BuildContext context,
+      Color categoryColor,
+      FaqCategory category,
+      int categoryIndex,
+      int itemIndex,
+      GlobalKey itemKey,
+      ) {
     final theme = Theme.of(context);
 
-    return Column(
-      children: [
-        ListTile(
-          contentPadding: EdgeInsets.zero,
-          title: Text(
-            item.question,
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
+    return RepaintBoundary(
+      key: itemKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(
+              item.question,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          trailing: Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: categoryColor,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              item.isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-              color: Colors.white,
-              size: 20,
-            ),
-          ),
-          onTap: () {
-            setState(() {
-              item.isExpanded = !item.isExpanded;
-            });
-          },
-        ),
-        if (item.isExpanded)
-          Padding(
-            padding: const EdgeInsets.only(
-              bottom: 16.0,
-            ),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(12),
+            trailing: Container(
+              width: 32,
+              height: 32,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.05), // Very subtle background
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: categoryColor.withOpacity(0.3),
-                  width: 1,
-                ),
+                color: categoryColor,
+                shape: BoxShape.circle,
               ),
-              child: Text(
-                item.answer,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: Colors.white.withOpacity(0.9),
-                ),
+              child: Icon(
+                item.isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                color: Colors.white,
+                size: 20,
               ),
             ),
+            onTap: () => _toggleFaqItem(item, itemKey, categoryIndex, itemIndex),
           ),
-      ],
+          AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOut,
+            child: item.isExpanded
+                ? Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05), // Very subtle background
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: categoryColor.withOpacity(0.3),
+                    width: 1,
+                  ),
+                ),
+                child: Text(
+                  item.answer,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: Colors.white.withOpacity(0.9),
+                  ),
+                ),
+              ),
+            )
+                : const SizedBox.shrink(),
+          ),
+        ],
+      ),
     );
   }
 }
