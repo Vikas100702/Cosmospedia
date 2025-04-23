@@ -1,7 +1,8 @@
-import 'package:cosmospedia/blocs/home/home_state.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class HomeEvent extends Equatable{
+  const HomeEvent();
+
   @override
   List<Object> get props => [];
 }
@@ -10,11 +11,11 @@ class LoadHomeData extends HomeEvent {}
 
 class RefreshHomeData extends HomeEvent {}
 
-class SwitchScreen extends HomeEvent {
-  final CurrentScreen screen;
-  SwitchScreen(this.screen);
+class SwitchTab extends HomeEvent {
+  final int tabIndex;
+  const SwitchTab(this.tabIndex);
 
   @override
-  List<Object> get props => [screen];
+  List<Object> get props => [tabIndex];
 
 }
