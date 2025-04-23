@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:meta/meta.dart';
 
 part 'sign_up_event.dart';
 
@@ -16,10 +15,20 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
             emit(SignUpFailure('Passwords do not match'));
             return;
           }
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          // Validate password
+          final passwordError = validatePassword(event.password);
+          if (passwordError != null) {
+            emit(SignUpFailure(passwordError));
+            return;
+          }
+
+          final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: event.email,
             password: event.password,
           );
+
+          // Update user display name
+          await userCredential.user?.updateDisplayName(event.name);
 
           // Optionally send email verification
           await FirebaseAuth.instance.currentUser?.sendEmailVerification();
@@ -52,5 +61,25 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         }
       },
     );
+  }
+
+  // password validation method
+  String? validatePassword(String password) {
+    if (password.length < 8) {
+      return 'Password must be at least 8 characters';
+    }
+    if (!password.contains(RegExp(r'[A-Z]'))) {
+      return 'Password must contain at least one uppercase letter';
+    }
+    if (!password.contains(RegExp(r'[a-z]'))) {
+      return 'Password must contain at least one lowercase letter';
+    }
+    if (!password.contains(RegExp(r'[0-9]'))) {
+      return 'Password must contain at least one number';
+    }
+    if (!password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+      return 'Password must contain at least one special character';
+    }
+    return null;
   }
 }

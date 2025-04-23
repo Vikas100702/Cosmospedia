@@ -485,7 +485,7 @@ class MyProfileView extends StatelessWidget {
                     ),
                     Text(
                       subtitle,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 14,
                       ),
@@ -520,7 +520,7 @@ class MyProfileView extends StatelessWidget {
           feature,
           style: const TextStyle(color: Colors.white),
         ),
-        content: Text(
+        content: const Text(
           "This feature is coming soon to Cosmospedia!",
           style: TextStyle(color: Colors.white70),
         ),
@@ -544,7 +544,7 @@ class MyProfileView extends StatelessWidget {
       builder: (context) => AlertDialog(
         backgroundColor: Colors.grey[900],
         title: const Text(
-          "Edit Name",
+          "Edit Display Name",
           style: TextStyle(color: Colors.white),
         ),
         content: TextField(
@@ -557,7 +557,7 @@ class MyProfileView extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,
             ),
-            hintText: "Enter new name",
+            hintText: "Enter new display name",
             hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
           ),
         ),
@@ -570,10 +570,28 @@ class MyProfileView extends StatelessWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (controller.text.isNotEmpty) {
-                context.read<ProfileBloc>().add(UpdateName(controller.text));
-                Navigator.pop(context);
+                try {
+                  await FirebaseAuth.instance.currentUser
+                      ?.updateDisplayName(controller.text);
+                  if (context.mounted) {
+                    context
+                        .read<ProfileBloc>()
+                        .add(UpdateName(controller.text));
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Name updated successfully')),
+                    );
+                  }
+                } catch (error) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Failed to update name: $error')),
+                    );
+                  }
+                }
               }
             },
             style: ElevatedButton.styleFrom(
@@ -589,60 +607,7 @@ class MyProfileView extends StatelessWidget {
     );
   }
 
-  /*void _handleMailEdit(BuildContext context) {
-    final controller = TextEditingController(text: "alex@cosmospedia.com");
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey[900],
-        title: const Text(
-          "Edit Name",
-          style: TextStyle(color: Colors.white),
-        ),
-        content: TextField(
-          controller: controller,
-          style: const TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white.withOpacity(0.1),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide.none,
-            ),
-            hintText: "Enter new name",
-            hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              "Cancel",
-              style: TextStyle(color: Colors.blue[300]),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (controller.text.isNotEmpty) {
-                context.read<ProfileBloc>().add(UpdateName(controller.text));
-                Navigator.pop(context);
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue[700],
-            ),
-            child: const Text(
-              "Save",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-    );
-  }*/
-
   void _handlePasswordChange(BuildContext context) {
-    final currentPasswordController = TextEditingController();
     final newPasswordController = TextEditingController();
     final confirmPasswordController = TextEditingController();
 
@@ -657,22 +622,6 @@ class MyProfileView extends StatelessWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(
-              obscureText: true,
-              controller: currentPasswordController,
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white.withOpacity(0.1),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
-                ),
-                hintText: "Current password",
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
-              ),
-            ),
-            const SizedBox(height: 16),
             TextField(
               obscureText: true,
               controller: newPasswordController,
@@ -704,6 +653,11 @@ class MyProfileView extends StatelessWidget {
                 hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
               ),
             ),
+            const SizedBox(height: 8),
+            const Text(
+              'Password must contain:\n- 8+ characters\n- Uppercase letter\n- Lowercase letter\n- Number\n- Special character',
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
           ],
         ),
         actions: [
@@ -715,13 +669,39 @@ class MyProfileView extends StatelessWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: () {
-              if (newPasswordController.text.isNotEmpty &&
-                  newPasswordController.text == confirmPasswordController.text) {
-                context.read<ProfileBloc>().add(
-                    UpdatePassword(newPasswordController.text)
+            onPressed: () async {
+              final newPass = newPasswordController.text;
+              final confirmPass = confirmPasswordController.text;
+
+              if (newPass.isEmpty && newPass != confirmPass) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Passwords do not match')),
                 );
-                Navigator.pop(context);
+                return;
+              }
+
+              final error  = _validatePassword(newPass);
+              if (error != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(error)),
+                );
+                return;
+              }
+
+              try {
+                await FirebaseAuth.instance.currentUser?.updatePassword(newPass);
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Password updated successfully')),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to update password: $e')),
+                  );
+                }
               }
             },
             style: ElevatedButton.styleFrom(
@@ -737,7 +717,18 @@ class MyProfileView extends StatelessWidget {
     );
   }
 
- /* void _showEditDialog(BuildContext context, String title, String description,
+  String? _validatePassword(String password) {
+    if (password.length < 8) return 'Password must be at least 8 characters';
+    if (!password.contains(RegExp(r'[A-Z]'))) return 'Missing uppercase letter';
+    if (!password.contains(RegExp(r'[a-z]'))) return 'Missing lowercase letter';
+    if (!password.contains(RegExp(r'[0-9]'))) return 'Missing number';
+    if (!password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+      return 'Missing special character';
+    }
+    return null;
+  }
+
+  /* void _showEditDialog(BuildContext context, String title, String description,
       TextEditingController controller) {
     showDialog(
       context: context,

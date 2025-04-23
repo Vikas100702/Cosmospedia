@@ -2,8 +2,6 @@ import 'package:cosmospedia/blocs/sign_up/sign_up_bloc.dart';
 import 'package:cosmospedia/ui/screens/sign_in_screen/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import '../../components/custom_buttons/custom_elevated_button/custom_elevated_button.dart';
 import '../../components/custom_buttons/custom_text_button/custom_text_button.dart';
 import '../home_screen/home_screen.dart';
@@ -13,6 +11,7 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _nameController = TextEditingController();
     final _emailController = TextEditingController();
     final _passwordController = TextEditingController();
     final _confirmPasswordController = TextEditingController();
@@ -71,6 +70,32 @@ class SignUpScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 48),
 
+                          //User Name Field
+                          TextFormField(
+                            controller: _nameController,
+                            style: const TextStyle(color: Colors.white),
+                            decoration: InputDecoration(
+                              labelText: 'Display Name',
+                              labelStyle: const TextStyle(color: Colors.white70),
+                              filled: true,
+                              fillColor: Colors.white.withOpacity(0.1),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              prefixIcon: const Icon(Icons.person, color: Colors.white70),
+                            ),
+                            validator: (value) {
+                              if (value?.isEmpty ?? true) {
+                                return 'Please enter your user name';
+                              }
+                              if (value!.length < 3) {
+                                return 'Name must be at least 3 characters';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
                           // Email Field
                           TextFormField(
                             controller: _emailController,
@@ -169,6 +194,7 @@ class SignUpScreen extends StatelessWidget {
                               if (_formKey.currentState?.validate() ?? false) {
                                 context.read<SignUpBloc>().add(
                                   SignUpWithEmailPassword(
+                                    _nameController.text,
                                     _emailController.text,
                                     _passwordController.text,
                                     _confirmPasswordController.text,
