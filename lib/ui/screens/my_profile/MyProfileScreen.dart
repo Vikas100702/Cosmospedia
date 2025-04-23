@@ -1,4 +1,5 @@
 import 'package:cosmospedia/ui/components/custom_app_bar/custom_app_bar.dart';
+import 'package:cosmospedia/ui/screens/my_profile/TermsAndConditionsScreen.dart';
 import 'package:cosmospedia/ui/screens/sign_in_screen/sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -341,7 +342,14 @@ class MyProfileScreen extends StatelessWidget {
           subtitle: "Read our terms of service",
           icon: Icons.gavel,
           gradientColors: [Colors.teal[700]!, Colors.green[500]!],
-          onTap: () => _showComingSoonDialog(context, "Terms & Conditions"),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const TermsAndConditionsScreen(),
+              ),
+            );
+          },
         ),
 
         _buildProfileOptionCard(
