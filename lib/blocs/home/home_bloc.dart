@@ -6,10 +6,10 @@ import 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final ApodRepository apodRepository;
 
-  HomeBloc({required this.apodRepository}) : super(const HomeState()) {
+  HomeBloc({required this.apodRepository}) : super(const HomeState(currentTabIndex: 0)) {
     on<LoadHomeData>(_loadHomeData);
     on<RefreshHomeData>(_refreshHomeData);
-    on<SwitchScreen>(_switchScreen);
+    on<SwitchTab>(_switchTab);
   }
 
   Future<void> _loadHomeData(
@@ -63,7 +63,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  void _switchScreen(SwitchScreen event, Emitter<HomeState> emit){
-    emit(state.copyWith(currentScreen: event.screen));
+  void _switchTab(SwitchTab event, Emitter<HomeState> emit){
+    emit(state.copyWith(currentTabIndex: event.tabIndex));
   }
 }

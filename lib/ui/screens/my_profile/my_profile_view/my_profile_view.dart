@@ -1,28 +1,28 @@
-import 'package:cosmospedia/ui/components/custom_app_bar/custom_app_bar.dart';
-import 'package:cosmospedia/ui/screens/my_profile/TermsAndConditionsScreen.dart';
-import 'package:cosmospedia/ui/screens/sign_in_screen/sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../utils/app_colors.dart';
-import 'FaqScreen.dart';
+import '../../../../blocs/profile/profile_bloc.dart';
+import '../../../../utils/app_colors.dart';
+import '../../../components/custom_app_bar/custom_app_bar.dart';
+import '../../sign_in_screen/sign_in_screen.dart';
+import '../faq_screen.dart';
 
-class MyProfileScreen extends StatelessWidget {
-  const MyProfileScreen({super.key});
+class MyProfileView extends StatelessWidget {
+  const MyProfileView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    final currentUser = FirebaseAuth.instance.currentUser;
+    // final currentUser = FirebaseAuth.instance.currentUser;
 
     // User data from firebase
-    final user = {
+    /*final user = {
       'name': currentUser?.displayName ?? 'Cosmos Explorer',
       'email': currentUser?.email ?? 'user@cosmospedia.com',
       'initials': _getInitials(currentUser?.displayName ?? 'CE'),
-    };
+    };*/
 
     return Container(
       decoration: const BoxDecoration(
@@ -58,28 +58,48 @@ class MyProfileScreen extends StatelessWidget {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              _buildUserHeader(context, user),
-              const SizedBox(height: 24),
-              _buildProfileOptionsSection(context),
-            ],
-          ),
+        body: BlocBuilder<ProfileBloc, ProfileState>(
+          builder: (context, state) {
+            if (state is ProfileLoading || state is ProfileInitial) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            if (state is ProfileError) {
+              return Center(
+                child: Text('Error: ${state.errorMessage}'),
+              );
+            }
+
+            if (state is ProfileLoaded) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    _buildUserHeader(context, state.name, state.email),
+                    const SizedBox(height: 24),
+                    _buildProfileOptionsSection(context, state.name),
+                  ],
+                ),
+              );
+            }
+
+            return const SizedBox();
+          },
         ),
       ),
     );
   }
 
-  String _getInitials(String name) {
+  /*String _getInitials(String name) {
     if (name.isEmpty) return 'CE';
     final parts = name.split(' ');
     if (parts.length == 1) return parts[0][0].toUpperCase();
     return '${parts[0][0]}${parts[parts.length - 1][0]}'.toUpperCase();
-  }
+  }*/
 
-  Widget _buildUserHeader(BuildContext context, Map<String, dynamic> user) {
+  Widget _buildUserHeader(BuildContext context, String name, String email) {
     final theme = Theme.of(context);
 
     return Center(
@@ -140,7 +160,7 @@ class MyProfileScreen extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      user['initials'],
+                      'HI',
                       style: theme.textTheme.headlineMedium!.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -160,7 +180,7 @@ class MyProfileScreen extends StatelessWidget {
 
             // User info
             Text(
-              user['name'],
+              name,
               style: theme.textTheme.titleLarge!.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -182,7 +202,7 @@ class MyProfileScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                user['email'],
+                email,
                 style: theme.textTheme.bodyLarge!.copyWith(
                   color: Colors.white.withOpacity(0.9),
                   letterSpacing: 0.3,
@@ -195,7 +215,7 @@ class MyProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileOptionsSection(BuildContext context) {
+  Widget _buildProfileOptionsSection(BuildContext context, String currentName) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -226,20 +246,20 @@ class MyProfileScreen extends StatelessWidget {
         _buildProfileOptionCard(
           context,
           title: "Name",
-          subtitle: "Edit your display name",
+          subtitle: currentName,
           icon: Icons.person,
           gradientColors: [Colors.blue[700]!, Colors.cyan[400]!],
-          onTap: () => _handleNameEdit(context),
+          onTap: () => _handleNameEdit(context, currentName),
         ),
 
-        _buildProfileOptionCard(
+        /*_buildProfileOptionCard(
           context,
           title: "Mail",
           subtitle: "Update your email address",
           icon: Icons.mail,
           gradientColors: [Colors.blue[700]!, Colors.cyan[400]!],
           onTap: () => _handleMailEdit(context),
-        ),
+        ),*/
 
         _buildProfileOptionCard(
           context,
@@ -342,14 +362,7 @@ class MyProfileScreen extends StatelessWidget {
           subtitle: "Read our terms of service",
           icon: Icons.gavel,
           gradientColors: [Colors.teal[700]!, Colors.green[500]!],
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const TermsAndConditionsScreen(),
-              ),
-            );
-          },
+          onTap: () => _showComingSoonDialog(context, "Terms & Conditions"),
         ),
 
         _buildProfileOptionCard(
@@ -387,7 +400,8 @@ class MyProfileScreen extends StatelessWidget {
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -409,7 +423,8 @@ class MyProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileOptionCard(BuildContext context, {
+  Widget _buildProfileOptionCard(
+    BuildContext context, {
     required String title,
     required String subtitle,
     required IconData icon,
@@ -470,7 +485,7 @@ class MyProfileScreen extends StatelessWidget {
                     ),
                     Text(
                       subtitle,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 14,
                       ),
@@ -505,7 +520,7 @@ class MyProfileScreen extends StatelessWidget {
           feature,
           style: const TextStyle(color: Colors.white),
         ),
-        content: Text(
+        content: const Text(
           "This feature is coming soon to Cosmospedia!",
           style: TextStyle(color: Colors.white70),
         ),
@@ -522,17 +537,80 @@ class MyProfileScreen extends StatelessWidget {
     );
   }
 
-  void _handleNameEdit(BuildContext context) {
-    final controller = TextEditingController(text: "Alex Cosmos");
-    _showEditDialog(context, "Edit Name", "Update your display name", controller);
-  }
-
-  void _handleMailEdit(BuildContext context) {
-    final controller = TextEditingController(text: "alex@cosmospedia.com");
-    _showEditDialog(context, "Edit Email", "Update your email address", controller);
+  void _handleNameEdit(BuildContext context, String currentName) {
+    final controller = TextEditingController(text: currentName);
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.grey[900],
+        title: const Text(
+          "Edit Display Name",
+          style: TextStyle(color: Colors.white),
+        ),
+        content: TextField(
+          controller: controller,
+          style: const TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white.withOpacity(0.1),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide.none,
+            ),
+            hintText: "Enter new display name",
+            hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              "Cancel",
+              style: TextStyle(color: Colors.blue[300]),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (controller.text.isNotEmpty) {
+                try {
+                  await FirebaseAuth.instance.currentUser
+                      ?.updateDisplayName(controller.text);
+                  if (context.mounted) {
+                    context
+                        .read<ProfileBloc>()
+                        .add(UpdateName(controller.text));
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Name updated successfully')),
+                    );
+                  }
+                } catch (error) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Failed to update name: $error')),
+                    );
+                  }
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue[700],
+            ),
+            child: const Text(
+              "Save",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _handlePasswordChange(BuildContext context) {
+    final newPasswordController = TextEditingController();
+    final confirmPasswordController = TextEditingController();
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -546,21 +624,7 @@ class MyProfileScreen extends StatelessWidget {
           children: [
             TextField(
               obscureText: true,
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white.withOpacity(0.1),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
-                ),
-                hintText: "Current password",
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              obscureText: true,
+              controller: newPasswordController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 filled: true,
@@ -576,6 +640,7 @@ class MyProfileScreen extends StatelessWidget {
             const SizedBox(height: 16),
             TextField(
               obscureText: true,
+              controller: confirmPasswordController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 filled: true,
@@ -588,6 +653,11 @@ class MyProfileScreen extends StatelessWidget {
                 hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
               ),
             ),
+            const SizedBox(height: 8),
+            const Text(
+              'Password must contain:\n- 8+ characters\n- Uppercase letter\n- Lowercase letter\n- Number\n- Special character',
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
           ],
         ),
         actions: [
@@ -599,19 +669,46 @@ class MyProfileScreen extends StatelessWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Password updated successfully"),
-                  backgroundColor: Colors.green,
-                ),
-              );
+            onPressed: () async {
+              final newPass = newPasswordController.text;
+              final confirmPass = confirmPasswordController.text;
+
+              if (newPass.isEmpty && newPass != confirmPass) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Passwords do not match')),
+                );
+                return;
+              }
+
+              final error  = _validatePassword(newPass);
+              if (error != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(error)),
+                );
+                return;
+              }
+
+              try {
+                await FirebaseAuth.instance.currentUser?.updatePassword(newPass);
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Password updated successfully')),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to update password: $e')),
+                  );
+                }
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue[700],
             ),
-            child: const Text("Update Password",
+            child: const Text(
+              "Update Password",
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -620,7 +717,18 @@ class MyProfileScreen extends StatelessWidget {
     );
   }
 
-  void _showEditDialog(BuildContext context, String title, String description,
+  String? _validatePassword(String password) {
+    if (password.length < 8) return 'Password must be at least 8 characters';
+    if (!password.contains(RegExp(r'[A-Z]'))) return 'Missing uppercase letter';
+    if (!password.contains(RegExp(r'[a-z]'))) return 'Missing lowercase letter';
+    if (!password.contains(RegExp(r'[0-9]'))) return 'Missing number';
+    if (!password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+      return 'Missing special character';
+    }
+    return null;
+  }
+
+  /* void _showEditDialog(BuildContext context, String title, String description,
       TextEditingController controller) {
     showDialog(
       context: context,
@@ -677,14 +785,15 @@ class MyProfileScreen extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue[700],
             ),
-            child: const Text("Save",
+            child: const Text(
+              "Save",
               style: TextStyle(color: Colors.white),
             ),
           ),
         ],
       ),
     );
-  }
+  }*/
 
   Future<void> _handleLogout(BuildContext context) async {
     final shouldLogout = await showDialog<bool>(
@@ -712,7 +821,8 @@ class MyProfileScreen extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red[400],
             ),
-            child: const Text("Log Out",
+            child: const Text(
+              "Log Out",
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -726,11 +836,12 @@ class MyProfileScreen extends StatelessWidget {
         if (!context.mounted) return;
 
         // Navigate to sign in screen and remove all previous routes
-        Navigator.pushAndRemoveUntil(context,
+        Navigator.pushAndRemoveUntil(
+          context,
           MaterialPageRoute(
             builder: (context) => const SignInScreen(),
           ),
-              (route) => false,
+          (route) => false,
         );
       } catch (e) {
         if (!context.mounted) return;
