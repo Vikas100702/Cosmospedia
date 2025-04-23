@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart'; // Add this import for RenderAbstractViewport
+import 'package:flutter/rendering.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../../utils/app_colors.dart';
@@ -41,8 +41,6 @@ class _FaqScreenState extends State<FaqScreen> with AutomaticKeepAliveClientMixi
   final List<FaqCategory> _faqCategories = [];
   bool _isLoading = true;
   final ScrollController _scrollController = ScrollController();
-
-  // Keys for preserving expanded state across rebuilds
   final Map<String, GlobalKey> _itemKeys = {};
 
   @override
@@ -54,14 +52,7 @@ class _FaqScreenState extends State<FaqScreen> with AutomaticKeepAliveClientMixi
     _loadFaqs();
   }
 
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
   void _loadFaqs() async {
-    // Simulate loading delay
     await Future.delayed(const Duration(milliseconds: 500));
 
     setState(() {
@@ -313,37 +304,17 @@ class _FaqScreenState extends State<FaqScreen> with AutomaticKeepAliveClientMixi
 
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'CosmosPedia FAQs',
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF8E44AD), // Purple color like in screenshots
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.search, color: Colors.white),
-                    onPressed: () {
-                      // Implement search functionality
-                    },
-                  ),
-                ),
-              ],
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.3),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text(
+            'CosmosPedia FAQs',
+            style: theme.textTheme.headlineSmall?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
@@ -351,7 +322,6 @@ class _FaqScreenState extends State<FaqScreen> with AutomaticKeepAliveClientMixi
           child: ListView.builder(
             padding: const EdgeInsets.only(bottom: 16),
             key: const PageStorageKey('faq_list'),
-            controller: _scrollController,
             itemCount: _faqCategories.length,
             itemBuilder: (context, index) {
               final category = _faqCategories[index];
@@ -441,15 +411,12 @@ class _FaqScreenState extends State<FaqScreen> with AutomaticKeepAliveClientMixi
                   ),
                   itemBuilder: (context, itemIndex) {
                     final item = category.items[itemIndex];
-                    final String keyId = 'cat${categoryIndex}_item$itemIndex';
                     return _buildFaqItem(
                       item,
                       context,
                       iconColor,
-                      category,
                       categoryIndex,
                       itemIndex,
-                      _itemKeys[keyId] ?? GlobalKey(),
                     );
                   },
                 ),
@@ -461,9 +428,7 @@ class _FaqScreenState extends State<FaqScreen> with AutomaticKeepAliveClientMixi
     );
   }
 
-  void _toggleFaqItem(FaqItem item, GlobalKey itemKey, int categoryIndex, int itemIndex) {
-    final beforeScrollPosition = _scrollController.position.pixels;
-
+  void _toggleFaqItem(FaqItem item, int categoryIndex, int itemIndex) {
     setState(() {
       // Close all other open items first
       for (var cat in _faqCategories) {
@@ -478,42 +443,37 @@ class _FaqScreenState extends State<FaqScreen> with AutomaticKeepAliveClientMixi
       item.isExpanded = !item.isExpanded;
     });
 
-    // Don't attempt to scroll if closing the item
-    if (!item.isExpanded) return;
+    // Only attempt to scroll if we're opening the item
+    if (item.isExpanded) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final key = _itemKeys['cat${categoryIndex}_item$itemIndex'];
+        if (key?.currentContext != null && _scrollController.hasClients) {
+          final renderBox = key?.currentContext!.findRenderObject() as RenderBox;
+          final viewport = RenderAbstractViewport.of(renderBox);
+          final position = viewport.getOffsetToReveal(renderBox, 0.5).offset;
 
-    // Wait for layout calculation to complete
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Restore previous scroll position first to prevent jumping
-      if (_scrollController.hasClients) {
-        _scrollController.jumpTo(beforeScrollPosition);
-
-        // Then smoothly scroll to the selected item - using Scrollable.ensureVisible
-        final context = itemKey.currentContext;
-        if (context != null) {
-          Scrollable.ensureVisible(
-            context,
-            alignment: 0.0,
+          _scrollController.animateTo(
+            position,
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
           );
         }
-      }
-    });
+      });
+    }
   }
 
   Widget _buildFaqItem(
       FaqItem item,
       BuildContext context,
       Color categoryColor,
-      FaqCategory category,
       int categoryIndex,
       int itemIndex,
-      GlobalKey itemKey,
       ) {
     final theme = Theme.of(context);
+    final key = _itemKeys['cat${categoryIndex}_item$itemIndex'];
 
     return RepaintBoundary(
-      key: itemKey,
+      key: key,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -539,7 +499,7 @@ class _FaqScreenState extends State<FaqScreen> with AutomaticKeepAliveClientMixi
                 size: 20,
               ),
             ),
-            onTap: () => _toggleFaqItem(item, itemKey, categoryIndex, itemIndex),
+            onTap: () => _toggleFaqItem(item, categoryIndex, itemIndex),
           ),
           AnimatedSize(
             duration: const Duration(milliseconds: 200),
@@ -551,7 +511,7 @@ class _FaqScreenState extends State<FaqScreen> with AutomaticKeepAliveClientMixi
                 width: double.infinity,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.05), // Very subtle background
+                  color: Colors.white.withOpacity(0.05),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
                     color: categoryColor.withOpacity(0.3),

@@ -6,7 +6,7 @@ import '../../../../blocs/profile/profile_bloc.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../components/custom_app_bar/custom_app_bar.dart';
 import '../../sign_in_screen/sign_in_screen.dart';
-import '../FaqScreen.dart';
+import '../faq_screen.dart';
 
 class MyProfileView extends StatelessWidget {
   const MyProfileView({super.key});
