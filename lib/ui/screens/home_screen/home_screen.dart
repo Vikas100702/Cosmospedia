@@ -8,7 +8,7 @@ import '../../../blocs/home/home_state.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../utils/app_colors.dart';
 import '../asteroids_screen/asteroids_screen.dart';
-import '../my_profile/MyProfileScreen.dart';
+import '../my_profile/my_profile_screen.dart';
 import '../rover_screen/rover_screen.dart';
 import '../space_weather/cme/cme_screen.dart';
 import 'home_content.dart';
