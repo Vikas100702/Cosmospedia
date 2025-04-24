@@ -205,6 +205,18 @@ class SignUpScreen extends StatelessWidget {
                             text: state is SignUpLoading ? 'Creating Account...' : 'Sign Up',
                           ),
 
+                          // Terms and Conditions text
+                          const SizedBox(height: 12),
+                          Text(
+                            'By signing up, you agree to the Terms and Conditions of the application.',
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 12,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 8),
+
                           // Already have an account link
                           CustomTextButton(
                             onPressed: () {
