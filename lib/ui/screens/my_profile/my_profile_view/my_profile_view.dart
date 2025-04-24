@@ -1,3 +1,4 @@
+import 'package:cosmospedia/ui/screens/my_profile/PrivacyPolicyScreen.dart';
 import 'package:cosmospedia/ui/screens/my_profile/TermsAndConditionsScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -379,7 +380,14 @@ class MyProfileView extends StatelessWidget {
           subtitle: "How we handle your data",
           icon: Icons.privacy_tip,
           gradientColors: [Colors.teal[700]!, Colors.green[500]!],
-          onTap: () => _showComingSoonDialog(context, "Privacy Policy"),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const PrivacyPolicyScreen(),
+              ),
+            );
+          },
         ),
 
         const SizedBox(height: 32),

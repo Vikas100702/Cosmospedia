@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../utils/app_colors.dart';
 
-class TermsAndConditionsScreen extends StatelessWidget {
-  const TermsAndConditionsScreen({super.key});
+class PrivacyPolicyScreen extends StatelessWidget {
+  const PrivacyPolicyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class TermsAndConditionsScreen extends StatelessWidget {
               border: Border.all(color: Colors.indigo.withOpacity(0.5), width: 1),
             ),
             child: Text(
-              'Terms & Conditions',
+              'Privacy Policy',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
@@ -48,12 +48,12 @@ class TermsAndConditionsScreen extends StatelessWidget {
             ),
           ),
         ),
-        body: _buildTermsContent(context),
+        body: _buildPrivacyContent(context),
       ),
     );
   }
 
-  Widget _buildTermsContent(BuildContext context) {
+  Widget _buildPrivacyContent(BuildContext context) {
     final theme = Theme.of(context);
 
     return Column(
@@ -73,7 +73,7 @@ class TermsAndConditionsScreen extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                'CosmosPedia Terms',
+                'CosmosPedia Privacy Policy',
                 style: theme.textTheme.headlineSmall?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -87,74 +87,104 @@ class TermsAndConditionsScreen extends StatelessWidget {
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             children: [
-              _buildTermsSection(
+              _buildPrivacySection(
                 context,
                 '1. Introduction',
-                'Welcome to the CosmosPedia mobile application (hereinafter referred to as the "App"), developed and maintained by CosmosPedia. These Terms and Conditions ("Terms") govern your access to and use of the App. By accessing, installing, or using the App, you agree to be bound by these Terms. We encourage you to read them carefully.',
+                'Welcome to CosmosPedia ("we", "our", or "us"). This Privacy Policy governs your use of the CosmosPedia mobile application (the "App") and outlines how we collect, utilize, disclose, and safeguard your personal information. We are committed to ensuring that your privacy is protected and that your data is handled in accordance with applicable laws and industry standards.',
                 Icons.info_outline,
                 Colors.blue,
               ),
-              _buildTermsSection(
+              _buildPrivacySection(
                 context,
-                '2. Acceptance of Terms',
-                'By downloading, installing, or using the App, you acknowledge and affirm that you have read, understood, and agree to comply with these Terms in full. If you do not agree with any part of these Terms, you must refrain from using the App.',
-                Icons.check_circle_outline,
+                '2. Information Collection and Use',
+                'We collect various categories of information to deliver an optimal and personalized user experience:\n'
+                    '• Account Information: When registering for an account, we collect your email address, display name, and password to facilitate authentication and account management.\n'
+                    '• Usage Data: We automatically collect data relating to your interactions with the App, including device type, operating system, app version, and engagement metrics with features.\n'
+                    '• Favorites Data: User-saved preferences, such as selected asteroids, rover imagery, and space weather events, are stored to personalize content and enhance usability.\n'
+                    '• Crash Reports: In the event of a system malfunction, diagnostic information is collected to support issue resolution and improve app stability.',
+                Icons.data_usage,
                 Colors.green,
               ),
-              _buildTermsSection(
+              _buildPrivacySection(
                 context,
-                '3. License and Permitted Use',
-                'CosmosPedia grants you a limited, revocable, non-exclusive, non-transferable, and non-sublicensable license to use the App strictly for personal, non-commercial purposes, subject to these Terms. You agree not to exploit the App or its content for any unlawful, unauthorized, or prohibited activity.',
-                Icons.verified_user_outlined,
-                Colors.cyan,
-              ),
-              _buildTermsSection(
-                context,
-                '4. User Accounts',
-                'Certain functionalities of the App may require you to register an account. You are solely responsible for maintaining the confidentiality and security of your account credentials and for all activities that occur under your account. You agree to promptly notify us of any unauthorized access or security breaches related to your account.',
-                Icons.person_outline,
+                '3. Firebase Services Integration',
+                'We utilize the following Firebase services:\n'
+                    '• Firebase Authentication: For secure user sign-in and account management.\n'
+                    '• Firebase Analytics: To gain insights into user behavior and app performance.\n'
+                    '• Firebase Crashlytics: For real-time crash reporting and issue diagnosis.',
+                Icons.cloud_outlined,
                 Colors.orange,
               ),
-              _buildTermsSection(
+              _buildPrivacySection(
                 context,
-                '5. Content Disclaimer',
-                'All content presented through the App—including text, imagery, data, and multimedia—is provided for general informational purposes only. While we endeavor to ensure accuracy and reliability, CosmosPedia makes no warranties, representations, or guarantees—express or implied—regarding the completeness, precision, or reliability of the content.',
-                Icons.warning_amber_outlined,
+                '4. How We Use Your Data',
+                'We process your personal data for the following legitimate business purposes:\n'
+                    '• To deliver, operate, and maintain the App and its features\n'
+                    '• To inform users of updates, enhancements, or critical changes to the App\n'
+                    '• To enable participation in interactive and personalized features\n'
+                    '• To provide responsive customer support\n'
+                    '• To perform data analysis to refine and evolve the App\n'
+                    '• To monitor overall usage trends and engagement\n'
+                    '• To detect, investigate, and mitigate technical issues and security vulnerabilities',
+                Icons.psychology_outlined,
+                Colors.cyan,
+              ),
+              _buildPrivacySection(
+                context,
+                '5. Data Sharing and Disclosure',
+                'We do not sell, rent, or lease your personal information. Disclosure of personal data is limited to the following instances:\n'
+                    '• Service Providers: Trusted third parties such as Firebase may process your information on our behalf for purposes such as hosting, analytics, and customer support.\n'
+                    '• Legal Compliance: We may disclose your data if mandated by law or in response to valid requests from public authorities.',
+                Icons.share_outlined,
                 Colors.amber,
               ),
-              _buildTermsSection(
+              _buildPrivacySection(
                 context,
-                '6. Intellectual Property Rights',
-                'The App, including but not limited to its design, functionality, visual elements, codebase, and all associated content, is the exclusive property of CosmosPedia and its licensors. It is protected under applicable intellectual property laws, including copyright, trademark, and patent laws. Unauthorized reproduction, modification, or distribution of any part of the App is strictly prohibited.',
-                Icons.copyright_outlined,
+                '6. Data Security',
+                'We employ a combination of administrative, technical, and physical safeguards to protect your data. These measures include encrypted data transmission, secure authentication protocols, and regular security assessments. While we strive to use commercially acceptable means to protect your information, no electronic transmission or storage method is entirely foolproof.',
+                Icons.security,
                 Colors.purple,
               ),
-              _buildTermsSection(
+              _buildPrivacySection(
                 context,
-                '7. Third-Party Links and Services',
-                'The App may contain links to or integrations with third-party websites, services, or content not operated or controlled by CosmosPedia. We assume no responsibility for the content, privacy practices, or policies of any third parties. Your interaction with such external resources is governed by their respective terms and policies.',
-                Icons.link,
+                '7. Your Data Protection Rights',
+                'Depending on your jurisdiction, you may be entitled to exercise certain rights under data protection laws, including:\n'
+                    '• The right to access, correct, or delete your personal information\n'
+                    '• The right to restrict or object to data processing\n'
+                    '• The right to data portability\n'
+                    '• The right to withdraw consent where processing is based on consent',
+                Icons.gavel_outlined,
                 Colors.teal,
               ),
-              _buildTermsSection(
+              _buildPrivacySection(
                 context,
-                '8. Limitation of Liability',
-                'To the maximum extent permitted by applicable law, CosmosPedia, its affiliates, officers, directors, employees, agents, partners, and licensors shall not be liable for any direct, indirect, incidental, special, consequential, or exemplary damages—including but not limited to loss of revenue, data, or business opportunities—arising from or related to your access to or use of the App.',
-                Icons.policy_outlined,
+                '8. Children\'s Privacy',
+                'The App is not intended for children under the age of 13. We do not knowingly collect personal data from children. If we become aware that we have collected information from a child without verifiable parental consent, we will take appropriate steps to delete such data promptly.',
+                Icons.child_care_outlined,
                 Colors.indigo,
               ),
-              _buildTermsSection(
+              _buildPrivacySection(
                 context,
-                '9. Amendments to the Terms',
-                'We reserve the right to amend, revise, or update these Terms at our sole discretion. Material changes will be communicated via the App or by other appropriate means. Continued use of the App after the effective date of the updated Terms constitutes your acceptance of the revised agreement.',
+                '9. Changes to This Privacy Policy',
+                'We may revise this Privacy Policy from time to time to reflect changes in legal, regulatory, or operational requirements. We will notify users of significant changes by updating this page and modifying the "Effective Date" above.',
                 Icons.update_outlined,
                 Colors.deepPurple,
               ),
-              _buildTermsSection(
+              _buildPrivacySection(
                 context,
-                '10. Governing Law and Jurisdiction',
-                'These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which CosmosPedia operates, excluding any conflict of laws provisions. You agree to submit to the exclusive jurisdiction of the courts located in said jurisdiction for the resolution of any disputes arising out of or in connection with these Terms or the use of the App.',
-                Icons.balance_outlined,
+                '10. Platform-Specific Disclosures',
+                'Google Play Store – Data Safety:\n'
+                    '• Data Collected: Email address, usage statistics, crash diagnostics\n'
+                    '• Purpose: Authentication, core app functionality, performance analytics\n'
+                    '• Third-Party Sharing: Limited to Firebase services (managed by Google)\n'
+                    '• Security Practices: Data encrypted in transit, secure authentication protocols employed\n'
+                    '• User Control: Data deletion requests may be submitted via in-app settings or by contacting support\n\n'
+                    'Apple App Store – Privacy Nutrition Label:\n'
+                    '• Identifiers: User ID (for user account functionality)\n'
+                    '• Usage Data: Feature interactions, session activity\n'
+                    '• Diagnostics: Application crash logs\n'
+                    '• Usage Purpose: Functional operation of the app, analytics, and service enhancement',
+                Icons.devices_outlined,
                 Colors.blue,
               ),
               _buildContactSection(context),
@@ -168,7 +198,7 @@ class TermsAndConditionsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTermsSection(
+  Widget _buildPrivacySection(
       BuildContext context, String title, String content, IconData icon, Color iconColor) {
     final theme = Theme.of(context);
 
@@ -282,7 +312,7 @@ class TermsAndConditionsScreen extends StatelessWidget {
                 const SizedBox(width: 16),
                 Expanded(
                   child: Text(
-                    '11. Contact Information',
+                    '11. Contact Us',
                     style: theme.textTheme.titleLarge?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -293,7 +323,7 @@ class TermsAndConditionsScreen extends StatelessWidget {
             ),
             Divider(color: Colors.pink.withOpacity(0.3), height: 24),
             Text(
-              'For any inquiries, clarifications, or concerns regarding these Terms, please reach out to us via:',
+              'If you have any questions, concerns, or requests regarding this Privacy Policy, you may contact us:',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: Colors.white.withOpacity(0.9),
                 height: 1.5,
@@ -340,7 +370,6 @@ class TermsAndConditionsScreen extends StatelessWidget {
     );
   }
 
-  // Fixed contact detail widget to prevent overflow
   Widget _buildFixedContactDetail(
       BuildContext context, String label, String value, IconData icon, Color iconColor) {
     return Row(
@@ -405,7 +434,7 @@ class TermsAndConditionsScreen extends StatelessWidget {
             elevation: 0,
           ),
           child: const Text(
-            'I Accept These Terms',
+            'I Accept This Privacy Policy',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
