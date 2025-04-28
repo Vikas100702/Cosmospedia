@@ -16,6 +16,8 @@ class HomeContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Initialize data loading when widget is first built
+    context.read<HomeBloc>().add(LoadHomeData());
 
     final l10n = AppLocalizations.of(context);
     final screenSize = MediaQuery.of(context).size;
@@ -60,11 +62,23 @@ class HomeContent extends StatelessWidget {
         ),
         body: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
-            if (state.status == HomeStatus.initial) {
+            /*if (state.status == HomeStatus.initial) {
               context.read<HomeBloc>().add(LoadHomeData());
               return const Center(child: CircularProgressIndicator());
             }
             if (state.status == HomeStatus.loading) {
+              return const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    Text("Loading"),
+                  ],
+                ),
+              );
+            }*/
+            if (state.status == HomeStatus.loading &&
+                state.apodImages.isEmpty) {
               return const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -85,11 +99,14 @@ class HomeContent extends StatelessWidget {
                 ),
               );
             }
+
+            // Show cached data even if we're loading new data during refresh
+
             return RefreshIndicator(
               onRefresh: () async {
                 context.read<HomeBloc>().add(RefreshHomeData());
               },
-              child: LayoutBuilder(
+              /*child: LayoutBuilder(
                 builder: (context, constraints) {
                   return SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -114,6 +131,27 @@ class HomeContent extends StatelessWidget {
                     ),
                   );
                 },
+              ),*/
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    if (state.apodImages.isNotEmpty)
+                      buildImageSlider(
+                        context,
+                        _prepareApodDataForSlider(state.apodImages),
+                        MediaQuery.of(context).size.height *
+                            (isPortrait ? 0.3 : 0.5),
+                        BoxConstraints(maxWidth: screenSize.width),
+                      ),
+                    if (state.newsItems.isNotEmpty)
+                      buildNewsList(
+                        context,
+                        state.newsItems,
+                        BoxConstraints(maxWidth: screenSize.width),
+                      ),
+                  ],
+                ),
               ),
             );
           },
