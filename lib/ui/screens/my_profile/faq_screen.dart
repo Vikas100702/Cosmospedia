@@ -320,6 +320,7 @@ class _FaqScreenState extends State<FaqScreen> with AutomaticKeepAliveClientMixi
         ),
         Expanded(
           child: ListView.builder(
+            primary: false,
             padding: const EdgeInsets.only(bottom: 16),
             key: const PageStorageKey('faq_list'),
             itemCount: _faqCategories.length,
