@@ -1,5 +1,5 @@
-// lib/data/repositories/space_weather/cme_repository.dart
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../../models/space_weather/cme_model.dart';
 import '../../../utils/constants.dart';
@@ -19,7 +19,9 @@ class CMERepository {
       );
 
       final response = await client.get(url);
-      print('CME API Response: ${response.statusCode} - ${response.body}');
+      if (kDebugMode) {
+        print('CME API Response: ${response.statusCode} - ${response.body}');
+      }
 
       if (response.statusCode == 200) {
         final dynamic responseData = json.decode(response.body);
@@ -30,12 +32,18 @@ class CMERepository {
               if (e is Map<String, dynamic>) {
                 return CmeModel.fromJson(e);
               } else {
-                print('Unexpected item type: ${e.runtimeType}');
+                if (kDebugMode) {
+                  print('Unexpected item type: ${e.runtimeType}');
+                }
                 return _createErrorCMEModel();
               }
             } catch (e, stack) {
-              print('Error parsing CME item: $e\n$stack');
-              print('Problematic item: $e');
+              if (kDebugMode) {
+                print('Error parsing CME item: $e\n$stack');
+              }
+              if (kDebugMode) {
+                print('Problematic item: $e');
+              }
               return _createErrorCMEModel();
             }
           }).where((model) => model.activityID != 'error').toList();
@@ -48,7 +56,9 @@ class CMERepository {
         throw Exception('Failed to fetch CME data: ${response.statusCode} - ${response.body}');
       }
     } catch (error, stackTrace) {
-      print('Error loading CME data: $error\n$stackTrace');
+      if (kDebugMode) {
+        print('Error loading CME data: $error\n$stackTrace');
+      }
       throw Exception('Failed to load CME data: $error');
     }
   }

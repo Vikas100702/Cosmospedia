@@ -1,4 +1,3 @@
-// lib/data/models/asteroid.dart
 import 'package:equatable/equatable.dart';
 
 class Asteroid extends Equatable {

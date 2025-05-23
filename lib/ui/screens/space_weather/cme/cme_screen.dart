@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../../../blocs/space_weather/cme/cme_bloc.dart';
 import '../../../../data/models/space_weather/cme_model.dart';
-import '../../../../data/repositories/space_weather/cme_repository.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../components/custom_app_bar/custom_app_bar.dart';
 
@@ -518,10 +517,10 @@ class CMEScreen extends StatelessWidget {
                   ),
                   titlesData: FlTitlesData(
                     show: true,
-                    rightTitles: AxisTitles(
+                    rightTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
-                    topTitles: AxisTitles(
+                    topTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
                     bottomTitles: AxisTitles(
@@ -584,7 +583,7 @@ class CMEScreen extends StatelessWidget {
                           final index = spot.x.toInt();
                           final date = dates[index];
                           return LineTooltipItem(
-                            '${date}: ${spot.y.toInt()} events',
+                            '$date: ${spot.y.toInt()} events',
                             const TextStyle(color: Colors.white),
                           );
                         }).toList();
@@ -736,10 +735,10 @@ class CMEScreen extends StatelessWidget {
                         },
                       ),
                     ),
-                    rightTitles: AxisTitles(
+                    rightTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
-                    topTitles: AxisTitles(
+                    topTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
                   ),
@@ -951,7 +950,7 @@ class CMEScreen extends StatelessWidget {
                               const TextStyle(color: Colors.white),
                             );
                           }
-                          return LineTooltipItem('', const TextStyle());
+                          return const LineTooltipItem('', TextStyle());
                         }).toList();
                       },
                     ),
@@ -969,10 +968,10 @@ class CMEScreen extends StatelessWidget {
                   ),
                   titlesData: FlTitlesData(
                     show: true,
-                    rightTitles: AxisTitles(
+                    rightTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
-                    topTitles: AxisTitles(
+                    topTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
                     bottomTitles: AxisTitles(
@@ -983,11 +982,11 @@ class CMEScreen extends StatelessWidget {
                         getTitlesWidget: (value, meta) {
                           final index = value.toInt();
                           if (index == 0 || index == speedData.length - 1 || index % 5 == 0) {
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
+                            return const Padding(
+                              padding: EdgeInsets.only(top: 8.0),
                               child: Text(
                                 'CME',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: Colors.white70,
                                   fontSize: 10,
                                 ),
@@ -1079,7 +1078,7 @@ class CMEScreen extends StatelessWidget {
                       color: Colors.white.withOpacity(0.5),
                       barWidth: 1,
                       isStrokeCapRound: true,
-                      dotData: FlDotData(show: false),
+                      dotData: const FlDotData(show: false),
                       dashArray: [5, 5],
                     ),
                   ],
@@ -1230,10 +1229,10 @@ class CMEScreen extends StatelessWidget {
                         },
                       ),
                     ),
-                    rightTitles: AxisTitles(
+                    rightTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
-                    topTitles: AxisTitles(
+                    topTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
                   ),
@@ -1499,18 +1498,10 @@ class CMEScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        /*subtitle: Text(
-          'Type: ${cme.type ?? 'Unknown'} | Source: ${cme.sourceLocation ?? 'Unknown'}',
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 12,
-          ),
-        ),*/
         leading: Container(
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
-            /*color: _getCMETypeColor(cme.type),*/
           ),
           child: const Icon(
             Icons.solar_power,

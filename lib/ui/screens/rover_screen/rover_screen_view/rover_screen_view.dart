@@ -123,7 +123,7 @@ class RoverScreenView extends StatelessWidget {
                           ),
                           SizedBox(height: screenSize.height * 0.04),
                           Padding(
-                            padding: EdgeInsets.symmetric(vertical: 50),
+                            padding: const EdgeInsets.symmetric(vertical: 50),
                             child: BlocProvider.value(
                               value: RoverManifestBloc(
                                 roverManifestRepository: RoverManifestRepository(),

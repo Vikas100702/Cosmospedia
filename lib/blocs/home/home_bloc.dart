@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/models/apod.dart';
 import '../../data/repositories/apod_repositories.dart';
 import 'home_event.dart';
 import 'home_state.dart';
@@ -26,8 +25,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         ),
       );
       try {
-        final apodImages = await apodRepository.getRecentApods(20); //For slider
-        final newsItems = await apodRepository.getRecentApods(20); //For Cards.
+        final apodImages = await apodRepository.getRecentApods(20); //For slider and cards
         emit(state.copyWith(
           status: HomeStatus.success,
           apodImages: apodImages,
@@ -50,8 +48,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       status: HomeStatus.loading,
     ));
     try {
-      final apodImages = await apodRepository.getRecentApods(20); //For slider
-      final newsItems = await apodRepository.getRecentApods(20); //For Cards.
+      final apodImages = await apodRepository.getRecentApods(20); //For slider and Cards.
       emit(
         state.copyWith(
           apodImages: apodImages,

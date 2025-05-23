@@ -1,4 +1,4 @@
-// lib/blocs/space_weather/cme_bloc.dart
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -35,7 +35,7 @@ class CMEBloc extends Bloc<CMEEvent, CMEState> {
             endDate: event.endDate,
           );
         } catch (e) {
-          print('Error loading CME analysis: $e');
+          debugPrint('Error loading CME analysis: $e');
           // Continue with empty analysis list
         }
       }
@@ -46,7 +46,7 @@ class CMEBloc extends Bloc<CMEEvent, CMEState> {
         cmeAnalysisList: cmeAnalysisList,
       ));
     } catch (error, stackTrace) {
-      print('Error in _loadCMEData: $error\n$stackTrace');
+      debugPrint('Error in _loadCMEData: $error\n$stackTrace');
       emit(state.copyWith(
         status: CMEStatus.failure,
         error: error.toString(),

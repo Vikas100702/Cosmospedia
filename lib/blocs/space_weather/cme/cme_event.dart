@@ -1,4 +1,3 @@
-// lib/blocs/space_weather/cme_event.dart
 part of 'cme_bloc.dart';
 
 abstract class CMEEvent extends Equatable {

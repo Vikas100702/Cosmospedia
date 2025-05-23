@@ -1,5 +1,5 @@
-import 'package:cosmospedia/ui/screens/my_profile/PrivacyPolicyScreen.dart';
-import 'package:cosmospedia/ui/screens/my_profile/TermsAndConditionsScreen.dart';
+import 'package:cosmospedia/ui/screens/my_profile/privacy_policy_screen.dart';
+import 'package:cosmospedia/ui/screens/my_profile/terms_and_conditions_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,14 +17,6 @@ class MyProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    // final currentUser = FirebaseAuth.instance.currentUser;
-
-    // User data from firebase
-    /*final user = {
-      'name': currentUser?.displayName ?? 'Cosmos Explorer',
-      'email': currentUser?.email ?? 'user@cosmospedia.com',
-      'initials': _getInitials(currentUser?.displayName ?? 'CE'),
-    };*/
 
     return Container(
       decoration: const BoxDecoration(
@@ -93,13 +85,6 @@ class MyProfileView extends StatelessWidget {
       ),
     );
   }
-
-  /*String _getInitials(String name) {
-    if (name.isEmpty) return 'CE';
-    final parts = name.split(' ');
-    if (parts.length == 1) return parts[0][0].toUpperCase();
-    return '${parts[0][0]}${parts[parts.length - 1][0]}'.toUpperCase();
-  }*/
 
   Widget _buildUserHeader(BuildContext context, String name, String email) {
     final theme = Theme.of(context);
@@ -253,15 +238,6 @@ class MyProfileView extends StatelessWidget {
           gradientColors: [Colors.blue[700]!, Colors.cyan[400]!],
           onTap: () => _handleNameEdit(context, currentName),
         ),
-
-        /*_buildProfileOptionCard(
-          context,
-          title: "Mail",
-          subtitle: "Update your email address",
-          icon: Icons.mail,
-          gradientColors: [Colors.blue[700]!, Colors.cyan[400]!],
-          onTap: () => _handleMailEdit(context),
-        ),*/
 
         _buildProfileOptionCard(
           context,
@@ -743,73 +719,6 @@ class MyProfileView extends StatelessWidget {
     }
     return null;
   }
-
-  /* void _showEditDialog(BuildContext context, String title, String description,
-      TextEditingController controller) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey[900],
-        title: Text(
-          title,
-          style: const TextStyle(color: Colors.white),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              description,
-              style: const TextStyle(color: Colors.white70),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: controller,
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white.withOpacity(0.1),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
-                ),
-                hintText: "Enter new value",
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              "Cancel",
-              style: TextStyle(color: Colors.blue[300]),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // Show success message
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text("${title.split(' ')[1]} updated successfully"),
-                  backgroundColor: Colors.green,
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue[700],
-            ),
-            child: const Text(
-              "Save",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-    );
-  }*/
 
   Future<void> _handleLogout(BuildContext context) async {
     final shouldLogout = await showDialog<bool>(

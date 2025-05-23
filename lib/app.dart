@@ -11,42 +11,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /*return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        // User is signed in
-        if (snapshot.hasData) {
-          return MaterialApp(
-              localizationsDelegates: const [
-                AppLocalizationsDelegate(),
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: const [
-                Locale('en', ''), //English
-                // Add more locales as needed
-              ],
-              title: 'Cosmospedia', // Use a hardcoded fallback title
-              theme: AppTheme.lightTheme,
-              darkTheme: AppTheme.darkTheme,
-              themeMode: ThemeMode.system,
-              debugShowCheckedModeBanner: false,
-              initialRoute: '/',
-              onGenerateRoute: AppRouter.onGenerateRoute,
-              home: const SplashScreen(),
-              */
-    /*home: Builder(
-                builder: (context) {
-                  // Use a fallback method to avoid null check
-                  final l10n = AppLocalizations.of(context) ?? AppLocalizations.of(context);
-                  return const SignInScreen();
-                },
-              )*/
-    /*
-          );
-        }*/
-
     // User is not signed in
     return MaterialApp(
       localizationsDelegates: const [
@@ -68,13 +32,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       onGenerateRoute: AppRouter.onGenerateRoute,
       home: const SplashScreen(),
-      /*home: Builder(
-              builder: (context) {
-                // Use a fallback method to avoid null check
-                final l10n = AppLocalizations.of(context) ?? AppLocalizations.of(context);
-                return const SignInScreen();
-              },
-            )*/
     );
   }
 }

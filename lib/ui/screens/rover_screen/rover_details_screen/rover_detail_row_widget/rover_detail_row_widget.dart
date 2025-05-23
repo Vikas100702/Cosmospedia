@@ -1,4 +1,3 @@
-// lib/ui/components/rover/detail_row_widget.dart
 import 'package:flutter/material.dart';
 
 class RoverDetailRowWidget extends StatelessWidget {

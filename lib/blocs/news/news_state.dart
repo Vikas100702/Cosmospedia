@@ -1,35 +1,3 @@
-/*
-part of 'news_bloc.dart';
-
-enum NewsStatus { initial, loading, success, failure }
-
-class NewsState extends Equatable{
-  final NewsStatus status;
-  final List<ApodModel> newsItems;
-  final String? error;
-
-  const NewsState({
-    this.status = NewsStatus.initial,
-    this.newsItems = const [],
-    this.error,
-  });
-
-  NewsState copyWith({
-    NewsStatus? status,
-    List<ApodModel>? newsItems,
-    String? error,
-  }){
-    return NewsState(
-      status: status ?? this.status,
-      newsItems: newsItems ?? this.newsItems,
-      error: error ?? this.error,
-    );
-  }
-
-  @override
-  List<Object?> get props => [status, newsItems, error];
-}*/
-
 import 'package:equatable/equatable.dart';
 import '../../data/models/apod.dart';
 

@@ -1,4 +1,3 @@
-// lib/blocs/space_weather/cme_state.dart
 part of 'cme_bloc.dart';
 
 enum CMEStatus { initial, loading, success, failure }

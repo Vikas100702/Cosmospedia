@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cosmospedia/utils/app_colors.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -74,7 +75,9 @@ class _ImagePreviewState extends State<ImagePreview> {
       final file = File(filePath);
 
       // Debugging: Print file path
-      print('Saving file to: $file');
+      if (kDebugMode) {
+        print('Saving file to: $file');
+      }
 
       // Download with progress
       List<int> bytes = [];
@@ -92,7 +95,9 @@ class _ImagePreviewState extends State<ImagePreview> {
 
       if (mounted) {
         // Debugging: Confirm file saved
-        print('File saved successfully: ${await file.exists()}');
+        if (kDebugMode) {
+          print('File saved successfully: ${await file.exists()}');
+        }
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -102,7 +107,9 @@ class _ImagePreviewState extends State<ImagePreview> {
       }
     } catch (error) {
       if (mounted) {
-        print('Error downloading image: $error'); // Debugging error message
+        if (kDebugMode) {
+          print('Error downloading image: $error');
+        } // Debugging error message
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

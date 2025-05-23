@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
 class CmeModel extends Equatable {
   final String activityID;
@@ -154,8 +155,12 @@ class CMEAnalysis extends Equatable {
             : null,
       );
     } catch (e, stack) {
-      print('Error parsing CMEAnalysis: $e\n$stack');
-      print('Problematic JSON: $json');
+      if (kDebugMode) {
+        print('Error parsing CMEAnalysis: $e\n$stack');
+      }
+      if (kDebugMode) {
+        print('Problematic JSON: $json');
+      }
       rethrow;
     }
   }
@@ -260,8 +265,12 @@ class Enlil extends Equatable {
             : [],
       );
     } catch (e, stack) {
-      print('Error parsing Enlil: $e\n$stack');
-      print('Problematic JSON: $json');
+      if (kDebugMode) {
+        print('Error parsing Enlil: $e\n$stack');
+      }
+      if (kDebugMode) {
+        print('Problematic JSON: $json');
+      }
       rethrow;
     }
   }

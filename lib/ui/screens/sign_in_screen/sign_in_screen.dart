@@ -4,7 +4,6 @@ import 'package:cosmospedia/ui/screens/home_screen/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '';
 import '../../components/custom_buttons/custom_elevated_button/custom_elevated_button.dart';
 import '../sign_up_screen/sign_up_screen.dart';
 
@@ -13,9 +12,9 @@ class SignInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _emailController = TextEditingController();
-    final _passwordController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
 
     return BlocProvider(
       create: (context) => SignInBloc(),
@@ -46,7 +45,7 @@ class SignInScreen extends StatelessWidget {
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.all(24),
                     child: Form(
-                      key: _formKey,
+                      key: formKey,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -59,10 +58,27 @@ class SignInScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 32),
                           Text(
-                            'Welcome Back',
-                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            'Welcome to',
+                            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            'CosmosPedia',
+                            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            'A Personalized Astronomical Companion',
+                            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -70,7 +86,7 @@ class SignInScreen extends StatelessWidget {
 
                           // Email Field
                           TextFormField(
-                            controller: _emailController,
+                            controller: emailController,
                             keyboardType: TextInputType.emailAddress,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
@@ -98,7 +114,7 @@ class SignInScreen extends StatelessWidget {
 
                           // Password Field
                           TextFormField(
-                            controller: _passwordController,
+                            controller: passwordController,
                             obscureText: true,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
@@ -123,48 +139,6 @@ class SignInScreen extends StatelessWidget {
                             },
                           ),
                           const SizedBox(height: 24),
-
-                          // Sign In Button
-                          /*ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
-                            },
-                            child: Text('Sign In',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),),
-                            */
-                          /*onPressed: state is SignInLoading
-                                ? null
-                                : () {
-                              if (_formKey.currentState?.validate() ?? false) {
-                                context.read<SignInBloc>().add(
-                                  SignInWithEmailPassword(
-                                    _emailController.text,
-                                    _passwordController.text,
-                                  ),
-                                );
-                              }
-                            },
-                            child: state is SignInLoading
-                                ? const CircularProgressIndicator()
-                                : const Text(
-                              'Sign In',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),*//*
-                          ),*/
                           CustomElevatedButton(
                             onPressed: () {
                               if (state is SignInLoading) {
@@ -172,53 +146,27 @@ class SignInScreen extends StatelessWidget {
                                 return;
                               }
 
-                              if (_formKey.currentState?.validate() ?? false) {
+                              if (formKey.currentState?.validate() ?? false) {
                                 context.read<SignInBloc>().add(
                                   SignInWithEmailPassword(
-                                    _emailController.text,
-                                    _passwordController.text,
+                                    emailController.text,
+                                    passwordController.text,
                                   ),
                                 );
                               }
                             },
                             text: state is SignInLoading ? 'Signing In...' : 'Sign In',
                           ),
-
-                          //SignUp Button
-                          /*TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const SignUpScreen()),
-                              );
-                            },
-                            child: const Text(
-                              'Don\'t have an account? Sign Up',
-                              style: TextStyle(color: Colors.white70),
-                            ),
-                          ),*/
-
                           CustomTextButton(onPressed: (){
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => const SignUpScreen()),
                             );
                           }, text: 'Don\'t have an account? Sign Up',),
-
-                          // Forgot Password Link
-                          /*TextButton(
-                            onPressed: () {
-                              // Add forgot password functionality
-                            },
-                            child: const Text(
-                              'Forgot Password?',
-                              style: TextStyle(color: Colors.white70),
-                            ),
-                          ),*/
                           CustomTextButton(
                             onPressed: () {
                               // Add forgot password functionality
-                              _showPasswordResetDialog(context, _emailController);
+                              _showPasswordResetDialog(context, emailController);
                             },
                             text: 'Forgot Password?',
                           ),

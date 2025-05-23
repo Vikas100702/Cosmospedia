@@ -1,5 +1,3 @@
-// lib/ui/screens/rover_screen/rover_calendar_alert_dialog/rover_calendar_alert_dialog.dart
-import 'package:cosmospedia/data/models/mars/rover.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';

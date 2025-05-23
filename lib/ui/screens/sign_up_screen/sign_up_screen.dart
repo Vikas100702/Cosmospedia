@@ -11,11 +11,11 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _nameController = TextEditingController();
-    final _emailController = TextEditingController();
-    final _passwordController = TextEditingController();
-    final _confirmPasswordController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
+    final nameController = TextEditingController();
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+    final confirmPasswordController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
 
     return BlocProvider(
       create: (context) => SignUpBloc(),
@@ -46,7 +46,7 @@ class SignUpScreen extends StatelessWidget {
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.all(24),
                     child: Form(
-                      key: _formKey,
+                      key: formKey,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -72,7 +72,7 @@ class SignUpScreen extends StatelessWidget {
 
                           //User Name Field
                           TextFormField(
-                            controller: _nameController,
+                            controller: nameController,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                               labelText: 'Display Name',
@@ -98,7 +98,7 @@ class SignUpScreen extends StatelessWidget {
                           const SizedBox(height: 16),
                           // Email Field
                           TextFormField(
-                            controller: _emailController,
+                            controller: emailController,
                             keyboardType: TextInputType.emailAddress,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
@@ -128,7 +128,7 @@ class SignUpScreen extends StatelessWidget {
 
                           // Password Field
                           TextFormField(
-                            controller: _passwordController,
+                            controller: passwordController,
                             obscureText: true,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
@@ -158,7 +158,7 @@ class SignUpScreen extends StatelessWidget {
 
                           // Confirm Password Field
                           TextFormField(
-                            controller: _confirmPasswordController,
+                            controller: confirmPasswordController,
                             obscureText: true,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
@@ -175,7 +175,7 @@ class SignUpScreen extends StatelessWidget {
                                   color: Colors.white70),
                             ),
                             validator: (value) {
-                              if (value != _passwordController.text) {
+                              if (value != passwordController.text) {
                                 return 'Passwords do not match';
                               }
                               return null;
@@ -191,13 +191,13 @@ class SignUpScreen extends StatelessWidget {
                                 return;
                               }
 
-                              if (_formKey.currentState?.validate() ?? false) {
+                              if (formKey.currentState?.validate() ?? false) {
                                 context.read<SignUpBloc>().add(
                                   SignUpWithEmailPassword(
-                                    _nameController.text,
-                                    _emailController.text,
-                                    _passwordController.text,
-                                    _confirmPasswordController.text,
+                                    nameController.text,
+                                    emailController.text,
+                                    passwordController.text,
+                                    confirmPasswordController.text,
                                   ),
                                 );
                               }
@@ -207,7 +207,7 @@ class SignUpScreen extends StatelessWidget {
 
                           // Terms and Conditions text
                           const SizedBox(height: 12),
-                          Text(
+                          const Text(
                             'By signing up, you agree to the Terms and Conditions of the application.',
                             style: TextStyle(
                               color: Colors.white70,
