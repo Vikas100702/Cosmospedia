@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:cosmospedia/ui/screens/news_screen/news_image_preview/news_iamge_preview.dart';
+import 'package:cosmospedia/ui/screens/news_screen/news_image_preview/news_image_preview.dart';
 import 'package:cosmospedia/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 

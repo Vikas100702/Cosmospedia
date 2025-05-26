@@ -90,7 +90,9 @@ class RoverPhotosGrid extends StatelessWidget {
                       (photo.camera?.name?.toLowerCase() ==
                           cameraName?.toLowerCase());
 
-                  final matchesDate = selectedDate == null || (photo.earthDate == DateFormat('yyy-MM-dd').format(selectedDate!));
+                  final matchesDate = selectedDate == null ||
+                      (photo.earthDate ==
+                          DateFormat('yyy-MM-dd').format(selectedDate!));
 
                   if (matchesCamera && matchesDate) {
                     photos.add(photo);
@@ -215,22 +217,10 @@ class RoverPhotosGrid extends StatelessWidget {
                                           context
                                               .read<FavoritesBloc>()
                                               .add(RemoveFavorite(photo));
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                                content: Text(
-                                                    'Removed from favorites')),
-                                          );
                                         } else {
                                           context
                                               .read<FavoritesBloc>()
                                               .add(AddFavorite(photo));
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                                content:
-                                                    Text('Added to favorites')),
-                                          );
                                         }
                                       },
                                     );
@@ -253,7 +243,6 @@ class RoverPhotosGrid extends StatelessWidget {
   }
 
   void _showPhotoDetails(BuildContext context, Photos photo) {
-    final size = MediaQuery.of(context).size;
 
     showModalBottomSheet(
       context: context,
@@ -427,36 +416,23 @@ class RoverPhotosGrid extends StatelessWidget {
                           icon: isFavorite
                               ? Icons.favorite
                               : Icons.favorite_border,
-                          label: isFavorite ? 'Favorited' : 'Favorite',
+                          label: isFavorite ? 'Favorite' : 'Favorite',
                           color: isFavorite ? Colors.red : Colors.white,
                           onPressed: () {
                             if (isFavorite) {
                               context
                                   .read<FavoritesBloc>()
                                   .add(RemoveFavorite(photo));
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Removed from favorites'),
-                                  backgroundColor: Colors.redAccent,
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
                             } else {
                               context
                                   .read<FavoritesBloc>()
                                   .add(AddFavorite(photo));
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Added to favorites'),
-                                  backgroundColor: Colors.green,
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
                             }
                           },
                         );
                       },
                     ),
+
                     // Share button
                     _buildActionButton(
                       icon: Icons.share,

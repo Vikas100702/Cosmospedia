@@ -131,7 +131,7 @@ class _SpaceWeatherContent extends StatelessWidget {
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.all(16),
-          constraints: BoxConstraints(
+          constraints: const BoxConstraints(
             minHeight: 0, // Remove minimum height constraint
           ),
           child: Row(
@@ -165,7 +165,7 @@ class _SpaceWeatherContent extends StatelessWidget {
                   onPressed: () {
                     _showDescriptionDialog(context, title, description);
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.info_outline,
                     color: Colors.white,
                   ))

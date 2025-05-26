@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cosmospedia/l10n/app_localizations.dart';
 import 'package:cosmospedia/ui/screens/rover_screen/rover_list_screen/rover_card_widget/rover_card_widget.dart';
 import 'package:flutter/material.dart';
@@ -66,32 +64,12 @@ class RoverListScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: ListView(
               children: [
-                // RoverCardWidget(roverName: 'curiosity'),
-                // SizedBox(height: 16),
-                // RoverCardWidget(roverName: 'opportunity'),
-                // SizedBox(height: 16),
-                // RoverCardWidget(roverName: 'spirit'),
-
                 BlocProvider.value(
                   value: RoverManifestBloc(
                     roverManifestRepository: RoverManifestRepository(),
                   )..add(LoadRoverManifest(roverName: l10n.curiosity)),
                   child: RoverCardWidget(roverName: l10n.curiosity),
                 ),
-                /*const SizedBox(height: 16),
-                BlocProvider.value(
-                  value: RoverManifestBloc(
-                    roverManifestRepository: RoverManifestRepository(),
-                  )..add(LoadRoverManifest(roverName: l10n.opportunity)),
-                  child: RoverCardWidget(roverName: l10n.opportunity),
-                ),
-                const SizedBox(height: 16),
-                BlocProvider.value(
-                  value: RoverManifestBloc(
-                    roverManifestRepository: RoverManifestRepository(),
-                  )..add(LoadRoverManifest(roverName: l10n.spirit)),
-                  child: RoverCardWidget(roverName: l10n.spirit),
-                ),*/
               ],
             ),
           ),

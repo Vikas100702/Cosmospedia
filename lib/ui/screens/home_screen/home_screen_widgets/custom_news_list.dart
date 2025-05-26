@@ -17,7 +17,6 @@ Widget buildNewsList(
   // Calculate dynamic padding and spacing
   final horizontalPadding = screenSize.width * 0.04;
   final verticalPadding = screenSize.height * 0.02;
-  final cardSpacing = screenSize.height * 0.02;
 
   return Padding(
     padding: EdgeInsets.symmetric(

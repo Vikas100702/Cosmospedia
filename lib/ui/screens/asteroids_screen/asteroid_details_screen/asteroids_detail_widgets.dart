@@ -1,7 +1,6 @@
 import 'package:cosmospedia/data/models/asteroids/asteroids_model.dart';
 import 'package:cosmospedia/utils/size_config.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'dart:math';
@@ -16,7 +15,7 @@ class AsteroidsDetailWidgets extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    Theme.of(context);
     final closestApproach = asteroid.closeApproachData.isNotEmpty
         ? asteroid.closeApproachData.first
         : null;
@@ -187,7 +186,7 @@ class AsteroidsDetailWidgets extends StatelessWidget {
                             child: LayoutBuilder(
                               builder: (context, constraints) {
                                 final maxWidth = constraints.maxWidth * 0.8;
-                                final referenceSize = 40.0;
+                                const referenceSize = 40.0;
                                 final asteroidVisualSize = isLarger
                                     ? referenceSize * ratio
                                     : referenceSize;
@@ -350,8 +349,8 @@ class AsteroidsDetailWidgets extends StatelessWidget {
               child: RadarChart(
                 RadarChartData(
                   radarShape: RadarShape.polygon,
-                  radarBorderData: BorderSide(color: Colors.white30, width: 1),
-                  gridBorderData: BorderSide(color: Colors.white10, width: 1),
+                  radarBorderData: const BorderSide(color: Colors.white30, width: 1),
+                  gridBorderData: const BorderSide(color: Colors.white10, width: 1),
                   tickCount: 5,
                   ticksTextStyle: const TextStyle(color: Colors.transparent),
                   borderData: FlBorderData(show: false),
@@ -417,7 +416,7 @@ class AsteroidsDetailWidgets extends StatelessWidget {
               border: TableBorder.all(color: Colors.white30),
               children: [
                 TableRow(
-                  decoration: BoxDecoration(color: Colors.white10),
+                  decoration: const BoxDecoration(color: Colors.white10),
                   children: [
                     _buildTableHeader('Unit'),
                     _buildTableHeader('Minimum'),
@@ -496,13 +495,13 @@ class AsteroidsDetailWidgets extends StatelessWidget {
                     horizontalInterval: 5,
                     verticalInterval: 1,
                     getDrawingHorizontalLine: (value) {
-                      return FlLine(
+                      return const FlLine(
                         color: Colors.white10,
                         strokeWidth: 1,
                       );
                     },
                     getDrawingVerticalLine: (value) {
-                      return FlLine(
+                      return const FlLine(
                         color: Colors.white10,
                         strokeWidth: 1,
                       );
@@ -510,10 +509,10 @@ class AsteroidsDetailWidgets extends StatelessWidget {
                   ),
                   titlesData: FlTitlesData(
                     show: true,
-                    rightTitles: AxisTitles(
+                    rightTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
-                    topTitles: AxisTitles(
+                    topTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
                     bottomTitles: AxisTitles(
@@ -810,10 +809,10 @@ class AsteroidsDetailWidgets extends StatelessWidget {
                         },
                       ),
                     ),
-                    topTitles: AxisTitles(
+                    topTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
-                    rightTitles: AxisTitles(
+                    rightTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
                   ),
@@ -864,7 +863,7 @@ class AsteroidsDetailWidgets extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Context:',
                     style: TextStyle(
                       color: Colors.white,
@@ -874,13 +873,13 @@ class AsteroidsDetailWidgets extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     '• Lunar = Distance to the Moon (${lunar.toStringAsFixed(2)} lunar distances)',
-                    style: TextStyle(color: Colors.white70),
+                    style: const TextStyle(color: Colors.white70),
                   ),
                   Text(
                     '• AU = Astronomical Unit (${astronomical.toStringAsFixed(6)} AU)',
-                    style: TextStyle(color: Colors.white70),
+                    style: const TextStyle(color: Colors.white70),
                   ),
-                  Text(
+                  const Text(
                     '• 1 AU = Distance from Earth to Sun (149.6 million km)',
                     style: TextStyle(color: Colors.white70),
                   ),
@@ -986,7 +985,7 @@ class AsteroidsDetailWidgets extends StatelessWidget {
                           isHazardous
                               ? 'Potentially Hazardous Asteroid'
                               : 'Non-Hazardous Asteroid',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
@@ -996,7 +995,7 @@ class AsteroidsDetailWidgets extends StatelessWidget {
                           isHazardous
                               ? 'This asteroid\'s orbit intersects Earth\'s orbit path and it is large enough to cause significant damage if impact occurs.'
                               : 'This asteroid\'s orbit does not currently pose a threat to Earth.',
-                          style: TextStyle(color: Colors.white70),
+                          style: const TextStyle(color: Colors.white70),
                         ),
                       ],
                     ),
@@ -1442,14 +1441,14 @@ class AsteroidIconWidget extends StatelessWidget {
   final double size;
 
   const AsteroidIconWidget({
-    Key? key,
+    super.key,
     required this.diameter,
     required this.isHazardous,
     required this.size,
-  }) : super(key: key);
+  });
 
   @override
-  Widget build(BuildContext) {
+  Widget build(context) {
     final baseSize = size;
     final double iconSize =
         baseSize * math.min(1.5, math.max(0.7, (diameter / 5)));
@@ -1719,7 +1718,7 @@ class OrbitPainter extends CustomPainter {
     _drawText(
         canvas,
         asteroidName.length > 12
-            ? asteroidName.substring(0, 12) + '...'
+            ? '${asteroidName.substring(0, 12)}...'
             : asteroidName,
         asteroidPos,
         textStyle,

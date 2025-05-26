@@ -31,7 +31,6 @@ Future<void> main() async {
   //Initialize Repositories
   final apodRepository = ApodRepository();
   final roverRepository = RoverRepository();
-  final roverManifestRepository = RoverManifestRepository();
   final asteroidRepository = AsteroidsRepository();
   final cmeRepository = CMERepository();
   final gstRepository = GstRepository();

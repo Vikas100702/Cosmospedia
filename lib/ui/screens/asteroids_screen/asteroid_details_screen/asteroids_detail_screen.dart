@@ -14,8 +14,8 @@ class AsteroidsDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
-    final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
+    AppLocalizations.of(context);
+    Theme.of(context);
     final screenSize = MediaQuery.of(context).size;
 
     // Create a GlobalKey for the Scaffold

@@ -268,7 +268,7 @@ class AsteroidsScreen extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white70,
               fontSize: 14,
             ),
@@ -295,7 +295,7 @@ class AsteroidsScreen extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white70,
               fontSize: 14,
             ),
@@ -308,7 +308,7 @@ class AsteroidsScreen extends StatelessWidget {
             ),
             child: Text(
               value,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
