@@ -1,3 +1,7 @@
+# IMPORTANT NOTE :
+I am archiving this repository as of now as the main api(NASA Mars Rover API) I used to develop this project is not availabe on the NASA api portal.
+In future I will look into the project and will update the project with new features.
+
 # CosmosPedia - Space Exploration App
 
 ![CosmosPedia Logo](assets/logo.png) <!-- Add your logo path here if available -->
